@@ -9,13 +9,13 @@ public class Producteur extends AbstractComponent implements PublicationI {
 		super(reflectionInboundPortURI, nbThreads, nbSchedulableThreads);
 	}
 
-	@Override
+	
 	public void publierMessage() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	
 	public void publierNMessage() {
 		// TODO Auto-generated method stub
 		

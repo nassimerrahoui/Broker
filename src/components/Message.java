@@ -1,18 +1,50 @@
 package components;
 
 import java.io.Serializable;
-import fr.sorbonne_u.components.AbstractComponent;
 import interfaces.MessageI;
 
-public class Message extends AbstractComponent implements MessageI, Serializable {
+public class Message implements MessageI{
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-	String uri; // id du message
-	long datePublication; // temps unix
-	String producteurName;
+	/** identifiant unique du message */
+	protected final String idMessage;
+	/** temps système unix de la publication du message */
+	protected final long datePublication;
+	/** identifiant du dateur de la publication */
+	protected final String idDateur;
+	/** charge utile sérialisable du message */
+	protected final Serializable contenu;
+	
+	public Message(String idPublieur) {
+		this.idMessage = java.util.UUID.randomUUID().toString();
+		this.datePublication = System.currentTimeMillis();
+		this.idDateur = idPublieur;
+		this.contenu = new String("objet serializable "+ java.util.UUID.randomUUID());
+	}
+	
+	
 
-	public Message(String reflectionInboundPortURI, int nbThreads, int nbSchedulableThreads) {
-		super(reflectionInboundPortURI, nbThreads, nbSchedulableThreads);
+	
+	public String getIDMessage() {
+		return idMessage;
+	}
+
+	
+	public long getDatePublication() {
+		return datePublication;
+	}
+
+	
+	public String getIDDateur() {
+		return idDateur;
+	}
+
+	
+	public Serializable getContenu() {
+		return contenu;
 	}
 
 }

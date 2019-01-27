@@ -14,14 +14,6 @@ public class URIConsommateurInboundPort extends AbstractInboundPort implements R
 		assert uri != null && owner instanceof Consommateur;
 	}
 
-	@Override
-	public void recevoirMessage() {
-
-	}
-
-	@Override
-	public void recevoirNMessage() {
-
-	}
+	
 
 }

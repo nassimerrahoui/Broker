@@ -10,16 +10,16 @@ public class Consommateur extends AbstractComponent implements ReceptionI {
 
 	}
 
-	@Override
 	public void recevoirMessage() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void recevoirNMessage() {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }
