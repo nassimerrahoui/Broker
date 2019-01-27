@@ -1,6 +1,8 @@
 package ports;
 
+import java.util.ArrayList;
 import components.Consommateur;
+import components.Message;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
 import interfaces.ReceptionI;
@@ -14,6 +16,13 @@ public class URIConsommateurInboundPort extends AbstractInboundPort implements R
 		assert uri != null && owner instanceof Consommateur;
 	}
 
-	
+	public void recevoirMessage(String uri, Message msg) {
+		
+	}
+
+	public void recevoirNMessage(String uri, ArrayList<Message> msg) {
+		
+	}
+
 
 }

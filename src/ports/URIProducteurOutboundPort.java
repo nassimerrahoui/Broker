@@ -13,14 +13,12 @@ public class URIProducteurOutboundPort extends AbstractOutboundPort implements P
 		assert uri != null && owner != null;
 	}
 
-	@Override
 	public void publierMessage() {
-
+		// TODO
 	}
 
-	@Override
 	public void publierNMessage() {
-
+		// TODO
 	}
 
 }
