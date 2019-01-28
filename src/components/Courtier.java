@@ -21,6 +21,7 @@ public class Courtier extends AbstractComponent {
 
 	public void publierMessage(MessageI m) {
 		messages.add(m);
+		this.logMessage("Le courtier a recu le message à publier"+ m.getContenu());
 	}
 
 }

@@ -44,5 +44,23 @@ public class Producteur extends AbstractComponent {
 
 		super.finalise();
 	}
+	
+	@Override
+	public void execute() throws Exception {
+		super.execute();
+		
+		this.runTask(
+				new AbstractTask() {
+					public void run() {
+						try {
+							MessageI msg = new Message("String sérialisable du composant",this.owner.getComponentDefinitionClassName());
+							((Producteur)this.owner).publishMessageAndPrint(msg);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				}
+			}) ;
+		
+	}
 
 }
