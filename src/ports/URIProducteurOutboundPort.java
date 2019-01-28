@@ -2,6 +2,7 @@ package ports;
 
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
+import interfaces.MessageI;
 import interfaces.PublicationI;
 
 public class URIProducteurOutboundPort extends AbstractOutboundPort implements PublicationI {
@@ -12,13 +13,18 @@ public class URIProducteurOutboundPort extends AbstractOutboundPort implements P
 		super(uri, PublicationI.class, owner);
 		assert uri != null && owner != null;
 	}
-
-	public void publierMessage() {
-		// TODO
+	
+	public URIProducteurOutboundPort(ComponentI owner) throws Exception {
+		super(PublicationI.class,owner);
+		assert owner != null;
 	}
 
-	public void publierNMessage() {
-		// TODO
+	public MessageI publierMessage() {
+		return ((PublicationI)this.connector).publierMessage();
+	}
+
+	public MessageI [] publierNMessage(int numberOfMsg) {
+		return ((PublicationI)this.connector).publierNMessage(numberOfMsg);
 	}
 
 }

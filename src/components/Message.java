@@ -22,7 +22,7 @@ public class Message implements MessageI{
 		this.idMessage = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();
 		this.idDateur = idPublieur;
-		this.contenu = new String("objet serializable "+ java.util.UUID.randomUUID());
+		this.contenu = new String("objet serializable "+ idMessage);
 	}
 	
 	
@@ -45,6 +45,11 @@ public class Message implements MessageI{
 	
 	public Serializable getContenu() {
 		return contenu;
+	}
+	
+	@Override 
+	public String toString() {
+		return contenu.toString() + "publié par "+idDateur+ ",date: "+ datePublication;
 	}
 
 }
