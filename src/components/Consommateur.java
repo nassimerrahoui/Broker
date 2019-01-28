@@ -92,4 +92,33 @@ public class Consommateur extends AbstractComponent {
 		}
 		super.shutdownNow();
 	}
+
+	public String recevoirMessage() {
+		this.logMessage("consommateur recoit un nouveau msg...");
+		String msg = this.uriPrefix + "-" + java.util.UUID.randomUUID().toString();
+
+		assert msg != null : new PostconditionException("msg est vide!");
+		assert msg.startsWith(this.uriPrefix) : new PostconditionException("Le msg commence pas par le bon prefix!");
+
+		return msg;
+	}
+
+	public String[] recevoirNMessages(final int n) throws Exception {
+		assert n > 0 : new PreconditionException("n doit etre superieur a 0" + " mais egale a : " + n + "!");
+
+		String[] msgs = new String[n];
+		for (int i = 0; i < n; i++) {
+			msgs[i] = this.uriPrefix + "-" + java.util.UUID.randomUUID().toString();
+		}
+
+		assert msgs != null : new PostconditionException("Pas de msgs!");
+		assert msgs.length == n : new PostconditionException("Le nombre de msg est different de n!");
+		boolean allNonNull = true;
+		for (int i = 0; allNonNull && i < n; i++) {
+			allNonNull = (msgs[i] != null && msgs[i].startsWith(this.uriPrefix));
+		}
+		assert allNonNull : new PostconditionException("An URI is the result is null!");
+
+		return msgs;
+	}
 }
