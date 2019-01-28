@@ -2,12 +2,12 @@ package interfaces;
 
 import java.io.Serializable;
 
-public interface MessageI extends Serializable{
+public interface MessageI extends Serializable {
 	
-	String getIDMessage();
-	long getDatePublication();
-	String getIDDateur();
-	Serializable getContenu();
+	public String getIDMessage();
+	public long getDatePublication();
+	public String getIDDateur();
+	public Serializable getContenu();
 
 }
 

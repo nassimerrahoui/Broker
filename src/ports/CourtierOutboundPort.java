@@ -7,19 +7,13 @@ import interfaces.MessageI;
 import interfaces.PublicationI;
 import interfaces.ReceptionI;
 
-public class URICourtierOutboundPort extends AbstractOutboundPort
-implements ReceptionI{
+public class CourtierOutboundPort extends AbstractOutboundPort implements ReceptionI {
 
 	private static final long serialVersionUID = 1L;
 
-	public URICourtierOutboundPort(String uri, ComponentI owner) throws Exception {
+	public CourtierOutboundPort(String uri, ComponentI owner) throws Exception {
 		super(uri, PublicationI.class, owner);
 		assert uri != null && owner != null;
-	}
-	
-	public URICourtierOutboundPort(ComponentI owner) throws Exception {
-		super(PublicationI.class,owner);
-		assert owner != null;
 	}
 
 	public void recevoirMessage(MessageI msg) throws Exception {

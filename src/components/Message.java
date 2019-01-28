@@ -3,29 +3,25 @@ package components;
 import java.io.Serializable;
 import interfaces.MessageI;
 
-public class Message implements MessageI{
+public class Message implements MessageI {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	/** identifiant unique du message */
 	protected final String idMessage;
-	/** temps système unix de la publication du message */
+	/** temps systeme unix de la publication du message */
 	protected final long datePublication;
 	/** identifiant du dateur de la publication */
 	protected final String idDateur;
-	/** charge utile sérialisable du message */
+	/** charge utile serialisable du message */
 	protected final Serializable contenu;
 	
-	public Message(String idPublieur) {
+	public Message(Serializable contenu, String idPublieur) {
 		this.idMessage = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();
 		this.idDateur = idPublieur;
-		this.contenu = new String("objet serializable "+ idMessage);
+		this.contenu = contenu;
 	}
-	
-	
 
 	
 	public String getIDMessage() {
@@ -49,7 +45,7 @@ public class Message implements MessageI{
 	
 	@Override 
 	public String toString() {
-		return contenu.toString() + "publié par "+idDateur+ ",date: "+ datePublication;
+		return contenu.toString() + " - publie par " + idDateur + ", date: "+ datePublication;
 	}
 
 }
