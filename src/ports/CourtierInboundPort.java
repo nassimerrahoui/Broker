@@ -10,8 +10,10 @@ public class CourtierInboundPort extends AbstractInboundPort implements Publicat
 
 	private static final long serialVersionUID = 1L;
 
-	public CourtierInboundPort(Class<?> implementedInterface, ComponentI owner) throws Exception {
-		super(implementedInterface, owner);
+	public CourtierInboundPort(String uri, ComponentI owner) throws Exception {
+		super(uri,PublicationI.class, owner);
+		
+		assert uri != null & owner != null;
 	}
 
 	public void publierMessage(MessageI msg) throws Exception {
