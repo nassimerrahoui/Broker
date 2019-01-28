@@ -19,12 +19,17 @@ public class URIProducteurOutboundPort extends AbstractOutboundPort implements P
 		assert owner != null;
 	}
 
-	public MessageI publierMessage() {
-		return ((PublicationI)this.connector).publierMessage();
+	public MessageI publierMessage(MessageI m) throws Exception {
+		return ((PublicationI)this.connector).publierMessage(m);
 	}
-
+ /*
 	public MessageI [] publierNMessage(int numberOfMsg) {
 		return ((PublicationI)this.connector).publierNMessage(numberOfMsg);
+	}*/
+
+	public MessageI[] publierNMessage(int numberOfMsg, MessageI m) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
