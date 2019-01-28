@@ -27,9 +27,9 @@ public class Producteur extends AbstractComponent {
 		
 		publicationPort = new URIProducteurOutboundPort(outboundPortURI, this);
 		this.addPort(publicationPort);
-		publicationPort.localPublishPort();
-		this.counter = 0;
+		publicationPort.publishPort();
 		
+		// log dans fichier
 		if (AbstractCVM.isDistributed) {
 			this.executionLog.setDirectory(System.getProperty("user.dir")) ;
 		} else {
@@ -39,39 +39,41 @@ public class Producteur extends AbstractComponent {
 		this.tracer.setRelativePosition(1, 1) ;
 	}
 
-	public void publishMessageAndPrint() {
+	public void publishMessageAndPrint() throws Exception {
 		this.counter++;
 		if(counter <= 10) {
 			//publier un message et l'afficher
-			MessageI msg = this.publicationPort.publierMessage();
+			MessageI m = new Message("idPublieur");
+			MessageI msg = this.publicationPort.publierMessage(m);
 			this.logMessage("producteur publie un nouveau msg no "+this.counter
 					+ ": "+msg+".");
 			
-			MessageI [] msgs = this.publicationPort.publierNMessage(Producteur.N);
-			StringBuffer mes = new StringBuffer() ;
-			for(int i=0; i < Producteur.N; i++) {
-				mes.append(msgs[i]);
-				if( i < Producteur.N - 1) {
-					mes.append(", ") ;
-				}
-			}
+//			MessageI [] msgs = this.publicationPort.publierNMessage(Producteur.N, msg);
+//			StringBuffer mes = new StringBuffer() ;
+//			for(int i=0; i < Producteur.N; i++) {
+//				mes.append(msgs[i]);
+//				if( i < Producteur.N - 1) {
+//					mes.append(", ") ;
+//				}
+//			}
 			
-			this.logMessage("producteur publie un nouvel ensemble de messages no "
-					+ this.counter + " [" + mes + "].") ;
+//			this.logMessage("producteur publie un nouvel ensemble de messages no "
+//					+ this.counter + " [" + mes + "].") ;
 			
-			
-			 this.scheduleTask(
-					new AbstractComponent.AbstractTask() {
-						public void run() {
-							try {
-								((Producteur)this.getOwner()).
-													publishMessageAndPrint() ;
-							} catch (Exception e) {
-								throw new RuntimeException(e) ;
-							}
-						}
-					},
-					1000, TimeUnit.MILLISECONDS) ;
+
+			// deconnecter scheduleTask de la methode
+//			 this.scheduleTask(
+//					new AbstractComponent.AbstractTask() {
+//						public void run() {
+//							try {
+//								((Producteur)this.getOwner()).
+//													publishMessageAndPrint() ;
+//							} catch (Exception e) {
+//								throw new RuntimeException(e) ;
+//							}
+//						}
+//					},
+//					1000, TimeUnit.MILLISECONDS) ;
 
 			 
 		}

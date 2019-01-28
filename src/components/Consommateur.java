@@ -1,5 +1,7 @@
 package components;
 
+import java.util.ArrayList;
+
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
@@ -9,6 +11,7 @@ import fr.sorbonne_u.components.exceptions.InvariantException;
 import fr.sorbonne_u.components.exceptions.PostconditionException;
 import fr.sorbonne_u.components.exceptions.PreconditionException;
 import fr.sorbonne_u.components.ports.PortI;
+import interfaces.MessageI;
 import interfaces.ReceptionI;
 import ports.URIConsommateurInboundPort;
 
@@ -17,6 +20,7 @@ import ports.URIConsommateurInboundPort;
 public class Consommateur extends AbstractComponent {
 
 	protected String uriPrefix;
+	protected ArrayList<MessageI> messages = new ArrayList<MessageI>();
 
 	protected static void checkInvariant(Consommateur c) {
 		assert c.uriPrefix != null : new InvariantException("Le prefix URI est null!");
@@ -93,32 +97,19 @@ public class Consommateur extends AbstractComponent {
 		super.shutdownNow();
 	}
 
-	public String recevoirMessage() {
+	public void recevoirMessage(MessageI msg) {
 		this.logMessage("consommateur recoit un nouveau msg...");
-		String msg = this.uriPrefix + "-" + java.util.UUID.randomUUID().toString();
-
 		assert msg != null : new PostconditionException("msg est vide!");
-		assert msg.startsWith(this.uriPrefix) : new PostconditionException("Le msg commence pas par le bon prefix!");
-
-		return msg;
+		messages.add(msg);
 	}
 
-	public String[] recevoirNMessages(final int n) throws Exception {
-		assert n > 0 : new PreconditionException("n doit etre superieur a 0" + " mais egale a : " + n + "!");
+	public void recevoirNMessages(ArrayList<MessageI> msgs) throws Exception {
+		this.logMessage("consommateur recoit plusieurs msg...");
+		assert msgs != null : new PostconditionException("Pas de msg!");
 
-		String[] msgs = new String[n];
-		for (int i = 0; i < n; i++) {
-			msgs[i] = this.uriPrefix + "-" + java.util.UUID.randomUUID().toString();
+		for (int i = 0; i < msgs.size(); i++) {
+			if (msgs.get(i) == null) msgs.remove(i);
 		}
-
-		assert msgs != null : new PostconditionException("Pas de msgs!");
-		assert msgs.length == n : new PostconditionException("Le nombre de msg est different de n!");
-		boolean allNonNull = true;
-		for (int i = 0; allNonNull && i < n; i++) {
-			allNonNull = (msgs[i] != null && msgs[i].startsWith(this.uriPrefix));
-		}
-		assert allNonNull : new PostconditionException("An URI is the result is null!");
-
-		return msgs;
+		messages.addAll(msgs);
 	}
 }
