@@ -5,7 +5,6 @@ import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import fr.sorbonne_u.components.ports.PortI;
 import interfaces.MessageI;
 import interfaces.PublicationI;
 import interfaces.ReceptionI;
@@ -17,23 +16,32 @@ import ports.CourtierOutboundPort;
 
 public class Courtier extends AbstractComponent {
 	
+	protected CourtierOutboundPort envoiePort;
+	protected CourtierInboundPort publicationPort; //Publication du message à partir du producteur 
+	protected ArrayList<MessageI> messages = new ArrayList<MessageI>();
+	
 	public Courtier(String uri, String portURI) throws Exception {
 		super(uri,1,0);
 		
-		PortI p = new CourtierInboundPort("inbound-"+portURI,this);
-		this.addPort(p);
-		p.publishPort();
-		
-		PortI p2 = new CourtierOutboundPort("outbound-"+portURI,this);
-		this.addPort(p2);
-		p2.publishPort();
-	}
+		publicationPort = new CourtierInboundPort("inbound-"+portURI,this);
+		this.addPort(publicationPort);
+		publicationPort.publishPort();
+			
+		envoiePort = new CourtierOutboundPort("outbound-"+portURI,this);
+		this.addPort(envoiePort);
+		envoiePort.publishPort();
 
-	protected ArrayList<MessageI> messages;
+	}
 
 	public void publierMessage(MessageI m) {
 		messages.add(m);
+		System.out.println(messages.get(0).getContenu().toString()+ " Ajout du message");
 		this.logMessage("Le courtier a recu le message à publier"+ m.getContenu());
+	}
+	
+	public void envoieMessageAndPrint(MessageI msg) throws Exception {
+		System.out.println("Envoie du message");
+		this.envoiePort.recevoirMessage(msg);
 	}
 	
 	@Override
@@ -50,6 +58,26 @@ public class Courtier extends AbstractComponent {
 	{
 		this.logMessage("Arret du courtier.") ;
 		super.finalise();
+	}
+	
+	@Override
+	public void execute() throws Exception {
+		super.execute();
+		System.out.println("executeeee");
+		
+		this.envoieMessageAndPrint(messages.get(0));
+		/*this.runTask(
+				new AbstractTask() {
+					public void run() {
+						try {
+							((Courtier) this.owner).
+							//((Courtier)this.getOwner()).envoieMessageAndPrint(((Courtier) this.owner).messages.get(0));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				}
+			}) ;*/
+		
 	}
 
 }

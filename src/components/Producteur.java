@@ -53,7 +53,7 @@ public class Producteur extends AbstractComponent {
 				new AbstractTask() {
 					public void run() {
 						try {
-							MessageI msg = new Message("String sérialisable du composant",this.owner.getComponentDefinitionClassName());
+							MessageI msg = new Message("String sérialisable du composant","p1");
 							((Producteur)this.owner).publishMessageAndPrint(msg);
 						} catch (Exception e) {
 							e.printStackTrace();

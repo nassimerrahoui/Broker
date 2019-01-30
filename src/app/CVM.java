@@ -1,20 +1,28 @@
 package app;
 
+import components.Consommateur;
+import components.Courtier;
+import components.Producteur;
+import connectors.PublicationConnector;
+import connectors.ReceptionConnector;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
+import interfaces.PublicationI;
+import interfaces.ReceptionI;
 
 public class CVM extends AbstractCVM {
 	
+	protected static final String PRODUCTEUR_COMPONENT_URI = "my-URI-PRODUCTEUR";
+	protected static final String CONSOMMATEUR_COMPONENT_URI = "my-URI-CONSOMMATEUR";
+	protected static final String COURTIER_COMPONENT_URI = "my-URI-COURTIER";
+
+	protected static final String ConsommateurInboundPortURI = "ConsoInboundPort";
+	protected static final String ProducteurOutboundPortURI = "ProducteurOutboundPort";
 	
-	/** Remplacer les URI par ceux de notre contexte **/
+	protected static final String CourtierPortURI = "CourtierPort";
 	
-	/** URI of the provider component (convenience). */
-	protected static final String PROVIDER_COMPONENT_URI = "my-URI-provider";
-	/** URI of the consumer component (convenience). */
-	protected static final String CONSUMER_COMPONENT_URI = "my-URI-consumer";
-	/** URI of the provider outbound port (simplifies the connection). */
-	protected static final String URIGetterOutboundPortURI = "oport";
-	/** URI of the consumer inbound port (simplifies the connection). */
-	protected static final String URIProviderInboundPortURI = "iport";
+	protected Consommateur consommateur;
+	protected Producteur producteur;
+	protected Courtier courtier;
 
 	public CVM() throws Exception {
 		super();
@@ -23,6 +31,7 @@ public class CVM extends AbstractCVM {
 	
 	@Override
 	public void deploy() throws Exception {
+		
 		assert !this.deploymentDone();
 
 		
@@ -30,22 +39,23 @@ public class CVM extends AbstractCVM {
 		// Creation phase
 		// --------------------------------------------------------------------
 
-		// create the provider component
+		this.producteur = new Producteur(PRODUCTEUR_COMPONENT_URI, ProducteurOutboundPortURI);
+		this.courtier = new Courtier(COURTIER_COMPONENT_URI, CourtierPortURI);
+		this.consommateur = new Consommateur(CONSOMMATEUR_COMPONENT_URI, ConsommateurInboundPortURI);
 
-		// add it to the deployed components
-
-		// create the consumer component
-		
-		// add it to the deployed components
-
+		this.deployedComponents.add(consommateur);
+		this.deployedComponents.add(producteur);
+		this.deployedComponents.add(courtier);
 
 		// --------------------------------------------------------------------
 		// Connection phase
 		// --------------------------------------------------------------------
-
-		// do the connection
-		
-
+		// Connexion entre producteur et courtier
+		this.producteur.doPortConnection(ProducteurOutboundPortURI, courtier.findInboundPortURIsFromInterface(PublicationI.class)[0],
+				PublicationConnector.class.getCanonicalName());
+		// Connexion entre courtier et consommateur
+		this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(ReceptionI.class)[0],ConsommateurInboundPortURI,
+				ReceptionConnector.class.getCanonicalName());
 		// --------------------------------------------------------------------
 		// Deployment done
 		// --------------------------------------------------------------------
@@ -61,7 +71,9 @@ public class CVM extends AbstractCVM {
 		// any disconnection not done yet can be performed here
 
 		// print logs on files, if activated
-
+		this.consommateur.printExecutionLogOnFile("Consommateur") ;
+		this.producteur.printExecutionLogOnFile("Producteur") ;
+		this.courtier.printExecutionLogOnFile("Courtier") ;
 		super.shutdown();
 	}
 
@@ -72,7 +84,7 @@ public class CVM extends AbstractCVM {
 			// Execute the application.
 			a.startStandardLifeCycle(15000L);
 			// Give some time to see the traces (convenience).
-			Thread.sleep(10000L);
+			Thread.sleep(1000L);
 			// Simplifies the termination (termination has yet to be treated
 			// properly in BCM).
 			System.exit(0);

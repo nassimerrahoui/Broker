@@ -83,6 +83,7 @@ public class Consommateur extends AbstractComponent {
 		this.logMessage("consommateur recoit un nouveau msg...");
 		assert msg != null : new PostconditionException("msg est vide!");
 		messages.add(msg);
+		System.out.println(messages.get(0).getContenu().toString()+ "ahahahhah");
 	}
 
 	public void recevoirNMessages(ArrayList<MessageI> msgs) throws Exception {

@@ -18,7 +18,7 @@ public class ConsommateurInboundPort extends AbstractInboundPort implements Rece
 
 	public void recevoirMessage(final MessageI msg) throws Exception {
 
-		((ReceptionI) this.owner).recevoirMessage(msg);
+		((Consommateur) this.owner).recevoirMessage(msg);
 
 	}
 
