@@ -2,6 +2,7 @@ package ports;
 
 import java.util.ArrayList;
 import components.Courtier;
+import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
 import interfaces.MessageI;
@@ -17,14 +18,29 @@ public class CourtierInboundPort extends AbstractInboundPort implements Publicat
 		assert uri != null & owner != null;
 	}
 
-	public void publierMessage(MessageI msg) throws Exception {
-		//((Courtier) this.owner).publierMessage(msg);
-		((Courtier) this.getOwner()).publierMessage(msg);
+	public void publierMessage(final MessageI msg) throws Exception {
+		
+		this.owner.handleRequestAsync(
+				new AbstractComponent.AbstractService<Void>() {
+
+					public Void call() throws Exception {
+						((Courtier) this.getOwner()).publierMessage(msg);
+						return null;
+					}
+				}) ;
+		
 		
 	}
 
-	public void publierNMessage(ArrayList<MessageI> msgs) throws Exception {
-		((PublicationI) this.owner).publierNMessage(msgs);
+	public void publierNMessage(final ArrayList<MessageI> msgs) throws Exception {
+		this.owner.handleRequestAsync(
+				new AbstractComponent.AbstractService<Void>() {
+
+					public Void call() throws Exception {
+						((Courtier) this.getOwner()).publierNMessages(msgs);
+						return null;
+					}
+				}) ;
 	}
 
 }

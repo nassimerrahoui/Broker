@@ -33,10 +33,18 @@ public class Courtier extends AbstractComponent {
 
 	}
 
-	public void publierMessage(MessageI m) {
+	public void publierMessage(MessageI m) throws Exception {
 		messages.add(m);
-		System.out.println(messages.get(0).getContenu().toString()+ " Ajout du message");
-		this.logMessage("Le courtier a recu le message à publier"+ m.getContenu());
+		System.out.println("Arrive a publierMessage");
+		this.envoiePort.recevoirMessage(m);
+		
+	}
+	
+
+	public void publierNMessages(ArrayList<MessageI> msgs) throws Exception {
+		messages.addAll(msgs);
+		System.out.println("Arrive a publierNMessage");
+		this.envoiePort.recevoirNMessage(msgs);
 	}
 	
 	public void envoieMessageAndPrint(MessageI msg) throws Exception {
@@ -59,25 +67,7 @@ public class Courtier extends AbstractComponent {
 		this.logMessage("Arret du courtier.") ;
 		super.finalise();
 	}
-	
-	@Override
-	public void execute() throws Exception {
-		super.execute();
-		System.out.println("executeeee");
-		
-		this.envoieMessageAndPrint(messages.get(0));
-		/*this.runTask(
-				new AbstractTask() {
-					public void run() {
-						try {
-							((Courtier) this.owner).
-							//((Courtier)this.getOwner()).envoieMessageAndPrint(((Courtier) this.owner).messages.get(0));
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-				}
-			}) ;*/
-		
-	}
 
 }
+
+

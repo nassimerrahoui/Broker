@@ -2,6 +2,8 @@ package ports;
 
 import java.util.ArrayList;
 import components.Consommateur;
+import components.Courtier;
+import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
 import interfaces.MessageI;
@@ -18,7 +20,14 @@ public class ConsommateurInboundPort extends AbstractInboundPort implements Rece
 
 	public void recevoirMessage(final MessageI msg) throws Exception {
 
-		((Consommateur) this.owner).recevoirMessage(msg);
+		this.owner.handleRequestAsync(
+				new AbstractComponent.AbstractService<Void>() {
+
+					public Void call() throws Exception {
+						((Consommateur) this.getOwner()).recevoirMessage(msg);
+						return null;
+					}
+				}) ;
 
 	}
 

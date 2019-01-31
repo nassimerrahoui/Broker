@@ -21,7 +21,6 @@ public class CourtierOutboundPort extends AbstractOutboundPort implements Recept
 	}
 
 	public void recevoirMessage(MessageI msg) throws Exception {
-		System.out.println("ahahah");
 		((ReceptionI)this.connector).recevoirMessage(msg);
 	}
 

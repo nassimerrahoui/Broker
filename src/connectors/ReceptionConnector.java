@@ -8,11 +8,12 @@ import interfaces.ReceptionI;
 public class ReceptionConnector extends AbstractConnector implements ReceptionI {
 
 	public void recevoirMessage(MessageI msg) throws Exception {
-		((ReceptionI) this.requiring).recevoirMessage(msg);
+		System.out.println("co reception");
+		((ReceptionI) this.offering).recevoirMessage(msg);
 	}
 
 	public void recevoirNMessage(ArrayList<MessageI> msgs) throws Exception {
-		((ReceptionI) this.requiring).recevoirNMessage(msgs);
+		((ReceptionI) this.offering).recevoirNMessage(msgs);
 	}
 
 }
