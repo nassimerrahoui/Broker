@@ -2,7 +2,6 @@ package ports;
 
 import java.util.ArrayList;
 import components.Consommateur;
-import components.Courtier;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
