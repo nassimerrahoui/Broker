@@ -11,6 +11,7 @@ import interfaces.ReceptionI;
 
 public class CVM extends AbstractCVM {
 	
+	//
 	protected static final String PRODUCTEUR_COMPONENT_URI = "my-URI-PRODUCTEUR";
 	protected static final String CONSOMMATEUR_COMPONENT_URI = "my-URI-CONSOMMATEUR";
 	protected static final String COURTIER_COMPONENT_URI = "my-URI-COURTIER";
@@ -46,11 +47,12 @@ public class CVM extends AbstractCVM {
 		this.deployedComponents.add(consommateur);
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);
-
+		
 		// --------------------------------------------------------------------
 		// Connection phase
 		// --------------------------------------------------------------------
 		// Connexion entre producteur et courtier
+		// utiiser port connection a la place de la ref courtier
 		this.producteur.doPortConnection(ProducteurOutboundPortURI, courtier.findInboundPortURIsFromInterface(PublicationI.class)[0],
 				PublicationConnector.class.getCanonicalName());
 		// Connexion entre courtier et consommateur

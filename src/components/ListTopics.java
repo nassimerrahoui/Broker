@@ -8,6 +8,7 @@ import interfaces.MessageI;
 
 public class ListTopics implements ListTopicsI {
 
+	// java.util.Concurrent map synchron
 	private Map<Topic, ArrayList<MessageI>> topic_messages = new HashMap<Topic, ArrayList<MessageI>>();
 
 	public void createTopic(String uri, String uriProducteur) {

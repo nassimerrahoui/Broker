@@ -21,7 +21,8 @@ public class Producteur extends AbstractComponent {
 		publicationPort = new ProducteurOutboundPort(outboundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
-
+		// faire un toggletracing pour afficher les  logs | faireun togglelogging pour enregistrer dans un fichier
+		this.toggleTracing();
 		this.tracer.setTitle("Producteur");
 		this.tracer.setRelativePosition(1, 1);
 	}
@@ -71,13 +72,13 @@ public class Producteur extends AbstractComponent {
 		this.runTask(
 				new AbstractTask() {
 					public void run() {
-						try {/*
+						try {
 							ArrayList<String> l = new ArrayList<String>();
 							l.add("Sujet1");
 							l.add("Sujet2");
 							MessageI msg = new Message("String sérialisable du composant","p1",l);
-							((Producteur)this.owner).publishMessageAndPrint(msg);*/
-							((Producteur)this.owner).createTopic("Sport", "prod1");
+							((Producteur)this.owner).publishMessageAndPrint(msg);
+							//((Producteur)this.owner).createTopic("Sport", "prod1");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
