@@ -1,8 +1,9 @@
 package test;
 
 import java.util.ArrayList;
-import components.ListTopics;
-import components.Message;
+
+import basics.ListTopics;
+import basics.Message;
 import interfaces.MessageI;
 
 public class Test {

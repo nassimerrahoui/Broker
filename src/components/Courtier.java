@@ -1,6 +1,8 @@
 package components;
 
 import java.util.ArrayList;
+
+import basics.ListTopics;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;

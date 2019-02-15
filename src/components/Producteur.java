@@ -2,6 +2,7 @@ package components;
 
 import java.util.ArrayList;
 
+import basics.Message;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
