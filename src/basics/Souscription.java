@@ -22,5 +22,15 @@ public class Souscription implements SouscriptionI {
 		// TODO Auto-generated method stub
 		
 	}
+	public FilterI getFilter() {
+		return filter;
+	}
+	public void setFilter(FilterI filter) {
+		this.filter = filter;
+	}
+	
+	public TopicI getTopic() {
+		return topic;
+	}
 
 }

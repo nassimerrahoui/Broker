@@ -7,4 +7,7 @@ public interface SouscriptionI extends RequiredI, OfferedI {
 	
 	public void souscrire(TopicI t, FilterI filter);
 	public void resiliation(TopicI t);
+	public FilterI getFilter();
+	public void setFilter(FilterI filter);
+	public TopicI getTopic();
 }

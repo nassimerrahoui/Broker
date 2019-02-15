@@ -61,5 +61,6 @@ public class Filter implements FilterI {
 	public void setContenu(Serializable contenu) {
 		this.contenu = contenu;
 	}
+	
 
 }
