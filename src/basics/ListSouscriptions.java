@@ -3,39 +3,33 @@ package basics;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import interfaces.ListSouscriptionsI;
-import interfaces.MessageI;
-import interfaces.SouscriptionI;
 
-public class ListSouscriptions implements ListSouscriptionsI{
+public class ListSouscriptions implements ListSouscriptionsI {
 
-	private Map<String, ArrayList<SouscriptionI>> consommateur_ss = new HashMap<String, ArrayList<SouscriptionI>>();
-	
+	private Map<String, ArrayList<Souscription>> souscriptions = new HashMap<String, ArrayList<Souscription>>();
 
-	public void deleteSouscription(SouscriptionI s, String uriConsommateur) throws Exception {
-		if (consommateur_ss.containsKey(uriConsommateur)){
-			consommateur_ss.get(uriConsommateur).remove(s);
+	public void addSouscriptionToConsommateur(Souscription s, String uriConsommateur) throws Exception {
+		if (!souscriptions.containsKey(uriConsommateur)) {
+			souscriptions.put(uriConsommateur, new ArrayList<Souscription>());
+		}
+		souscriptions.get(uriConsommateur).add(s);
+	}
+
+	public void deleteSouscription(Souscription s, String uriConsommateur) throws Exception {
+		if (souscriptions.containsKey(uriConsommateur)) {
+			souscriptions.get(uriConsommateur).remove(s);
 		}
 	}
-	
-	public void addSouscriptionToConsommateur(SouscriptionI s, String uriConsommateur) throws Exception {
-		if (!consommateur_ss.containsKey(uriConsommateur)) {
-			consommateur_ss.put(uriConsommateur, new ArrayList<SouscriptionI>());
-		}
-		consommateur_ss.get(uriConsommateur).add(s);
-	}
-	
 
-	public void modifyFilter(Topic t,Filter f,String uriConsommateur) {
-		ArrayList<SouscriptionI> liste_souscription = consommateur_ss.get(uriConsommateur);
-		for (SouscriptionI ss : liste_souscription) {
-			if (ss.getTopic().equals(t)) {
-				ss.setFilter(f);
+	public void modifyFilter(Topic t, Filter f, String uriConsommateur) {
+		ArrayList<Souscription> liste_souscription = souscriptions.get(uriConsommateur);
+		for (Souscription s : liste_souscription) {
+			if (s.topic.equals(t)) {
+				s.filter = f;
 			}
 		}
-		
+
 	}
-	
 
 }

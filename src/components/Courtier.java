@@ -2,37 +2,52 @@ package components;
 
 import java.util.ArrayList;
 
+import basics.ListSouscriptions;
 import basics.ListTopics;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
+import interfaces.FilterI;
 import interfaces.ListTopicsI;
 import interfaces.MessageI;
 import interfaces.PublicationI;
 import interfaces.ReceptionI;
+import interfaces.SouscriptionI;
 import ports.CourtierInboundPort;
 import ports.CourtierOutboundPort;
+import ports.CourtierSouscriptionInboundPort;
 
 
 @RequiredInterfaces(required = { ReceptionI.class })
-@OfferedInterfaces(offered = { PublicationI.class, ListTopicsI.class })
+@OfferedInterfaces(offered = { PublicationI.class, ListTopicsI.class, SouscriptionI.class })
 
 public class Courtier extends AbstractComponent {
 
 	protected CourtierOutboundPort envoiePort;
 	protected CourtierInboundPort publicationPort; // Publication du message à partir du producteur
+	protected CourtierSouscriptionInboundPort souscriptionPort;
+	
 	protected ListTopics topics = new ListTopics(); 
+	protected ListSouscriptions souscriptions = new ListSouscriptions();
 
-	public Courtier(String uri, String portURI) throws Exception {
+	public Courtier(String uri) throws Exception {
 		super(uri, 1, 0);
-
-		publicationPort = new CourtierInboundPort("inbound-" + portURI, this);
+		
+		String publicationPortURI = java.util.UUID.randomUUID().toString();
+		publicationPort = new CourtierInboundPort(publicationPortURI, this);
+		
+		String envoiPortURI = java.util.UUID.randomUUID().toString();
+		envoiePort = new CourtierOutboundPort(envoiPortURI, this);
+		
+		String souscriptionPortURI = java.util.UUID.randomUUID().toString();
+		souscriptionPort = new CourtierSouscriptionInboundPort(souscriptionPortURI, this);
+		
 		this.addPort(publicationPort);
-		publicationPort.publishPort();
-
-		envoiePort = new CourtierOutboundPort("outbound-" + portURI, this);
 		this.addPort(envoiePort);
+		this.addPort(souscriptionPort);
+		publicationPort.publishPort();
+		souscriptionPort.publishPort();
 		envoiePort.publishPort();
 
 	}
@@ -68,9 +83,15 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void envoieMessageAndPrint(MessageI msg) throws Exception {
-		System.out.println("Envoi du message vers le consommateur");
+		System.out.println("Envoi du message vers le consommateur...");
 		this.envoiePort.recevoirMessage(msg);
 	}
+	
+	
+	public void souscrire(SouscriptionI s, String uriConsommateur) throws Exception {
+		souscriptions.addSouscriptionToConsommateur(s, uriConsommateur);
+	}
+	
 
 	@Override
 	public void start() throws ComponentStartException {

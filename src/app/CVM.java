@@ -41,7 +41,7 @@ public class CVM extends AbstractCVM {
 		// --------------------------------------------------------------------
 
 		this.producteur = new Producteur(PRODUCTEUR_COMPONENT_URI, ProducteurOutboundPortURI);
-		this.courtier = new Courtier(COURTIER_COMPONENT_URI, CourtierPortURI);
+		this.courtier = new Courtier(COURTIER_COMPONENT_URI);
 		this.consommateur = new Consommateur(CONSOMMATEUR_COMPONENT_URI, ConsommateurInboundPortURI);
 
 		this.deployedComponents.add(consommateur);

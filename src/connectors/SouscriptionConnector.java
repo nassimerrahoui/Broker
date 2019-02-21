@@ -8,27 +8,25 @@ import interfaces.TopicI;
 public class SouscriptionConnector extends AbstractConnector implements SouscriptionI {
 
 	public void souscrire(TopicI t, FilterI filter) {
-
+		((SouscriptionI)this.offering).souscrire(t, filter);
 	}
 
 	public void resiliation(TopicI t) {
-		// TODO Auto-generated method stub
+		((SouscriptionI)this.offering).resiliation(t);
 
 	}
 
 	public FilterI getFilter() {
-		// TODO Auto-generated method stub
-		return null;
+		return ((SouscriptionI)this.offering).getFilter();
 	}
 
 	public void setFilter(FilterI filter) {
-		// TODO Auto-generated method stub
+		((SouscriptionI)this.offering).setFilter(filter);
 
 	}
 
 	public TopicI getTopic() {
-		// TODO Auto-generated method stub
-		return null;
+		return ((SouscriptionI)this.offering).getTopic();
 	}
 
 }
