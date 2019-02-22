@@ -6,7 +6,7 @@ import fr.sorbonne_u.components.interfaces.RequiredI;
 
 public interface SouscriptionI extends RequiredI, OfferedI {
 
-	public void souscrire(Souscription s);
+	public void souscrire(Souscription s) throws Exception;
 
 	public void resiliation(TopicI t, String uriConsommateur);
 

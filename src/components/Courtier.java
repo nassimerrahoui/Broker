@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import basics.ListSouscriptions;
 import basics.ListTopics;
+import basics.Souscription;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
@@ -88,7 +89,13 @@ public class Courtier extends AbstractComponent {
 	}
 	
 	
-	public void souscrire(SouscriptionI s, String uriConsommateur) throws Exception {
+	
+	/*
+	 * public void souscrire(Souscription s) throws Exception {
+		souscriptions.addSouscriptionToConsommateur(s);
+	}
+	 */
+	public void souscrire(Souscription s, String uriConsommateur) throws Exception {
 		souscriptions.addSouscriptionToConsommateur(s, uriConsommateur);
 	}
 	
