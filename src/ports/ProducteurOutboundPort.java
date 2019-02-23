@@ -1,11 +1,10 @@
 package ports;
 
-import java.util.ArrayList;
-
+import java.util.concurrent.CopyOnWriteArrayList;
+import basics.ListTopics;
+import basics.Message;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
-import interfaces.ListTopicsI;
-import interfaces.MessageI;
 import interfaces.PublicationI;
 
 public class ProducteurOutboundPort extends AbstractOutboundPort implements PublicationI {
@@ -16,30 +15,30 @@ public class ProducteurOutboundPort extends AbstractOutboundPort implements Publ
 		super(uri, PublicationI.class, owner);
 		assert uri != null && owner != null;
 	}
-	
-	public void publierMessage(MessageI msg) throws Exception {
+
+	public void publierMessage(Message msg) throws Exception {
 		((PublicationI) this.connector).publierMessage(msg);
 	}
 
-	public void publierNMessage(ArrayList<MessageI> msgs) throws Exception {
+	public void publierNMessage(CopyOnWriteArrayList<Message> msgs) throws Exception {
 		((PublicationI) this.connector).publierNMessage(msgs);
 	}
-	
+
 	public void createTopic(String uri, String uriProducteur) throws Exception {
-		((ListTopicsI) this.connector).createTopic(uri, uriProducteur);
-		
+		((ListTopics) this.connector).createTopic(uri, uriProducteur);
+
 	}
 
 	public void deleteTopic(String uri, String uriProd) throws Exception {
-		((ListTopicsI) this.connector).deleteTopic(uri, uriProd);
+		((ListTopics) this.connector).deleteTopic(uri, uriProd);
 	}
 
 	public Boolean existTopicURI(String uri) throws Exception {
-		return ((ListTopicsI) this.connector).existTopicURI(uri);
+		return ((ListTopics) this.connector).existTopicURI(uri);
 	}
 
-	public ArrayList<String> getUriTopics() throws Exception {
-		return ((ListTopicsI) this.connector).getUriTopics();
+	public CopyOnWriteArrayList<String> getUriTopics() throws Exception {
+		return ((ListTopics) this.connector).getUriTopics();
 	}
 
 }

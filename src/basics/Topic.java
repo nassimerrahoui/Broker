@@ -1,13 +1,11 @@
 package basics;
 
-import interfaces.TopicI;
+public class Topic {
 
-public class Topic implements TopicI {
-	
 	protected final String uri;
-	
+
 	protected String uriProducteur;
-	
+
 	public Topic(String uri, String uriProducteur) {
 		this.uri = uri;
 		this.uriProducteur = uriProducteur;

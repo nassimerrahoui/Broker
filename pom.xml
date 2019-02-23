@@ -20,11 +20,11 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>BCM-21092018</groupId>
-			<artifactId>BCM-21092018</artifactId>
+			<groupId>BCM-18022019</groupId>
+			<artifactId>BCM-18022019</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/resources/BCM-21092018.jar</systemPath>
+			<systemPath>${project.basedir}/resources/BCM-18022019.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>javassist</groupId>

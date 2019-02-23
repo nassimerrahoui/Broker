@@ -1,11 +1,9 @@
 package basics;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import interfaces.FilterI;
-import interfaces.MessageI;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Filter implements FilterI {
+public class Filter {
 
 	/** temps systeme unix de la publication du message */
 	protected long datePublication;
@@ -23,7 +21,7 @@ public class Filter implements FilterI {
 		this.contenu = null;
 	}
 
-	public boolean its_a_match(MessageI msg) {
+	public boolean its_a_match(Message msg) {
 		boolean matching = true;
 		if (datePublication == 0 && contenu == null)
 			return matching;
@@ -50,7 +48,7 @@ public class Filter implements FilterI {
 		return matching;
 	}
 
-	public boolean its_all_match(ArrayList<MessageI> msgs) {
+	public boolean its_all_match(ConcurrentLinkedQueue<Message> msgs) {
 		return false;
 	}
 
@@ -61,6 +59,5 @@ public class Filter implements FilterI {
 	public void setContenu(Serializable contenu) {
 		this.contenu = contenu;
 	}
-	
 
 }

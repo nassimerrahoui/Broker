@@ -1,36 +1,36 @@
 package connectors;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import basics.ListTopics;
+import basics.Message;
 import fr.sorbonne_u.components.connectors.AbstractConnector;
-import interfaces.ListTopicsI;
-import interfaces.MessageI;
 import interfaces.PublicationI;
 
-public class PublicationConnector extends AbstractConnector implements PublicationI, ListTopicsI {
+public class PublicationConnector extends AbstractConnector implements PublicationI {
 
-	public void publierMessage(MessageI msg) throws Exception {
+	public void publierMessage(Message msg) throws Exception {
 		((PublicationI) this.offering).publierMessage(msg);
 	}
 
-	public void publierNMessage(ArrayList<MessageI> msgs) throws Exception {
+	public void publierNMessage(CopyOnWriteArrayList<Message> msgs) throws Exception {
 		((PublicationI) this.offering).publierNMessage(msgs);
 	}
 
 	public void createTopic(String uri, String uriProducteur) throws Exception {
-		((ListTopicsI) this.offering).createTopic(uri, uriProducteur);
-		
+		((ListTopics) this.offering).createTopic(uri, uriProducteur);
+
 	}
 
 	public void deleteTopic(String uri, String uriProd) throws Exception {
-		((ListTopicsI) this.offering).deleteTopic(uri, uriProd);
+		((ListTopics) this.offering).deleteTopic(uri, uriProd);
 	}
 
 	public Boolean existTopicURI(String uri) throws Exception {
-		return ((ListTopicsI) this.offering).existTopicURI(uri);
+		return ((ListTopics) this.offering).existTopicURI(uri);
 	}
 
-	public ArrayList<String> getUriTopics() throws Exception {
-		return ((ListTopicsI) this.offering).getUriTopics();
+	public CopyOnWriteArrayList<String> getUriTopics() throws Exception {
+		return ((ListTopics) this.offering).getUriTopics();
 	}
 
 }

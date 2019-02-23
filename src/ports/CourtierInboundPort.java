@@ -1,15 +1,14 @@
 package ports;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import basics.Message;
 import components.Courtier;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
-import interfaces.ListTopicsI;
-import interfaces.MessageI;
 import interfaces.PublicationI;
 
-public class CourtierInboundPort extends AbstractInboundPort implements PublicationI, ListTopicsI {
+public class CourtierInboundPort extends AbstractInboundPort implements PublicationI {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,7 +18,7 @@ public class CourtierInboundPort extends AbstractInboundPort implements Publicat
 		assert uri != null & owner != null;
 	}
 
-	public void publierMessage(final MessageI msg) throws Exception {
+	public void publierMessage(final Message msg) throws Exception {
 
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
@@ -31,7 +30,7 @@ public class CourtierInboundPort extends AbstractInboundPort implements Publicat
 
 	}
 
-	public void publierNMessage(final ArrayList<MessageI> msgs) throws Exception {
+	public void publierNMessage(final CopyOnWriteArrayList<Message> msgs) throws Exception {
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
@@ -70,9 +69,9 @@ public class CourtierInboundPort extends AbstractInboundPort implements Publicat
 
 	}
 
-	public ArrayList<String> getUriTopics() throws Exception {
-		return this.owner.handleRequestSync(new AbstractComponent.AbstractService<ArrayList<String>>() {
-			public ArrayList<String> call() throws Exception {
+	public CopyOnWriteArrayList<String> getUriTopics() throws Exception {
+		return this.owner.handleRequestSync(new AbstractComponent.AbstractService<CopyOnWriteArrayList<String>>() {
+			public CopyOnWriteArrayList<String> call() throws Exception {
 				return ((Courtier) this.getOwner()).getUriTopics();
 			}
 		});

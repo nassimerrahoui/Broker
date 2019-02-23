@@ -1,15 +1,17 @@
 package ports;
 
+import basics.Filter;
 import basics.Souscription;
+import basics.Topic;
 import components.Courtier;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
-import interfaces.FilterI;
 import interfaces.SouscriptionI;
-import interfaces.TopicI;
 
 public class CourtierSouscriptionInboundPort extends AbstractInboundPort implements SouscriptionI {
+
+	private static final long serialVersionUID = 1L;
 
 	public CourtierSouscriptionInboundPort(String uri, ComponentI owner) throws Exception {
 		super(uri, SouscriptionI.class, owner);
@@ -27,30 +29,28 @@ public class CourtierSouscriptionInboundPort extends AbstractInboundPort impleme
 		});
 
 	}
-	
-	private static final long serialVersionUID = 1L;
 
-	public void resiliation(TopicI t) {
+	public void resiliation(Topic t) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public FilterI getFilter() {
+	public Filter getFilter() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void setFilter(FilterI filter) {
+	public void setFilter(Filter filter) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public TopicI getTopic() {
+	public Topic getTopic() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void resiliation(TopicI t, String uriConsommateur) {
+	public void resiliation(Topic t, String uriConsommateur) {
 		// TODO Auto-generated method stub
 
 	}

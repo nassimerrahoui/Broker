@@ -1,11 +1,10 @@
 package basics;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import interfaces.MessageI;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.net.InetAddress;
 
-public class Message implements MessageI {
+public class Message {
 
 	private static final long serialVersionUID = 1L;
 	/** identifiant unique du message */
@@ -17,19 +16,18 @@ public class Message implements MessageI {
 	/** charge utile serialisable du message */
 	protected final Serializable contenu;
 	/** le sujet du message */
-	protected final ArrayList<String> uriTopics;
-	/** le URI du producteur du message*/
-	protected final String uriProducteur ;
+	protected final CopyOnWriteArrayList<String> uriTopics;
+	/** le URI du producteur du message */
+	protected final String uriProducteur;
 
-	
-	public Message(Serializable contenu, String idPublieur, ArrayList<String> uriTopics) throws Exception{
+	public Message(Serializable contenu, String idPublieur, CopyOnWriteArrayList<String> uriTopics) throws Exception {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		this.uri = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();
 		this.idDateur = inetAddress.getHostName();
 		this.uriProducteur = idPublieur;
 		this.contenu = contenu;
-		this.uriTopics = new ArrayList<String>(uriTopics);
+		this.uriTopics = new CopyOnWriteArrayList<String>(uriTopics);
 	}
 
 	public String getIDMessage() {
@@ -43,6 +41,7 @@ public class Message implements MessageI {
 	public String getIDDateur() {
 		return idDateur;
 	}
+
 	public String getUriProducteur() {
 		return uriProducteur;
 	}
@@ -56,8 +55,12 @@ public class Message implements MessageI {
 		return contenu.toString() + " - publie par " + idDateur + ", date: " + datePublication;
 	}
 
-	public ArrayList<String> getTopicsURI() {
+	public CopyOnWriteArrayList<String> getTopicsURI() {
 		return uriTopics;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

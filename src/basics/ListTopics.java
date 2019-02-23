@@ -1,20 +1,16 @@
 package basics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import interfaces.ListTopicsI;
-import interfaces.MessageI;
+public class ListTopics {
 
-public class ListTopics implements ListTopicsI {
-
-	// java.util.Concurrent map synchron
-	private Map<Topic, ArrayList<MessageI>> topic_messages = new HashMap<Topic, ArrayList<MessageI>>();
+	private ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> topic_messages = new ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>>();
 
 	public void createTopic(String uri, String uriProducteur) {
 		Topic t = new Topic(uri, uriProducteur);
-		topic_messages.put(t, new ArrayList<MessageI>());
+		topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
 	}
 
 	public void deleteTopic(String uri, String uriProd) {
@@ -22,7 +18,7 @@ public class ListTopics implements ListTopicsI {
 		if (t.getProducteurURI().equals(uriProd)) {
 			topic_messages.remove(t);
 			System.out.println("Votre topic a ete supprime");
-			
+
 		}
 
 	}
@@ -31,9 +27,9 @@ public class ListTopics implements ListTopicsI {
 		return getUriTopics().contains(uri);
 	}
 
-	public ArrayList<String> getUriTopics() {
-		ArrayList<Topic> lm = new ArrayList<Topic>(topic_messages.keySet());
-		ArrayList<String> list = new ArrayList<String>();  
+	public CopyOnWriteArrayList<String> getUriTopics() {
+		CopyOnWriteArrayList<Topic> lm = new CopyOnWriteArrayList<Topic>(topic_messages.keySet());
+		CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<String>();
 		for (Topic topic : lm) {
 			list.add(topic.getTopicURI());
 		}
@@ -50,29 +46,28 @@ public class ListTopics implements ListTopicsI {
 		return topic;
 	}
 
-	public void addMesssageToTopic(MessageI msg, String uriProducteur) {
+	public void addMesssageToTopic(Message msg, String uriProducteur) {
 
 		for (String uri : msg.getTopicsURI()) {
 
 			if (!topic_messages.containsKey(this.getTopicByUri(uri))) {
 				Topic t = new Topic(uri, uriProducteur);
-				topic_messages.put(t, new ArrayList<MessageI>());
+				topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
 			}
 
 			topic_messages.get(getTopicByUri(uri)).add(msg);
 
 		}
 	}
-	
-	public void addNMesssageToTopic(ArrayList<MessageI> msgs , String uriProducteur) {
 
-		for (MessageI m : msgs) {
-			addMesssageToTopic(m,uriProducteur);
+	public void addNMesssageToTopic(CopyOnWriteArrayList<Message> msgs, String uriProducteur) {
+
+		for (Message m : msgs) {
+			addMesssageToTopic(m, uriProducteur);
 		}
 	}
-	
-	public ArrayList<MessageI> getMessagesByUriTopic(String uri){
+
+	public ConcurrentLinkedQueue<Message> getMessagesByUriTopic(String uri) {
 		return topic_messages.get(getTopicByUri(uri));
 	}
-
 }

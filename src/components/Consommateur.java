@@ -1,7 +1,7 @@
 package components;
 
-import java.util.ArrayList;
-
+import java.util.concurrent.CopyOnWriteArrayList;
+import basics.Message;
 import basics.Souscription;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
@@ -11,41 +11,38 @@ import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import fr.sorbonne_u.components.exceptions.InvariantException;
 import fr.sorbonne_u.components.exceptions.PostconditionException;
 import fr.sorbonne_u.components.ports.PortI;
-import interfaces.MessageI;
 import interfaces.ReceptionI;
 import interfaces.SouscriptionI;
 import ports.ConsommateurInboundPort;
 import ports.ConsommateurOutboundPort;
-import ports.ProducteurOutboundPort;
 
 @OfferedInterfaces(offered = { ReceptionI.class })
 @RequiredInterfaces(required = { SouscriptionI.class })
 
 public class Consommateur extends AbstractComponent {
 
-	protected ArrayList<MessageI> messages = new ArrayList<MessageI>();
+	protected CopyOnWriteArrayList<Message> messages = new CopyOnWriteArrayList<Message>();
 
 	protected ConsommateurOutboundPort souscriptionPort;
-	
+
 	protected static void checkInvariant(Consommateur c) {
 		assert c.isOfferedInterface(ReceptionI.class) : new InvariantException("Ce composant doit offrir ReceptionI!");
 	}
 
-	public Consommateur(String uri)  throws Exception {
+	public Consommateur(String uri) throws Exception {
 
 		super(uri, 1, 0);
 		String consommateurPortURI = java.util.UUID.randomUUID().toString();
 		String consOutPortURI = java.util.UUID.randomUUID().toString();
-		
+
 		PortI p = new ConsommateurInboundPort(consommateurPortURI, this);
 		this.addPort(p);
 		p.publishPort();
-		
+
 		PortI p1 = new ConsommateurOutboundPort(consOutPortURI, this);
 		this.addPort(p1);
 		p1.publishPort();
 
-		
 		this.tracer.setTitle("consommateur");
 		this.tracer.setRelativePosition(1, 0);
 
@@ -96,14 +93,14 @@ public class Consommateur extends AbstractComponent {
 		super.shutdownNow();
 	}
 
-	public void recevoirMessage(MessageI msg) {
+	public void recevoirMessage(Message msg) {
 		System.out.println("consommateur recoit un nouveau msg...");
 		assert msg != null : new PostconditionException("msg est vide!");
 		messages.add(msg);
-		System.out.println(messages.get(0).getContenu().toString()+ "conso");
+		System.out.println(messages.get(0).getContenu().toString() + "conso");
 	}
 
-	public void recevoirNMessages(ArrayList<MessageI> msgs) throws Exception {
+	public void recevoirNMessages(CopyOnWriteArrayList<Message> msgs) throws Exception {
 		this.logMessage("consommateur recoit plusieurs msg...");
 		assert msgs != null : new PostconditionException("Pas de msg!");
 
@@ -113,7 +110,7 @@ public class Consommateur extends AbstractComponent {
 		}
 		messages.addAll(msgs);
 	}
-	
+
 	public void souscrire(Souscription s) throws Exception {
 		this.souscriptionPort.souscrire(s);
 	}

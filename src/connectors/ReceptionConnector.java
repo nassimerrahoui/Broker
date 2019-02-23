@@ -1,18 +1,17 @@
 package connectors;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import basics.Message;
 import fr.sorbonne_u.components.connectors.AbstractConnector;
-import interfaces.MessageI;
 import interfaces.ReceptionI;
 
 public class ReceptionConnector extends AbstractConnector implements ReceptionI {
 
-	public void recevoirMessage(MessageI msg) throws Exception {
-		System.out.println("co reception");
+	public void recevoirMessage(Message msg) throws Exception {
 		((ReceptionI) this.offering).recevoirMessage(msg);
 	}
 
-	public void recevoirNMessage(ArrayList<MessageI> msgs) throws Exception {
+	public void recevoirNMessage(CopyOnWriteArrayList<Message> msgs) throws Exception {
 		((ReceptionI) this.offering).recevoirNMessage(msgs);
 	}
 
