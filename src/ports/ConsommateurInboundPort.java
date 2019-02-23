@@ -1,11 +1,11 @@
 package ports;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import basics.Message;
 import components.Consommateur;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
-import interfaces.MessageI;
 import interfaces.ReceptionI;
 
 public class ConsommateurInboundPort extends AbstractInboundPort implements ReceptionI {
@@ -17,20 +17,19 @@ public class ConsommateurInboundPort extends AbstractInboundPort implements Rece
 		assert uri != null && owner instanceof Consommateur;
 	}
 
-	public void recevoirMessage(final MessageI msg) throws Exception {
+	public void recevoirMessage(final Message msg) throws Exception {
 
-		this.owner.handleRequestAsync(
-				new AbstractComponent.AbstractService<Void>() {
+		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
-					public Void call() throws Exception {
-						((Consommateur) this.getOwner()).recevoirMessage(msg);
-						return null;
-					}
-				}) ;
+			public Void call() throws Exception {
+				((Consommateur) this.getOwner()).recevoirMessage(msg);
+				return null;
+			}
+		});
 
 	}
 
-	public void recevoirNMessage(ArrayList<MessageI> msgs) throws Exception {
+	public void recevoirNMessage(CopyOnWriteArrayList<Message> msgs) throws Exception {
 
 		((ReceptionI) this.owner).recevoirNMessage(msgs);
 
