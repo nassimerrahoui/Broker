@@ -2,14 +2,14 @@ package basics;
 
 public class Souscription {
 
-	public Topic topic;
+	public String topic;
 	public Filter filter;
 	public String uriInboundReception;
 
-	public Souscription(Topic t, Filter filter, String uri) {
+	public Souscription(String t, Filter filter, String uriInBoundConsommateur) {
 		this.topic = t;
 		this.filter = filter;
-		this.uriInboundReception = uri;
+		this.uriInboundReception = uriInBoundConsommateur;
 	}
 
 }

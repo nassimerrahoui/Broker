@@ -1,6 +1,7 @@
 package components;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+import basics.Filter;
 import basics.Message;
 import basics.Souscription;
 import fr.sorbonne_u.components.AbstractComponent;
@@ -8,8 +9,6 @@ import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import fr.sorbonne_u.components.exceptions.InvariantException;
-import fr.sorbonne_u.components.exceptions.PostconditionException;
 import fr.sorbonne_u.components.ports.PortI;
 import interfaces.MessageServiceI;
 import ports.MessageServiceInboundPort;
@@ -21,51 +20,72 @@ import ports.MessageServiceOutboundPort;
 public class Consommateur extends AbstractComponent {
 
 	protected CopyOnWriteArrayList<Message> messages = new CopyOnWriteArrayList<Message>();
-
+	protected MessageServiceInboundPort receptionPort;
 	protected MessageServiceOutboundPort souscriptionPort;
-
-	protected static void checkInvariant(Consommateur c) {
-		assert c.isOfferedInterface(MessageServiceI.class) : new InvariantException("Ce composant doit offrir ReceptionI!");
-	}
 
 	public Consommateur(String uri) throws Exception {
 
 		super(uri, 1, 0);
-		String consommateurPortURI = java.util.UUID.randomUUID().toString();
-		String consOutPortURI = java.util.UUID.randomUUID().toString();
+		String receptionPortName = java.util.UUID.randomUUID().toString();
+		String souscriptionPortName = java.util.UUID.randomUUID().toString();
 
-		PortI p = new MessageServiceInboundPort(consommateurPortURI, this);
-		this.addPort(p);
-		p.publishPort();
+		receptionPort = new MessageServiceInboundPort(receptionPortName, this);
+		this.addPort(receptionPort);
+		receptionPort.publishPort();
 
-		PortI p1 = new MessageServiceOutboundPort(consOutPortURI, this);
-		this.addPort(p1);
-		p1.publishPort();
+		souscriptionPort = new MessageServiceOutboundPort(souscriptionPortName, this);
+		this.addPort(souscriptionPort);
+		souscriptionPort.publishPort();
+	}
 
-		this.tracer.setTitle("consommateur");
-		this.tracer.setRelativePosition(1, 0);
+	public void recevoirMessage(Message msg) throws Exception {
+		/** TODO if a remplacer par si ce sont des messages des nos souscriptions on recoit **/
+		if(msg.getTopicsURI().contains("hockey")) {
+			messages.add(msg);
+			System.out.println(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
+		}
+		else {
+			System.out.println(this.receptionPort.getPortURI() + " non recu : " + msg.getContenu().toString());
+		}
+	}
 
-		Consommateur.checkInvariant(this);
+	public void recevoirNMessages(CopyOnWriteArrayList<Message> msgs) throws Exception {
+		for (int i = 0; i < msgs.size(); i++) {
+			if (msgs.get(i) == null)
+				msgs.remove(i);
+		}
+		messages.addAll(msgs);
+	}
 
-		assert this.isPortExisting(consommateurPortURI) : new PostconditionException(
-				"Le consommateur doit avoir un port avec URI " + consommateurPortURI);
-		assert this.findPortFromURI(consommateurPortURI).getImplementedInterface()
-				.equals(MessageServiceI.class) : new PostconditionException(
-						"Le consommateur doit avoir un port avec une interface ReceptionI implemente");
-		assert this.findPortFromURI(consommateurPortURI).isPublished() : new PostconditionException(
-				"Le consommateur doit avoir un port publie avec URI " + consommateurPortURI);
+	public void souscrire(Souscription s) throws Exception {
+		this.souscriptionPort.souscrire(s);
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
-		this.logMessage("Lancement du composant Consommateur.");
-
 		super.start();
 	}
 
 	@Override
+	public void execute() throws Exception {
+		super.execute();
+
+		this.runTask(new AbstractTask() {
+			public void run() {
+				try {
+					Filter f = new Filter();
+					Souscription s = new Souscription("hockey", f, receptionPort.getPortURI());
+					souscriptionPort.souscrire(s);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+	}
+
+	@Override
 	public void finalise() throws Exception {
-		this.logMessage("Arret du composant Consommateur.");
 		super.finalise();
 
 	}
@@ -79,38 +99,5 @@ public class Consommateur extends AbstractComponent {
 			throw new ComponentShutdownException(e);
 		}
 		super.shutdown();
-	}
-
-	@Override
-	public void shutdownNow() throws ComponentShutdownException {
-		try {
-			PortI[] p = this.findPortsFromInterface(MessageServiceI.class);
-			p[0].unpublishPort();
-		} catch (Exception e) {
-			throw new ComponentShutdownException(e);
-		}
-		super.shutdownNow();
-	}
-
-	public void recevoirMessage(Message msg) {
-		System.out.println("consommateur recoit un nouveau msg...");
-		assert msg != null : new PostconditionException("msg est vide!");
-		messages.add(msg);
-		System.out.println(messages.get(0).getContenu().toString() + "conso");
-	}
-
-	public void recevoirNMessages(CopyOnWriteArrayList<Message> msgs) throws Exception {
-		this.logMessage("consommateur recoit plusieurs msg...");
-		assert msgs != null : new PostconditionException("Pas de msg!");
-
-		for (int i = 0; i < msgs.size(); i++) {
-			if (msgs.get(i) == null)
-				msgs.remove(i);
-		}
-		messages.addAll(msgs);
-	}
-
-	public void souscrire(Souscription s) throws Exception {
-		this.souscriptionPort.souscrire(s);
 	}
 }

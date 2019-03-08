@@ -1,5 +1,6 @@
 package components;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import basics.Filter;
@@ -24,7 +25,6 @@ public class Courtier extends AbstractComponent {
 	protected MessageServiceOutboundPort envoiePort;
 	protected MessageServiceInboundPort publicationPort;
 	protected MessageServiceInboundPort souscriptionPort;
-
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
 
@@ -81,28 +81,35 @@ public class Courtier extends AbstractComponent {
 		this.envoiePort.recevoirMessage(msg);
 	}
 
-	public void souscrire(Souscription s, String uriConsommateur) throws Exception {
-		souscriptions.addSouscriptionToConsommateur(s, uriConsommateur);
+	public void souscrire(Souscription s, String uriInBoundConsommateur) throws Exception {
+		if(topics.existTopicURI(s.topic)) {
+			souscriptions.addSouscriptionToConsommateur(s, uriInBoundConsommateur);
+		}
 	}
 	
 	public void setFilter(Topic t, Filter f, String uriInBoundConsommateur) {
 		souscriptions.modifyFilter(t, f, uriInBoundConsommateur);
 	}
 	
-	public void resiliation(Topic t, String uriConsommateur) {
-		//TODO
+	/** TODO **/
+	public ArrayList<String> getMyTopics(String uriInBoundConsommateur) {
+		return null;
+	}
+	
+	/** TODO **/
+	public void resiliation(Topic t, String uriInBoundConsommateur) {
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-		this.logMessage("Lancement du courtier");
+		this.logMessage("Lancement du courtier...");
 
 	}
 
 	@Override
 	public void finalise() throws Exception {
-		this.logMessage("Arret du courtier.");
+		this.logMessage("Arret du courtier...");
 		super.finalise();
 	}
 

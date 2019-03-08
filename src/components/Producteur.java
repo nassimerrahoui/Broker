@@ -15,7 +15,6 @@ public class Producteur extends AbstractComponent {
 
 	public Producteur(String uri) throws Exception {
 		super(uri, 0, 1);
-
 		String outBoundPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new MessageServiceOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
@@ -25,7 +24,6 @@ public class Producteur extends AbstractComponent {
 
 	public void publishMessageAndPrint(Message msg) throws Exception {
 		this.publicationPort.publierMessage(msg);
-		this.logMessage(this.getComponentDefinitionClassName() + " publie un nouveau msg : \n" + msg.getContenu());
 
 	}
 
@@ -59,8 +57,10 @@ public class Producteur extends AbstractComponent {
 					ArrayList<String> topics = new ArrayList<String>();
 					topics.add("chasse");
 					topics.add("cinema");
-					Message msg = new Message("Message pour les topics chasse et cinema !", "p1", topics);
-					((Producteur) this.owner).publishMessageAndPrint(msg);
+					Message m1 = new Message("Un nouveau film sur la chasse est sorti.", "p1", topics);
+					Message m2 = new Message("L'equipe du Canada a gagne la final de hockey !", "p1", "hockey");
+					((Producteur) this.owner).publishMessageAndPrint(m1);
+					((Producteur) this.owner).publishMessageAndPrint(m2);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
