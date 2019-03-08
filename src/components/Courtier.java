@@ -22,7 +22,7 @@ import ports.CourtierSouscriptionInboundPort;
 public class Courtier extends AbstractComponent {
 
 	protected CourtierOutboundPort envoiePort;
-	protected CourtierInboundPort publicationPort; // Publication du message à partir du producteur
+	protected CourtierInboundPort publicationPort;
 	protected CourtierSouscriptionInboundPort souscriptionPort;
 
 	protected ListTopics topics = new ListTopics();
@@ -51,7 +51,8 @@ public class Courtier extends AbstractComponent {
 
 	public void publierMessage(Message m) throws Exception {
 		topics.addMesssageToTopic(m, m.getUriProducteur());
-		System.out.println("Le message est publie :)");
+		// Quels sont les autres formes de contenu
+		System.out.println("Le message est publie : " + m.getContenu() );
 		this.envoiePort.recevoirMessage(m);
 
 	}
@@ -62,21 +63,14 @@ public class Courtier extends AbstractComponent {
 		this.envoiePort.recevoirNMessage(msgs);
 	}
 
-	public void createTopic(String uri, String uriProducteur) throws Exception {
-		topics.createTopic(uri, uriProducteur);
-		System.out.println("Votre topic a ete cree.");
+	public void createTopic(String uri) throws Exception {
+		topics.createTopic(uri);
+		System.out.println("Le topic " + uri + " a ete cree.");
 	}
 
-	public void deleteTopic(String uri, String uriProd) {
-		topics.deleteTopic(uri, uriProd);
-	}
-
-	public Boolean existTopicURI(String uri) {
-		return topics.existTopicURI(uri);
-	}
-
-	public CopyOnWriteArrayList<String> getUriTopics() {
-		return topics.getUriTopics();
+	public void deleteTopic(String uri) {
+		topics.deleteTopic(uri);
+		System.out.println("Le topic " + uri + " a ete supprime.");
 	}
 
 	public void envoieMessageAndPrint(Message msg) throws Exception {

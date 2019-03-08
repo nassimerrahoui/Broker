@@ -18,7 +18,6 @@ public class CVM extends AbstractCVM {
 
 	protected static final String ConsommateurInboundPortURI = "ConsoInboundPort";
 	protected static final String ProducteurOutboundPortURI = "ProducteurOutboundPort";
-	
 	protected static final String CourtierPortURI = "CourtierPort";
 	
 	protected Consommateur consommateur;
@@ -40,7 +39,7 @@ public class CVM extends AbstractCVM {
 		// Creation phase
 		// --------------------------------------------------------------------
 
-		this.producteur = new Producteur(PRODUCTEUR_COMPONENT_URI, ProducteurOutboundPortURI);
+		this.producteur = new Producteur(PRODUCTEUR_COMPONENT_URI);
 		this.courtier = new Courtier(COURTIER_COMPONENT_URI);
 		this.consommateur = new Consommateur(CONSOMMATEUR_COMPONENT_URI);
 

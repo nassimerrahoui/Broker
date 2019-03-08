@@ -44,35 +44,18 @@ public class CourtierInboundPort extends AbstractInboundPort implements Publicat
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Courtier) this.getOwner()).createTopic(uri, uriProducteur);
+				((Courtier) this.getOwner()).createTopic(uri);
 				return null;
 			}
 		});
 	}
 
-	public void deleteTopic(final String uri, final String uriProd) throws Exception {
+	public void deleteTopic(final String uri) throws Exception {
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Courtier) this.getOwner()).deleteTopic(uri, uriProd);
+				((Courtier) this.getOwner()).deleteTopic(uri);
 				return null;
-			}
-		});
-	}
-
-	public Boolean existTopicURI(final String uri) throws Exception {
-		return this.owner.handleRequestSync(new AbstractComponent.AbstractService<Boolean>() {
-			public Boolean call() throws Exception {
-				return ((Courtier) this.getOwner()).existTopicURI(uri);
-			}
-		});
-
-	}
-
-	public CopyOnWriteArrayList<String> getUriTopics() throws Exception {
-		return this.owner.handleRequestSync(new AbstractComponent.AbstractService<CopyOnWriteArrayList<String>>() {
-			public CopyOnWriteArrayList<String> call() throws Exception {
-				return ((Courtier) this.getOwner()).getUriTopics();
 			}
 		});
 	}

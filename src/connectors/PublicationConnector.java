@@ -17,12 +17,12 @@ public class PublicationConnector extends AbstractConnector implements Publicati
 	}
 
 	public void createTopic(String uri, String uriProducteur) throws Exception {
-		((ListTopics) this.offering).createTopic(uri, uriProducteur);
+		((ListTopics) this.offering).createTopic(uri);
 
 	}
 
 	public void deleteTopic(String uri, String uriProd) throws Exception {
-		((ListTopics) this.offering).deleteTopic(uri, uriProd);
+		((ListTopics) this.offering).deleteTopic(uri);
 	}
 
 	public Boolean existTopicURI(String uri) throws Exception {

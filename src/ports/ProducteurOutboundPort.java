@@ -24,13 +24,13 @@ public class ProducteurOutboundPort extends AbstractOutboundPort implements Publ
 		((PublicationI) this.connector).publierNMessage(msgs);
 	}
 
-	public void createTopic(String uri, String uriProducteur) throws Exception {
-		((ListTopics) this.connector).createTopic(uri, uriProducteur);
+	public void createTopic(String uri) throws Exception {
+		((ListTopics) this.connector).createTopic(uri);
 
 	}
 
 	public void deleteTopic(String uri, String uriProd) throws Exception {
-		((ListTopics) this.connector).deleteTopic(uri, uriProd);
+		((ListTopics) this.connector).deleteTopic(uri);
 	}
 
 	public Boolean existTopicURI(String uri) throws Exception {

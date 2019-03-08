@@ -1,6 +1,6 @@
 package components;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 import basics.Message;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
@@ -13,10 +13,11 @@ public class Producteur extends AbstractComponent {
 
 	protected ProducteurOutboundPort publicationPort;
 
-	public Producteur(String uri, String outboundPortURI) throws Exception {
+	public Producteur(String uri) throws Exception {
 		super(uri, 0, 1);
 
-		publicationPort = new ProducteurOutboundPort(outboundPortURI, this);
+		String outBoundPortURI = java.util.UUID.randomUUID().toString();
+		publicationPort = new ProducteurOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
 		// faire un toggletracing pour afficher les logs | faireun togglelogging pour
@@ -32,26 +33,17 @@ public class Producteur extends AbstractComponent {
 
 	}
 
-	public void createTopic(String uri, String uriProducteur) throws Exception {
-		this.publicationPort.createTopic(uri, uriProducteur);
-	}
-
-	public void deleteTopic(String uri, String uriProd) throws Exception {
-		this.publicationPort.deleteTopic(uri, uriProd);
-	}
-
-	public Boolean existTopicURI(String uri) throws Exception {
-		return this.publicationPort.existTopicURI(uri);
-	}
-
-	public CopyOnWriteArrayList<String> getUriTopics() throws Exception {
-		return this.publicationPort.getUriTopics();
-	}
-
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
 		this.logMessage("Lancement du composant Producteur...");
+		try {
+			this.publicationPort.createTopic("chasse");
+			this.publicationPort.createTopic("cinema");
+			this.publicationPort.createTopic("hockey");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -71,12 +63,11 @@ public class Producteur extends AbstractComponent {
 		this.runTask(new AbstractTask() {
 			public void run() {
 				try {
-					CopyOnWriteArrayList<String> l = new CopyOnWriteArrayList<String>();
-					l.add("Sujet1");
-					l.add("Sujet2");
-					Message msg = new Message("Hello, ici le producteur P1 !", "p1", l);
+					ArrayList<String> topics = new ArrayList<String>();
+					topics.add("chasse");
+					topics.add("cinema");
+					Message msg = new Message("Message pour les topics chasse et cinema !", "p1", topics);
 					((Producteur) this.owner).publishMessageAndPrint(msg);
-					// ((Producteur)this.owner).createTopic("Sport", "prod1");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

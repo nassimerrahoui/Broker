@@ -1,6 +1,7 @@
 package basics;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.net.InetAddress;
 
@@ -20,7 +21,7 @@ public class Message {
 	/** le URI du producteur du message */
 	protected final String uriProducteur;
 
-	public Message(Serializable contenu, String idPublieur, CopyOnWriteArrayList<String> uriTopics) throws Exception {
+	public Message(Serializable contenu, String idPublieur, ArrayList<String> uriTopics) throws Exception {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		this.uri = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();

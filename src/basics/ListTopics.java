@@ -8,18 +8,15 @@ public class ListTopics {
 
 	private ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> topic_messages = new ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>>();
 
-	public void createTopic(String uri, String uriProducteur) {
-		Topic t = new Topic(uri, uriProducteur);
+	public void createTopic(String uri) {
+		Topic t = new Topic(uri);
 		topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
 	}
 
-	public void deleteTopic(String uri, String uriProd) {
+	public void deleteTopic(String uri) {
 		Topic t = getTopicByUri(uri);
-		if (t.getProducteurURI().equals(uriProd)) {
-			topic_messages.remove(t);
-			System.out.println("Votre topic a ete supprime");
-
-		}
+		topic_messages.remove(t);
+		System.out.println("Votre topic a ete supprime");
 
 	}
 
@@ -51,7 +48,7 @@ public class ListTopics {
 		for (String uri : msg.getTopicsURI()) {
 
 			if (!topic_messages.containsKey(this.getTopicByUri(uri))) {
-				Topic t = new Topic(uri, uriProducteur);
+				Topic t = new Topic(uri);
 				topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
 			}
 
