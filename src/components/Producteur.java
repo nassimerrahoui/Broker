@@ -5,26 +5,22 @@ import basics.Message;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import interfaces.PublicationI;
-import ports.ProducteurOutboundPort;
+import interfaces.MessageServiceI;
+import ports.MessageServiceOutboundPort;
 
-@RequiredInterfaces(required = { PublicationI.class })
+@RequiredInterfaces(required = { MessageServiceI.class })
 public class Producteur extends AbstractComponent {
 
-	protected ProducteurOutboundPort publicationPort;
+	protected MessageServiceOutboundPort publicationPort;
 
 	public Producteur(String uri) throws Exception {
 		super(uri, 0, 1);
 
 		String outBoundPortURI = java.util.UUID.randomUUID().toString();
-		publicationPort = new ProducteurOutboundPort(outBoundPortURI, this);
+		publicationPort = new MessageServiceOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
-		// faire un toggletracing pour afficher les logs | faireun togglelogging pour
-		// enregistrer dans un fichier
-		this.toggleTracing();
-		this.tracer.setTitle("Producteur");
-		this.tracer.setRelativePosition(1, 1);
+
 	}
 
 	public void publishMessageAndPrint(Message msg) throws Exception {
@@ -36,7 +32,6 @@ public class Producteur extends AbstractComponent {
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-		this.logMessage("Lancement du composant Producteur...");
 		try {
 			this.publicationPort.createTopic("chasse");
 			this.publicationPort.createTopic("cinema");
@@ -48,8 +43,6 @@ public class Producteur extends AbstractComponent {
 
 	@Override
 	public void finalise() throws Exception {
-		this.logMessage("Arret du composant Producteur...");
-
 		this.publicationPort.doDisconnection();
 		this.publicationPort.unpublishPort();
 

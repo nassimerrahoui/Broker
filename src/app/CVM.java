@@ -3,23 +3,17 @@ package app;
 import components.Consommateur;
 import components.Courtier;
 import components.Producteur;
-import connectors.PublicationConnector;
-import connectors.ReceptionConnector;
+import connectors.MessageServiceConnector;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
-import interfaces.PublicationI;
-import interfaces.ReceptionI;
+import interfaces.MessageServiceI;
 
 public class CVM extends AbstractCVM {
-	
+
 	//
 	protected static final String PRODUCTEUR_COMPONENT_URI = "my-URI-PRODUCTEUR";
 	protected static final String CONSOMMATEUR_COMPONENT_URI = "my-URI-CONSOMMATEUR";
 	protected static final String COURTIER_COMPONENT_URI = "my-URI-COURTIER";
 
-	protected static final String ConsommateurInboundPortURI = "ConsoInboundPort";
-	protected static final String ProducteurOutboundPortURI = "ProducteurOutboundPort";
-	protected static final String CourtierPortURI = "CourtierPort";
-	
 	protected Consommateur consommateur;
 	protected Producteur producteur;
 	protected Courtier courtier;
@@ -28,13 +22,11 @@ public class CVM extends AbstractCVM {
 		super();
 	}
 
-	
 	@Override
 	public void deploy() throws Exception {
-		
+
 		assert !this.deploymentDone();
 
-		
 		// --------------------------------------------------------------------
 		// Creation phase
 		// --------------------------------------------------------------------
@@ -46,17 +38,22 @@ public class CVM extends AbstractCVM {
 		this.deployedComponents.add(consommateur);
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);
-		
+
 		// --------------------------------------------------------------------
 		// Connection phase
 		// --------------------------------------------------------------------
 		// Connexion entre producteur et courtier
 		// utiiser port connection a la place de la ref courtier
-		this.producteur.doPortConnection(ProducteurOutboundPortURI, courtier.findInboundPortURIsFromInterface(PublicationI.class)[0],
-				PublicationConnector.class.getCanonicalName());
+		this.producteur.doPortConnection(producteur.findOutboundPortURIsFromInterface(MessageServiceI.class)[0],
+				courtier.findInboundPortURIsFromInterface(MessageServiceI.class)[0],
+				MessageServiceConnector.class.getCanonicalName());
 		// Connexion entre courtier et consommateur
-		this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(ReceptionI.class)[0],ConsommateurInboundPortURI,
-				ReceptionConnector.class.getCanonicalName());
+		this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(MessageServiceI.class)[0],
+				consommateur.findInboundPortURIsFromInterface(MessageServiceI.class)[0],
+				MessageServiceConnector.class.getCanonicalName());
+		this.consommateur.doPortConnection(consommateur.findOutboundPortURIsFromInterface(MessageServiceI.class)[0],
+				courtier.findInboundPortURIsFromInterface(MessageServiceI.class)[0],
+				MessageServiceConnector.class.getCanonicalName());
 		// --------------------------------------------------------------------
 		// Deployment done
 		// --------------------------------------------------------------------
@@ -65,16 +62,15 @@ public class CVM extends AbstractCVM {
 		assert this.deploymentDone();
 	}
 
-	
 	@Override
 	public void shutdown() throws Exception {
 		assert this.allFinalised();
 		// any disconnection not done yet can be performed here
 
 		// print logs on files, if activated
-		this.consommateur.printExecutionLogOnFile("Consommateur") ;
-		this.producteur.printExecutionLogOnFile("Producteur") ;
-		this.courtier.printExecutionLogOnFile("Courtier") ;
+		this.consommateur.printExecutionLogOnFile("Consommateur");
+		this.producteur.printExecutionLogOnFile("Producteur");
+		this.courtier.printExecutionLogOnFile("Courtier");
 		super.shutdown();
 	}
 

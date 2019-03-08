@@ -21,8 +21,7 @@ public class ListSouscriptions {
 	}
 
 	public void modifyFilter(Topic t, Filter f, String uriInBoundConsommateur) {
-		CopyOnWriteArrayList<Souscription> liste_souscription = souscriptions.get(uriInBoundConsommateur);
-		for (Souscription s : liste_souscription) {
+		for (Souscription s : souscriptions.get(uriInBoundConsommateur)) {
 			if (s.topic.equals(t)) {
 				s.filter = f;
 			}
