@@ -4,6 +4,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import basics.Filter;
 import basics.Message;
 import basics.Souscription;
+import basics.Topic;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
@@ -19,13 +20,14 @@ import ports.MessageServiceOutboundPort;
 
 public class Consommateur extends AbstractComponent {
 
-	protected CopyOnWriteArrayList<Message> messages = new CopyOnWriteArrayList<Message>();
+	protected CopyOnWriteArrayList<Message> myMessages = new CopyOnWriteArrayList<Message>();
+	protected CopyOnWriteArrayList<Topic> myTopics = new CopyOnWriteArrayList<Topic>();
 	protected MessageServiceInboundPort receptionPort;
 	protected MessageServiceOutboundPort souscriptionPort;
 
-	public Consommateur(String uri) throws Exception {
+	public Consommateur() throws Exception {
 
-		super(uri, 1, 0);
+		super(1, 0);
 		String receptionPortName = java.util.UUID.randomUUID().toString();
 		String souscriptionPortName = java.util.UUID.randomUUID().toString();
 
@@ -36,16 +38,17 @@ public class Consommateur extends AbstractComponent {
 		souscriptionPort = new MessageServiceOutboundPort(souscriptionPortName, this);
 		this.addPort(souscriptionPort);
 		souscriptionPort.publishPort();
+		
+		this.toggleTracing();
 	}
 
-	public void recevoirMessage(Message msg) throws Exception {
-		/** TODO if a remplacer par si ce sont des messages des nos souscriptions on recoit **/
-		if(msg.getTopicsURI().contains("hockey")) {
-			messages.add(msg);
-			System.out.println(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
-		}
-		else {
-			System.out.println(this.receptionPort.getPortURI() + " non recu : " + msg.getContenu().toString());
+	public void recevoirMessage(Message msg,String uriInboundPort) throws Exception {
+		for (Topic t : myTopics) {
+			if (msg.getTopicsURI().contains(t.getTopicURI())) {
+				myMessages.add(msg);
+				System.out.println(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
+				break;
+			}
 		}
 	}
 
@@ -54,7 +57,7 @@ public class Consommateur extends AbstractComponent {
 			if (msgs.get(i) == null)
 				msgs.remove(i);
 		}
-		messages.addAll(msgs);
+		myMessages.addAll(msgs);
 	}
 
 	public void souscrire(Souscription s) throws Exception {

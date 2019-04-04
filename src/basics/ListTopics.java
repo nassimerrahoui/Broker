@@ -67,4 +67,8 @@ public class ListTopics {
 	public ConcurrentLinkedQueue<Message> getMessagesByUriTopic(String uri) {
 		return topic_messages.get(getTopicByUri(uri));
 	}
+	
+	public ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> getTopics(){
+		return topic_messages;
+	}
 }

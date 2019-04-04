@@ -13,8 +13,8 @@ public class Producteur extends AbstractComponent {
 
 	protected MessageServiceOutboundPort publicationPort;
 
-	public Producteur(String uri) throws Exception {
-		super(uri, 0, 1);
+	public Producteur() throws Exception {
+		super(0, 1);
 		String outBoundPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new MessageServiceOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
@@ -31,9 +31,9 @@ public class Producteur extends AbstractComponent {
 	public void start() throws ComponentStartException {
 		super.start();
 		try {
-			this.publicationPort.createTopic("chasse");
+			this.publicationPort.createTopic("actu");
 			this.publicationPort.createTopic("cinema");
-			this.publicationPort.createTopic("hockey");
+			this.publicationPort.createTopic("culture");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -55,10 +55,10 @@ public class Producteur extends AbstractComponent {
 			public void run() {
 				try {
 					ArrayList<String> topics = new ArrayList<String>();
-					topics.add("chasse");
+					topics.add("culture");
 					topics.add("cinema");
-					Message m1 = new Message("Un nouveau film sur la chasse est sorti.", "p1", topics);
-					Message m2 = new Message("L'equipe du Canada a gagne la final de hockey !", "p1", "hockey");
+					Message m1 = new Message("Un nouveau film est sorti.", "p1", topics);
+					Message m2 = new Message("Les gilets jaunes acte 21.", "p1", "actu");
 					((Producteur) this.owner).publishMessageAndPrint(m1);
 					((Producteur) this.owner).publishMessageAndPrint(m2);
 				} catch (Exception e) {

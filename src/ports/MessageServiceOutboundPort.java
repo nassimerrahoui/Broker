@@ -34,8 +34,8 @@ public class MessageServiceOutboundPort extends AbstractOutboundPort implements 
 		((MessageServiceI) this.connector).publierNMessage(msgs);
 	}
 
-	public void recevoirMessage(Message msg) throws Exception {
-		((MessageServiceI) this.connector).recevoirMessage(msg);
+	public void recevoirMessage(Message msg,String uri) throws Exception {
+		((MessageServiceI) this.connector).recevoirMessage(msg,uri);
 	}
 
 	public void recevoirNMessage(CopyOnWriteArrayList<Message> msg) throws Exception {

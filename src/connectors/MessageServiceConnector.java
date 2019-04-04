@@ -26,8 +26,11 @@ public class MessageServiceConnector extends AbstractConnector implements Messag
 		((MessageServiceI) this.offering).deleteTopic(uri);
 	}
 
-	public void recevoirMessage(Message msg) throws Exception {
-		((MessageServiceI) this.offering).recevoirMessage(msg);
+	public void recevoirMessage(Message msg,String uriInboundPort) throws Exception {
+		if (this.getOfferingPortURI() == uriInboundPort) {
+			((MessageServiceI) this.offering).recevoirMessage(msg,uriInboundPort);
+		}
+		
 	}
 
 	public void recevoirNMessage(CopyOnWriteArrayList<Message> msgs) throws Exception {

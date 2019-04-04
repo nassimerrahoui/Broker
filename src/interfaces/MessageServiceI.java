@@ -19,7 +19,7 @@ public interface MessageServiceI extends RequiredI, OfferedI {
 
 	public void deleteTopic(String uri) throws Exception;
 	
-	public void recevoirMessage(Message msg) throws Exception;
+	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception;
 
 	public void recevoirNMessage(CopyOnWriteArrayList<Message> msg) throws Exception;
 	

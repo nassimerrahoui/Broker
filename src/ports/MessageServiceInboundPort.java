@@ -63,12 +63,14 @@ public class MessageServiceInboundPort extends AbstractInboundPort implements Me
 		});
 	}
 
-	public void recevoirMessage(final Message msg) throws Exception {
+	public void recevoirMessage(final Message msg,final String uriInboundConsumer) throws Exception {
 
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Consommateur) this.getOwner()).recevoirMessage(msg);
+				
+				((Consommateur) this.getOwner()).recevoirMessage(msg,uriInboundConsumer);
+				
 				return null;
 			}
 		});
