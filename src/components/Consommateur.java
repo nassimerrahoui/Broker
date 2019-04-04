@@ -47,7 +47,7 @@ public class Consommateur extends AbstractComponent {
 		for (Topic t : myTopics) {
 			if (msg.getTopicsURI().contains(t.getTopicURI())) {
 				myMessages.add(msg);
-				System.out.println(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
+				this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
 				break;
 			}
 		}
@@ -63,6 +63,7 @@ public class Consommateur extends AbstractComponent {
 
 	public void souscrire(Souscription s) throws Exception {
 		this.logMessage("Souscription au topic "+s.topic+" sur le port "+s.uriInboundReception);
+		this.myTopics.add(new Topic(s.topic));
 		this.souscriptionPort.souscrire(s);
 	}
 

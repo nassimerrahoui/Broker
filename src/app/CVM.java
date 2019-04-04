@@ -68,6 +68,9 @@ public class CVM extends AbstractCVM {
 		assert this.allFinalised();
 		
 		// print logs on files, if activated
+		this.consommateur.toggleLogging();
+		this.courtier.toggleLogging();
+		this.producteur.toggleLogging();
 		this.consommateur.printExecutionLogOnFile("Consommateur");
 		this.producteur.printExecutionLogOnFile("Producteur");
 		this.courtier.printExecutionLogOnFile("Courtier");

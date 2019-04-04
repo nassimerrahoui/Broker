@@ -63,7 +63,7 @@ public class Producteur extends AbstractComponent {
 	@Override
 	public void execute() throws Exception {
 		super.execute();
-
+		Thread.sleep(1000);
 		this.runTask(new AbstractTask() {
 			public void run() {
 				try {
