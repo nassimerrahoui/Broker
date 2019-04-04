@@ -1,7 +1,6 @@
 package components;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -15,13 +14,14 @@ import basics.Topic;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
+import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import interfaces.MessageServiceI;
 import ports.MessageServiceInboundPort;
 import ports.MessageServiceOutboundPort;
 
 @RequiredInterfaces(required = { MessageServiceI.class })
-@OfferedInterfaces(offered = { MessageServiceI.class, MessageServiceI.class })
+@OfferedInterfaces(offered = { MessageServiceI.class })
 
 public class Courtier extends AbstractComponent {
 
@@ -80,12 +80,17 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void envoieMessageAndPrint(Message msg,String uriInboundConsumer) throws Exception {
+		this.logMessage("Envoie message "+msg+" à "+uriInboundConsumer);
 		this.envoiePort.recevoirMessage(msg,uriInboundConsumer);
 	}
 
 	public void souscrire(Souscription s, String uriInBoundConsommateur) throws Exception {
 		if(topics.existTopicURI(s.topic)) {
+			this.logMessage(uriInBoundConsommateur+" souscrit au topic "+s.topic);
 			souscriptions.addSouscriptionToConsommateur(s, uriInBoundConsommateur);
+		}
+		else {
+			this.logMessage(uriInBoundConsommateur+" :Topic "+s.topic+" doesn't exist");
 		}
 	}
 	
@@ -113,6 +118,18 @@ public class Courtier extends AbstractComponent {
 	public void finalise() throws Exception {
 		this.logMessage("Arret du courtier...");
 		super.finalise();
+	}
+	
+	public void shutdown() throws ComponentShutdownException {
+		try {
+			envoiePort.unpublishPort();
+			publicationPort.unpublishPort();
+			souscriptionPort.unpublishPort();
+		} catch (Exception e) {
+			throw new ComponentShutdownException();
+		}
+		
+		super.shutdown();
 	}
 	
 	public void notifyConsommateurs() throws Exception {

@@ -18,7 +18,7 @@ public class MessageServiceInboundPort extends AbstractInboundPort implements Me
 
 	public MessageServiceInboundPort(String uri, ComponentI owner) throws Exception {
 		super(uri, MessageServiceI.class, owner);
-		assert uri != null && owner instanceof Consommateur;
+		assert uri != null;
 	}
 
 	public void publierMessage(final Message msg) throws Exception {
@@ -87,7 +87,7 @@ public class MessageServiceInboundPort extends AbstractInboundPort implements Me
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Courtier) this.getOwner()).souscrire(s, pluginURI);
+				((Courtier) this.getOwner()).souscrire(s,s.uriInboundReception); 
 				return null;
 			}
 		});

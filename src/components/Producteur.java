@@ -14,29 +14,42 @@ public class Producteur extends AbstractComponent {
 	protected MessageServiceOutboundPort publicationPort;
 
 	public Producteur() throws Exception {
-		super(0, 1);
+		super(1, 1);
 		String outBoundPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new MessageServiceOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
+		
+		this.toggleTracing();
+		this.tracer.setTitle("Producer");
 
 	}
 
 	public void publishMessageAndPrint(Message msg) throws Exception {
+		this.logMessage("Producteur publie "+msg.toString());
 		this.publicationPort.publierMessage(msg);
 
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
+		this.logMessage("Lancement Producteur");
 		super.start();
-		try {
-			this.publicationPort.createTopic("actu");
-			this.publicationPort.createTopic("cinema");
-			this.publicationPort.createTopic("culture");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.runTask(new AbstractTask() {
+			
+			public void run() {
+				try {
+					publicationPort.createTopic("actu");
+					publicationPort.createTopic("cinema");
+					publicationPort.createTopic("culture");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
+		});
 	}
 
 	@Override

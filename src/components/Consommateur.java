@@ -27,7 +27,7 @@ public class Consommateur extends AbstractComponent {
 
 	public Consommateur() throws Exception {
 
-		super(1, 0);
+		super(1, 1);
 		String receptionPortName = java.util.UUID.randomUUID().toString();
 		String souscriptionPortName = java.util.UUID.randomUUID().toString();
 
@@ -40,6 +40,7 @@ public class Consommateur extends AbstractComponent {
 		souscriptionPort.publishPort();
 		
 		this.toggleTracing();
+		this.tracer.setTitle("Consumer");
 	}
 
 	public void recevoirMessage(Message msg,String uriInboundPort) throws Exception {
@@ -61,11 +62,13 @@ public class Consommateur extends AbstractComponent {
 	}
 
 	public void souscrire(Souscription s) throws Exception {
+		this.logMessage("Souscription au topic "+s.topic+" sur le port "+s.uriInboundReception);
 		this.souscriptionPort.souscrire(s);
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
+		this.logMessage("Lancement Consommateur");
 		super.start();
 	}
 
@@ -77,8 +80,8 @@ public class Consommateur extends AbstractComponent {
 			public void run() {
 				try {
 					Filter f = new Filter();
-					Souscription s = new Souscription("hockey", f, receptionPort.getPortURI());
-					souscriptionPort.souscrire(s);
+					Souscription s = new Souscription("actu", f, receptionPort.getPortURI());
+					souscrire(s);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -98,6 +101,7 @@ public class Consommateur extends AbstractComponent {
 		try {
 			PortI[] p = this.findPortsFromInterface(MessageServiceI.class);
 			p[0].unpublishPort();
+			p[1].unpublishPort();
 		} catch (Exception e) {
 			throw new ComponentShutdownException(e);
 		}
