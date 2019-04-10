@@ -5,13 +5,12 @@ import basics.Souscription;
 import basics.Topic;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
-import interfaces.PublicationServiceI;
 import interfaces.SouscriptionServiceI;
 
 public class SouscriptionOutboundPort extends AbstractOutboundPort implements SouscriptionServiceI {
 
 	public SouscriptionOutboundPort(String uri, ComponentI owner) throws Exception {
-		super(uri, PublicationServiceI.class, owner);
+		super(uri, SouscriptionServiceI.class, owner);
 		assert uri != null && owner != null;
 	}
 

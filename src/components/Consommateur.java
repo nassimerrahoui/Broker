@@ -10,7 +10,6 @@ import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import fr.sorbonne_u.components.ports.PortI;
 import interfaces.ReceptionServiceI;
 import interfaces.SouscriptionServiceI;
 import ports.ReceptionInboundPort;
@@ -94,9 +93,8 @@ public class Consommateur extends AbstractComponent {
 	@Override
 	public void shutdown() throws ComponentShutdownException {
 		try {
-			PortI[] p = this.findPortsFromInterface(ReceptionInboundPort.class);
-			p[0].unpublishPort();
-			p[1].unpublishPort();
+			receptionPort.unpublishPort();
+			souscriptionPort.unpublishPort();
 		} catch (Exception e) {
 			throw new ComponentShutdownException(e);
 		}
