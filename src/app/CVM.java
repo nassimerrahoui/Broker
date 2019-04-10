@@ -3,9 +3,13 @@ package app;
 import components.Consommateur;
 import components.Courtier;
 import components.Producteur;
-import connectors.MessageServiceConnector;
+import connectors.PublicationServiceConnector;
+import connectors.ReceptionServiceConnector;
+import connectors.SouscriptionServiceConnector;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
-import interfaces.MessageServiceI;
+import interfaces.PublicationServiceI;
+import interfaces.ReceptionServiceI;
+import interfaces.SouscriptionServiceI;
 
 public class CVM extends AbstractCVM {
 
@@ -29,9 +33,9 @@ public class CVM extends AbstractCVM {
 		this.producteur = new Producteur();
 		this.courtier = new Courtier();
 		this.consommateur = new Consommateur();
-		this.deployedComponents.add(consommateur);
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);
+		this.deployedComponents.add(consommateur);
 
 		// --------------------------------------------------------------------
 		// Connection phase
@@ -39,21 +43,21 @@ public class CVM extends AbstractCVM {
 		
 		// Connexion entre producteur et courtier
 
-		this.producteur.doPortConnection(producteur.findOutboundPortURIsFromInterface(MessageServiceI.class)[0],
-				courtier.findInboundPortURIsFromInterface(MessageServiceI.class)[0],
-				MessageServiceConnector.class.getCanonicalName());
+		this.producteur.doPortConnection(producteur.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
+				courtier.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
+				PublicationServiceConnector.class.getCanonicalName());
 		
 		// Connexion entre courtier et consommateur
 		
-		this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(MessageServiceI.class)[0],
-				consommateur.findInboundPortURIsFromInterface(MessageServiceI.class)[0],
-				MessageServiceConnector.class.getCanonicalName());
+		this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[0],
+				consommateur.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0],
+				ReceptionServiceConnector.class.getCanonicalName());
 		
 		// Connexion entre consommateur et courtier 
 		
-		this.consommateur.doPortConnection(consommateur.findOutboundPortURIsFromInterface(MessageServiceI.class)[0],
-				courtier.findInboundPortURIsFromInterface(MessageServiceI.class)[0],
-				MessageServiceConnector.class.getCanonicalName());
+		this.consommateur.doPortConnection(consommateur.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
+				courtier.findInboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
+				SouscriptionServiceConnector.class.getCanonicalName());
 		
 		// --------------------------------------------------------------------
 		// Deployment done

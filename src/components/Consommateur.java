@@ -1,59 +1,55 @@
 package components;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import basics.Filter;
 import basics.Message;
 import basics.Souscription;
-import basics.Topic;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import fr.sorbonne_u.components.ports.PortI;
-import interfaces.MessageServiceI;
-import ports.MessageServiceInboundPort;
-import ports.MessageServiceOutboundPort;
+import interfaces.ReceptionServiceI;
+import interfaces.SouscriptionServiceI;
+import ports.ReceptionInboundPort;
+import ports.SouscriptionOutboundPort;
 
-@OfferedInterfaces(offered = { MessageServiceI.class })
-@RequiredInterfaces(required = { MessageServiceI.class })
+@OfferedInterfaces(offered = { ReceptionServiceI.class })
+@RequiredInterfaces(required = { SouscriptionServiceI.class })
 
 public class Consommateur extends AbstractComponent {
 
 	protected CopyOnWriteArrayList<Message> myMessages = new CopyOnWriteArrayList<Message>();
-	protected CopyOnWriteArrayList<Topic> myTopics = new CopyOnWriteArrayList<Topic>();
-	protected MessageServiceInboundPort receptionPort;
-	protected MessageServiceOutboundPort souscriptionPort;
+	protected ReceptionInboundPort receptionPort;
+	protected SouscriptionOutboundPort souscriptionPort;
 
 	public Consommateur() throws Exception {
 
 		super(1, 1);
-		String receptionPortName = java.util.UUID.randomUUID().toString();
-		String souscriptionPortName = java.util.UUID.randomUUID().toString();
 
-		receptionPort = new MessageServiceInboundPort(receptionPortName, this);
+		String souscriptionPortName = java.util.UUID.randomUUID().toString();
+		souscriptionPort = new SouscriptionOutboundPort(souscriptionPortName, this);
+		
+		String receptionPortName = java.util.UUID.randomUUID().toString();
+		receptionPort = new ReceptionInboundPort(receptionPortName, this);
+		
+		this.addPort(souscriptionPort);
 		this.addPort(receptionPort);
+		souscriptionPort.publishPort();
 		receptionPort.publishPort();
 
-		souscriptionPort = new MessageServiceOutboundPort(souscriptionPortName, this);
-		this.addPort(souscriptionPort);
-		souscriptionPort.publishPort();
-		
 		this.toggleTracing();
-		this.tracer.setTitle("Consumer");
+		this.tracer.setTitle("Consommateur");
 	}
 
-	public void recevoirMessage(Message msg,String uriInboundPort) throws Exception {
-		for (Topic t : myTopics) {
-			if (msg.getTopicsURI().contains(t.getTopicURI())) {
-				myMessages.add(msg);
-				this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
-				break;
-			}
-		}
+	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {
+		myMessages.add(msg);
+		this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
 	}
 
-	public void recevoirNMessages(CopyOnWriteArrayList<Message> msgs) throws Exception {
+	public void recevoirNMessages(ArrayList<Message> msgs) throws Exception {
 		for (int i = 0; i < msgs.size(); i++) {
 			if (msgs.get(i) == null)
 				msgs.remove(i);
@@ -62,14 +58,12 @@ public class Consommateur extends AbstractComponent {
 	}
 
 	public void souscrire(Souscription s) throws Exception {
-		this.logMessage("Souscription au topic "+s.topic+" sur le port "+s.uriInboundReception);
-		this.myTopics.add(new Topic(s.topic));
+		this.logMessage("Souscription au topic " + s.topic + " sur le port " + s.uriInboundReception);
 		this.souscriptionPort.souscrire(s);
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
-		this.logMessage("Lancement Consommateur");
 		super.start();
 	}
 
@@ -81,7 +75,7 @@ public class Consommateur extends AbstractComponent {
 			public void run() {
 				try {
 					Filter f = new Filter();
-					Souscription s = new Souscription("actu", f, receptionPort.getPortURI());
+					Souscription s = new Souscription("A", f, receptionPort.getPortURI());
 					souscrire(s);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,7 +94,7 @@ public class Consommateur extends AbstractComponent {
 	@Override
 	public void shutdown() throws ComponentShutdownException {
 		try {
-			PortI[] p = this.findPortsFromInterface(MessageServiceI.class);
+			PortI[] p = this.findPortsFromInterface(ReceptionInboundPort.class);
 			p[0].unpublishPort();
 			p[1].unpublishPort();
 		} catch (Exception e) {

@@ -5,49 +5,46 @@ import basics.Message;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import interfaces.MessageServiceI;
-import ports.MessageServiceOutboundPort;
+import interfaces.PublicationServiceI;
+import ports.PublicationOutboundPort;
 
-@RequiredInterfaces(required = { MessageServiceI.class })
+@RequiredInterfaces(required = { PublicationServiceI.class })
 public class Producteur extends AbstractComponent {
 
-	protected MessageServiceOutboundPort publicationPort;
+	protected PublicationOutboundPort publicationPort;
 
 	public Producteur() throws Exception {
 		super(1, 1);
 		String outBoundPortURI = java.util.UUID.randomUUID().toString();
-		publicationPort = new MessageServiceOutboundPort(outBoundPortURI, this);
+		publicationPort = new PublicationOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
-		
+
 		this.toggleTracing();
-		this.tracer.setTitle("Producer");
+		this.tracer.setTitle("Producteur");
 
 	}
 
 	public void publishMessageAndPrint(Message msg) throws Exception {
-		this.logMessage("Producteur publie "+msg.toString());
+		this.logMessage(this.publicationPort.getPortURI() + " a publie : " + msg.toString());
 		this.publicationPort.publierMessage(msg);
 
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
-		this.logMessage("Lancement Producteur");
 		super.start();
 		this.runTask(new AbstractTask() {
-			
+
 			public void run() {
 				try {
-					publicationPort.createTopic("actu");
-					publicationPort.createTopic("cinema");
-					publicationPort.createTopic("culture");
+					publicationPort.createTopic("A");
+					publicationPort.createTopic("B");
+					publicationPort.createTopic("C");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
 			}
 		});
 	}
@@ -68,10 +65,10 @@ public class Producteur extends AbstractComponent {
 			public void run() {
 				try {
 					ArrayList<String> topics = new ArrayList<String>();
-					topics.add("culture");
-					topics.add("cinema");
-					Message m1 = new Message("Un nouveau film est sorti.", "p1", topics);
-					Message m2 = new Message("Les gilets jaunes acte 21.", "p1", "actu");
+					topics.add("A");
+					topics.add("B");
+					Message m1 = new Message("Message numero 1.", "p1", topics);
+					Message m2 = new Message("Message numero 2.", "p1", "C");
 					((Producteur) this.owner).publishMessageAndPrint(m1);
 					((Producteur) this.owner).publishMessageAndPrint(m2);
 				} catch (Exception e) {

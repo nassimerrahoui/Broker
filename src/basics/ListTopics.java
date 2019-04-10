@@ -1,5 +1,6 @@
 package basics;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -57,7 +58,7 @@ public class ListTopics {
 		}
 	}
 
-	public void addNMesssageToTopic(CopyOnWriteArrayList<Message> msgs, String uriProducteur) {
+	public void addNMesssageToTopic(ArrayList<Message> msgs, String uriProducteur) {
 
 		for (Message m : msgs) {
 			addMesssageToTopic(m, uriProducteur);

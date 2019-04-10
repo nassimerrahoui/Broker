@@ -15,7 +15,7 @@ public class ListSouscriptions {
 
 	public void deleteSouscription(Souscription s, String uriInBoundConsommateur) throws Exception {
 		if (souscriptions.containsKey(uriInBoundConsommateur)) {
-			souscriptions.get(uriInBoundConsommateur).remove(s);
+			souscriptions.get(uriInBoundConsommateur).remove(s.topic);
 		}
 	}
 
