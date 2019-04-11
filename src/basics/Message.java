@@ -1,7 +1,7 @@
 package basics;
 
 import java.io.Serializable;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 import java.net.InetAddress;
 
 public class Message {
@@ -16,18 +16,28 @@ public class Message {
 	/** charge utile serialisable du message */
 	protected final Serializable contenu;
 	/** le sujet du message */
-	protected final CopyOnWriteArrayList<String> uriTopics;
+	protected final ArrayList<String> uriTopics = new ArrayList<String>();
 	/** le URI du producteur du message */
 	protected final String uriProducteur;
 
-	public Message(Serializable contenu, String idPublieur, CopyOnWriteArrayList<String> uriTopics) throws Exception {
+	public Message(Serializable contenu, String idPublieur, ArrayList<String> uriTopics) throws Exception {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		this.uri = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();
 		this.idDateur = inetAddress.getHostName();
 		this.uriProducteur = idPublieur;
 		this.contenu = contenu;
-		this.uriTopics = new CopyOnWriteArrayList<String>(uriTopics);
+		this.uriTopics.addAll(uriTopics);
+	}
+
+	public Message(Serializable contenu, String idPublieur, String uriTopic) throws Exception {
+		InetAddress inetAddress = InetAddress.getLocalHost();
+		this.uri = java.util.UUID.randomUUID().toString();
+		this.datePublication = System.currentTimeMillis();
+		this.idDateur = inetAddress.getHostName();
+		this.uriProducteur = idPublieur;
+		this.contenu = contenu;
+		this.uriTopics.add(uriTopic);
 	}
 
 	public String getIDMessage() {
@@ -55,7 +65,7 @@ public class Message {
 		return contenu.toString() + " - publie par " + idDateur + ", date: " + datePublication;
 	}
 
-	public CopyOnWriteArrayList<String> getTopicsURI() {
+	public ArrayList<String> getTopicsURI() {
 		return uriTopics;
 	}
 

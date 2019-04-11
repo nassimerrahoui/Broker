@@ -1,5 +1,6 @@
 package basics;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -8,18 +9,15 @@ public class ListTopics {
 
 	private ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> topic_messages = new ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>>();
 
-	public void createTopic(String uri, String uriProducteur) {
-		Topic t = new Topic(uri, uriProducteur);
+	public void createTopic(String uri) {
+		Topic t = new Topic(uri);
 		topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
 	}
 
-	public void deleteTopic(String uri, String uriProd) {
+	public void deleteTopic(String uri) {
 		Topic t = getTopicByUri(uri);
-		if (t.getProducteurURI().equals(uriProd)) {
-			topic_messages.remove(t);
-			System.out.println("Votre topic a ete supprime");
-
-		}
+		topic_messages.remove(t);
+		System.out.println("Votre topic a ete supprime");
 
 	}
 
@@ -51,7 +49,7 @@ public class ListTopics {
 		for (String uri : msg.getTopicsURI()) {
 
 			if (!topic_messages.containsKey(this.getTopicByUri(uri))) {
-				Topic t = new Topic(uri, uriProducteur);
+				Topic t = new Topic(uri);
 				topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
 			}
 
@@ -60,7 +58,7 @@ public class ListTopics {
 		}
 	}
 
-	public void addNMesssageToTopic(CopyOnWriteArrayList<Message> msgs, String uriProducteur) {
+	public void addNMesssageToTopic(ArrayList<Message> msgs, String uriProducteur) {
 
 		for (Message m : msgs) {
 			addMesssageToTopic(m, uriProducteur);
@@ -69,5 +67,9 @@ public class ListTopics {
 
 	public ConcurrentLinkedQueue<Message> getMessagesByUriTopic(String uri) {
 		return topic_messages.get(getTopicByUri(uri));
+	}
+	
+	public ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> getTopics(){
+		return topic_messages;
 	}
 }

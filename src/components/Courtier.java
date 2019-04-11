@@ -1,104 +1,141 @@
 package components;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import basics.Filter;
 import basics.ListSouscriptions;
 import basics.ListTopics;
 import basics.Message;
 import basics.Souscription;
+import basics.Topic;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
-import fr.sorbonne_u.components.annotations.RequiredInterfaces;
+import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import interfaces.PublicationI;
-import interfaces.ReceptionI;
-import interfaces.SouscriptionI;
-import ports.CourtierInboundPort;
-import ports.CourtierOutboundPort;
-import ports.CourtierSouscriptionInboundPort;
+import interfaces.PublicationServiceI;
+import interfaces.SouscriptionServiceI;
+import ports.PublicationInboundPort;
+import ports.ReceptionOutboundPort;
+import ports.SouscriptionInboundPort;
 
-@RequiredInterfaces(required = { ReceptionI.class })
-@OfferedInterfaces(offered = { PublicationI.class, SouscriptionI.class })
+@OfferedInterfaces(offered = { PublicationServiceI.class, SouscriptionServiceI.class })
 
 public class Courtier extends AbstractComponent {
 
-	protected CourtierOutboundPort envoiePort;
-	protected CourtierInboundPort publicationPort; // Publication du message Ã  partir du producteur
-	protected CourtierSouscriptionInboundPort souscriptionPort;
-
+	protected ReceptionOutboundPort envoiPort;
+	protected PublicationInboundPort publicationPort;
+	protected SouscriptionInboundPort souscriptionPort;
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
 
-	public Courtier(String uri) throws Exception {
-		super(uri, 1, 0);
+	public Courtier() throws Exception {
+		super(1, 0);
+
+		createNewExecutorService("publication", 100, false);
+		createNewExecutorService("envoi", 100, false);
 
 		String publicationPortURI = java.util.UUID.randomUUID().toString();
-		publicationPort = new CourtierInboundPort(publicationPortURI, this);
+		publicationPort = new PublicationInboundPort(publicationPortURI, this);
 
-		String envoiPortURI = java.util.UUID.randomUUID().toString();
-		envoiePort = new CourtierOutboundPort(envoiPortURI, this);
+		String receptionPortURI = java.util.UUID.randomUUID().toString();
+		envoiPort = new ReceptionOutboundPort(receptionPortURI, this);
 
 		String souscriptionPortURI = java.util.UUID.randomUUID().toString();
-		souscriptionPort = new CourtierSouscriptionInboundPort(souscriptionPortURI, this);
+		souscriptionPort = new SouscriptionInboundPort(souscriptionPortURI, this);
 
 		this.addPort(publicationPort);
-		this.addPort(envoiePort);
+		this.addPort(envoiPort);
 		this.addPort(souscriptionPort);
 		publicationPort.publishPort();
 		souscriptionPort.publishPort();
-		envoiePort.publishPort();
+		envoiPort.publishPort();
+
+		this.toggleTracing();
+		this.tracer.setTitle("Courtier");
+		this.tracer.setRelativePosition(1, 1);
 
 	}
 
 	public void publierMessage(Message m) throws Exception {
 		topics.addMesssageToTopic(m, m.getUriProducteur());
-		System.out.println("Le message est publie :)");
-		this.envoiePort.recevoirMessage(m);
+		notifyConsommateurs();
 
 	}
 
-	public void publierNMessages(CopyOnWriteArrayList<Message> msgs) throws Exception {
+	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
 		topics.addNMesssageToTopic(msgs, msgs.get(0).getUriProducteur());
-		System.out.println("Les messages sont publies :)");
-		this.envoiePort.recevoirNMessage(msgs);
 	}
 
-	public void createTopic(String uri, String uriProducteur) throws Exception {
-		topics.createTopic(uri, uriProducteur);
-		System.out.println("Votre topic a ete cree.");
+	public void createTopic(String uri) throws Exception {
+		topics.createTopic(uri);
+		this.logMessage("Le topic " + uri + " a ete cree.");
 	}
 
-	public void deleteTopic(String uri, String uriProd) {
-		topics.deleteTopic(uri, uriProd);
+	public void envoieMessageAndPrint(final Message msg, final String uriInboundConsumer) throws Exception {
+		this.logMessage("Courtier envoi message a " + uriInboundConsumer + ": \n " + msg.toString());
+		envoiPort.recevoirMessage(msg, uriInboundConsumer);
 	}
 
-	public Boolean existTopicURI(String uri) {
-		return topics.existTopicURI(uri);
+	public void souscrire(Souscription s, String uriInBoundConsommateur) throws Exception {
+		if (topics.existTopicURI(s.topic)) {
+			this.logMessage(uriInBoundConsommateur + " souscrit au topic " + s.topic);
+			souscriptions.addSouscriptionToConsommateur(s, uriInBoundConsommateur);
+		} else {
+			this.logMessage(uriInBoundConsommateur + " : Topic " + s.topic + " n'existe pas.");
+		}
 	}
 
-	public CopyOnWriteArrayList<String> getUriTopics() {
-		return topics.getUriTopics();
+	public void setFilter(Topic t, Filter f, String uriInBoundConsommateur) {
+		souscriptions.modifyFilter(t, f, uriInBoundConsommateur);
 	}
 
-	public void envoieMessageAndPrint(Message msg) throws Exception {
-		System.out.println("Envoi du message vers le consommateur...");
-		this.envoiePort.recevoirMessage(msg);
-	}
-
-	public void souscrire(Souscription s, String uriConsommateur) throws Exception {
-		souscriptions.addSouscriptionToConsommateur(s, uriConsommateur);
+	/** TODO **/
+	public void resiliation(Topic t, String uriInBoundConsommateur) {
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-		this.logMessage("Lancement du courtier");
-
 	}
 
 	@Override
 	public void finalise() throws Exception {
-		this.logMessage("Arret du courtier.");
 		super.finalise();
+	}
+
+	public void shutdown() throws ComponentShutdownException {
+		try {
+			envoiPort.unpublishPort();
+			publicationPort.unpublishPort();
+			souscriptionPort.unpublishPort();
+		} catch (Exception e) {
+			throw new ComponentShutdownException();
+		}
+
+		super.shutdown();
+	}
+
+	public void notifyConsommateurs() throws Exception {
+
+		ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>> subs = souscriptions.getSouscriptions();
+		ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> tops = topics.getTopics();
+
+		for (ConcurrentHashMap.Entry<Topic, ConcurrentLinkedQueue<Message>> entry_topic : tops.entrySet()) {
+			Topic topic = entry_topic.getKey();
+			ConcurrentLinkedQueue<Message> msgs = entry_topic.getValue();
+
+			for (ConcurrentHashMap.Entry<String, ConcurrentHashMap<String, Souscription>> entry_sub : subs.entrySet()) {
+
+				ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
+				if (sub.containsKey(topic.getTopicURI())) {
+					String uri = sub.get(topic.getTopicURI()).uriInboundReception;
+					envoieMessageAndPrint(msgs.poll(), uri);
+
+				}
+
+			}
+		}
 	}
 
 }

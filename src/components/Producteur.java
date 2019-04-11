@@ -1,63 +1,57 @@
 package components;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 import basics.Message;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import interfaces.PublicationI;
-import ports.ProducteurOutboundPort;
+import interfaces.PublicationServiceI;
+import ports.PublicationOutboundPort;
 
-@RequiredInterfaces(required = { PublicationI.class })
+@RequiredInterfaces(required = { PublicationServiceI.class })
 public class Producteur extends AbstractComponent {
 
-	protected ProducteurOutboundPort publicationPort;
+	protected PublicationOutboundPort publicationPort;
 
-	public Producteur(String uri, String outboundPortURI) throws Exception {
-		super(uri, 0, 1);
-
-		publicationPort = new ProducteurOutboundPort(outboundPortURI, this);
+	public Producteur() throws Exception {
+		super(1, 1);
+		String outBoundPortURI = java.util.UUID.randomUUID().toString();
+		publicationPort = new PublicationOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
-		// faire un toggletracing pour afficher les logs | faireun togglelogging pour
-		// enregistrer dans un fichier
+
 		this.toggleTracing();
 		this.tracer.setTitle("Producteur");
-		this.tracer.setRelativePosition(1, 1);
+		this.tracer.setRelativePosition(20, 20);
+
 	}
 
 	public void publishMessageAndPrint(Message msg) throws Exception {
+		this.logMessage(this.publicationPort.getPortURI() + " a publie : " + msg.toString());
 		this.publicationPort.publierMessage(msg);
-		this.logMessage(this.getComponentDefinitionClassName() + " publie un nouveau msg : \n" + msg.getContenu());
 
-	}
-
-	public void createTopic(String uri, String uriProducteur) throws Exception {
-		this.publicationPort.createTopic(uri, uriProducteur);
-	}
-
-	public void deleteTopic(String uri, String uriProd) throws Exception {
-		this.publicationPort.deleteTopic(uri, uriProd);
-	}
-
-	public Boolean existTopicURI(String uri) throws Exception {
-		return this.publicationPort.existTopicURI(uri);
-	}
-
-	public CopyOnWriteArrayList<String> getUriTopics() throws Exception {
-		return this.publicationPort.getUriTopics();
 	}
 
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-		this.logMessage("Lancement du composant Producteur...");
+		this.runTask(new AbstractTask() {
+
+			public void run() {
+				try {
+					publicationPort.createTopic("A");
+					publicationPort.createTopic("B");
+					publicationPort.createTopic("C");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		});
 	}
 
 	@Override
 	public void finalise() throws Exception {
-		this.logMessage("Arret du composant Producteur...");
-
 		this.publicationPort.doDisconnection();
 		this.publicationPort.unpublishPort();
 
@@ -67,16 +61,17 @@ public class Producteur extends AbstractComponent {
 	@Override
 	public void execute() throws Exception {
 		super.execute();
-
+		Thread.sleep(1000);
 		this.runTask(new AbstractTask() {
 			public void run() {
 				try {
-					CopyOnWriteArrayList<String> l = new CopyOnWriteArrayList<String>();
-					l.add("Sujet1");
-					l.add("Sujet2");
-					Message msg = new Message("Hello, ici le producteur P1 !", "p1", l);
-					((Producteur) this.owner).publishMessageAndPrint(msg);
-					// ((Producteur)this.owner).createTopic("Sport", "prod1");
+					ArrayList<String> topics = new ArrayList<String>();
+					topics.add("A");
+					topics.add("B");
+					Message m1 = new Message("Message numero 1.", "p1", topics);
+					Message m2 = new Message("Message numero 2.", "p1", "C");
+					((Producteur) this.owner).publishMessageAndPrint(m1);
+					((Producteur) this.owner).publishMessageAndPrint(m2);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
