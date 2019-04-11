@@ -22,6 +22,7 @@ public class Producteur extends AbstractComponent {
 
 		this.toggleTracing();
 		this.tracer.setTitle("Producteur");
+		this.tracer.setRelativePosition(20, 20);
 
 	}
 

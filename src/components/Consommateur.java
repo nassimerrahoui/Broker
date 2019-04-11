@@ -41,6 +41,7 @@ public class Consommateur extends AbstractComponent {
 
 		this.toggleTracing();
 		this.tracer.setTitle("Consommateur");
+		this.tracer.setRelativePosition(10, 10);
 	}
 
 	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {
@@ -73,6 +74,7 @@ public class Consommateur extends AbstractComponent {
 		this.runTask(new AbstractTask() {
 			public void run() {
 				try {
+					Thread.sleep(1000L);
 					Filter f = new Filter();
 					Souscription s = new Souscription("A", f, receptionPort.getPortURI());
 					souscrire(s);

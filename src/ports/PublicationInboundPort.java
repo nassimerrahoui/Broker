@@ -18,34 +18,40 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 	}
 
 	public void createTopic(final String uri) throws Exception {
-		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
+
+		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Courtier) this.getOwner()).createTopic(uri);
+				((Courtier) this.owner).createTopic(uri);
 				return null;
 			}
-		});
+		};
+
+		this.owner.handleRequestAsync("publication", task);
 	}
 
 	public void publierMessage(final Message msg) throws Exception {
 
-		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
+		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Courtier) this.getOwner()).publierMessage(msg);
+				((Courtier) this.owner).publierMessage(msg);
 				return null;
 			}
-		});
+		};
 
+		this.owner.handleRequestAsync("publication", task);
 	}
 
-	public void publierNMessage(final ArrayList<Message> msgs) throws Exception {
-		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
+	public void publierNMessages(final ArrayList<Message> msgs) throws Exception {
+		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
 
 			public Void call() throws Exception {
-				((Courtier) this.getOwner()).publierNMessages(msgs);
+				((Courtier) this.owner).publierNMessages(msgs);
 				return null;
 			}
-		});
+		};
+
+		this.owner.handleRequestAsync("publication", task);
 	}
 }

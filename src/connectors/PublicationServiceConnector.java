@@ -15,7 +15,7 @@ public class PublicationServiceConnector extends AbstractConnector implements Pu
 		((PublicationServiceI) this.offering).publierMessage(msg);
 	}
 
-	public void publierNMessage(ArrayList<Message> msgs) throws Exception {
-		((PublicationServiceI) this.offering).publierNMessage(msgs);
+	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
+		((PublicationServiceI) this.offering).publierNMessages(msgs);
 	}
 }

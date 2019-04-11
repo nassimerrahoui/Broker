@@ -23,7 +23,7 @@ import ports.SouscriptionInboundPort;
 
 public class Courtier extends AbstractComponent {
 
-	protected ReceptionOutboundPort receptionPort;
+	protected ReceptionOutboundPort envoiPort;
 	protected PublicationInboundPort publicationPort;
 	protected SouscriptionInboundPort souscriptionPort;
 	protected ListTopics topics = new ListTopics();
@@ -31,21 +31,25 @@ public class Courtier extends AbstractComponent {
 
 	public Courtier() throws Exception {
 		super(1, 0);
+
+		createNewExecutorService("publication", 100, false);
+		createNewExecutorService("envoi", 100, false);
+
 		String publicationPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new PublicationInboundPort(publicationPortURI, this);
 
 		String receptionPortURI = java.util.UUID.randomUUID().toString();
-		receptionPort = new ReceptionOutboundPort(receptionPortURI, this);
+		envoiPort = new ReceptionOutboundPort(receptionPortURI, this);
 
 		String souscriptionPortURI = java.util.UUID.randomUUID().toString();
 		souscriptionPort = new SouscriptionInboundPort(souscriptionPortURI, this);
 
 		this.addPort(publicationPort);
-		this.addPort(receptionPort);
+		this.addPort(envoiPort);
 		this.addPort(souscriptionPort);
 		publicationPort.publishPort();
 		souscriptionPort.publishPort();
-		receptionPort.publishPort();
+		envoiPort.publishPort();
 
 		this.toggleTracing();
 		this.tracer.setTitle("Courtier");
@@ -68,9 +72,9 @@ public class Courtier extends AbstractComponent {
 		this.logMessage("Le topic " + uri + " a ete cree.");
 	}
 
-	public void envoieMessageAndPrint(Message msg, String uriInboundConsumer) throws Exception {
+	public void envoieMessageAndPrint(final Message msg, final String uriInboundConsumer) throws Exception {
 		this.logMessage("Courtier envoi message a " + uriInboundConsumer + ": \n " + msg.toString());
-		this.receptionPort.recevoirMessage(msg, uriInboundConsumer);
+		envoiPort.recevoirMessage(msg, uriInboundConsumer);
 	}
 
 	public void souscrire(Souscription s, String uriInBoundConsommateur) throws Exception {
@@ -102,7 +106,7 @@ public class Courtier extends AbstractComponent {
 
 	public void shutdown() throws ComponentShutdownException {
 		try {
-			receptionPort.unpublishPort();
+			envoiPort.unpublishPort();
 			publicationPort.unpublishPort();
 			souscriptionPort.unpublishPort();
 		} catch (Exception e) {
@@ -126,9 +130,7 @@ public class Courtier extends AbstractComponent {
 				ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
 				if (sub.containsKey(topic.getTopicURI())) {
 					String uri = sub.get(topic.getTopicURI()).uriInboundReception;
-					for (Message message : msgs) {
-						envoieMessageAndPrint(message, uri);
-					}
+					envoieMessageAndPrint(msgs.poll(), uri);
 
 				}
 

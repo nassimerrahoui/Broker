@@ -23,8 +23,8 @@ public class PublicationOutboundPort extends AbstractOutboundPort implements Pub
 		((PublicationServiceI) this.connector).publierMessage(msg);
 	}
 
-	public void publierNMessage(ArrayList<Message> msgs) throws Exception {
-		((PublicationServiceI) this.connector).publierNMessage(msgs);
+	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
+		((PublicationServiceI) this.connector).publierNMessages(msgs);
 	}
 
 }
