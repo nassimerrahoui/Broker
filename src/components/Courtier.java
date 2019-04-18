@@ -51,9 +51,9 @@ public class Courtier extends AbstractComponent {
 		souscriptionPort.publishPort();
 		envoiPort.publishPort();
 
-		this.toggleTracing();
 		this.tracer.setTitle("Courtier");
 		this.tracer.setRelativePosition(1, 1);
+		this.toggleTracing();
 
 	}
 
