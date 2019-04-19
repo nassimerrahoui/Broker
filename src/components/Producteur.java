@@ -19,10 +19,10 @@ public class Producteur extends AbstractComponent {
 		publicationPort = new PublicationOutboundPort(outBoundPortURI, this);
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
-
-		this.toggleTracing();
+		
 		this.tracer.setTitle("Producteur");
-		this.tracer.setRelativePosition(20, 20);
+		this.tracer.setRelativePosition(1, 1);
+		this.toggleTracing();
 
 	}
 

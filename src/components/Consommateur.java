@@ -39,9 +39,9 @@ public class Consommateur extends AbstractComponent {
 		souscriptionPort.publishPort();
 		receptionPort.publishPort();
 
-		this.toggleTracing();
 		this.tracer.setTitle("Consommateur");
-		this.tracer.setRelativePosition(10, 10);
+		this.tracer.setRelativePosition(1, 1);
+		this.toggleTracing();
 	}
 
 	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {

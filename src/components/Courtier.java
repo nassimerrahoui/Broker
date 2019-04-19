@@ -32,8 +32,8 @@ public class Courtier extends AbstractComponent {
 	public Courtier() throws Exception {
 		super(1, 0);
 
-		createNewExecutorService("publication", 100, false);
-		createNewExecutorService("envoi", 100, false);
+		createNewExecutorService("publication", 5, false);
+		createNewExecutorService("envoi", 5, false);
 
 		String publicationPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new PublicationInboundPort(publicationPortURI, this);
@@ -51,9 +51,9 @@ public class Courtier extends AbstractComponent {
 		souscriptionPort.publishPort();
 		envoiPort.publishPort();
 
-		this.toggleTracing();
 		this.tracer.setTitle("Courtier");
 		this.tracer.setRelativePosition(1, 1);
+		this.toggleTracing();
 
 	}
 
