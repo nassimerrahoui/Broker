@@ -17,6 +17,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 	protected static String	COURTIER_3_JVM_URI = "jvm_courtier_3" ;
 	protected static String	COURTIER_4_JVM_URI = "jvm_courtier_4" ;
 
+	// Composants instancie
 	protected Courtier uriCourtier_1;
 	protected Courtier uriCourtier_2;
 	protected Courtier uriCourtier_3;

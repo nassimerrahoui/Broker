@@ -5,6 +5,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
+/**
+ * 
+ * La classe ListTopics est un objet qui représente les messages stockés sous forme map topic_messages.
+ * topic_messages : key<Topic> x value<Queue<Messages>> : A chaque topic est associé une liste de messages. 
+ * On utilise une ConcurrentHashMap pour topic_messages et une ConcurrentLinkedQueue pour chaque liste de messages
+ * afin de gérer les accés concurrent des différentes publications.
+ *   
+ */
 public class ListTopics {
 
 	private ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> topic_messages = new ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>>();
@@ -44,7 +53,7 @@ public class ListTopics {
 		return topic;
 	}
 
-	public void addMesssageToTopic(Message msg, String uriProducteur) {
+	public void addMesssageToTopic(Message msg) {
 
 		for (String uri : msg.getTopicsURI()) {
 
@@ -58,10 +67,10 @@ public class ListTopics {
 		}
 	}
 
-	public void addNMesssageToTopic(ArrayList<Message> msgs, String uriProducteur) {
+	public void addNMesssageToTopic(ArrayList<Message> msgs) {
 
 		for (Message m : msgs) {
-			addMesssageToTopic(m, uriProducteur);
+			addMesssageToTopic(m);
 		}
 	}
 

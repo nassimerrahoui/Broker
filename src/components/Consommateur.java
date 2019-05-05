@@ -39,7 +39,7 @@ public class Consommateur extends AbstractComponent {
 		souscriptionPort.publishPort();
 		receptionPort.publishPort();
 
-		this.tracer.setTitle("Consommateur");
+		this.tracer.setTitle(" Consommateur");
 		this.tracer.setRelativePosition(1, 1);
 		this.toggleTracing();
 	}

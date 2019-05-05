@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import basics.Message;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
+import fr.sorbonne_u.components.cvm.AbstractCVM;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import interfaces.PublicationServiceI;
 import ports.PublicationOutboundPort;
@@ -20,7 +21,7 @@ public class Producteur extends AbstractComponent {
 		this.addPort(publicationPort);
 		publicationPort.publishPort();
 		
-		this.tracer.setTitle("Producteur");
+		this.tracer.setTitle(" Producteur");
 		this.tracer.setRelativePosition(1, 1);
 		this.toggleTracing();
 
@@ -68,6 +69,7 @@ public class Producteur extends AbstractComponent {
 					ArrayList<String> topics = new ArrayList<String>();
 					topics.add("A");
 					topics.add("B");
+					System.out.println(AbstractCVM.getCVM());
 					Message m1 = new Message("Message numero 1.", "p1", topics);
 					Message m2 = new Message("Message numero 2.", "p1", "C");
 					((Producteur) this.owner).publishMessageAndPrint(m1);

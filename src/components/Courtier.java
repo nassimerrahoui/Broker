@@ -32,8 +32,8 @@ public class Courtier extends AbstractComponent {
 	public Courtier() throws Exception {
 		super(1, 0);
 
-		createNewExecutorService("publication", 5, false);
-		createNewExecutorService("envoi", 5, false);
+		createNewExecutorService("publication", 5, true);
+		createNewExecutorService("envoi", 5, true);
 
 		String publicationPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new PublicationInboundPort(publicationPortURI, this);
@@ -51,20 +51,20 @@ public class Courtier extends AbstractComponent {
 		souscriptionPort.publishPort();
 		envoiPort.publishPort();
 
-		this.tracer.setTitle("Courtier");
+		this.tracer.setTitle(" Courtier");
 		this.tracer.setRelativePosition(1, 1);
 		this.toggleTracing();
 
 	}
 
 	public void publierMessage(Message m) throws Exception {
-		topics.addMesssageToTopic(m, m.getUriProducteur());
+		topics.addMesssageToTopic(m);
 		notifyConsommateurs();
 
 	}
 
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
-		topics.addNMesssageToTopic(msgs, msgs.get(0).getUriProducteur());
+		topics.addNMesssageToTopic(msgs);
 	}
 
 	public void createTopic(String uri) throws Exception {
@@ -124,16 +124,21 @@ public class Courtier extends AbstractComponent {
 		for (ConcurrentHashMap.Entry<Topic, ConcurrentLinkedQueue<Message>> entry_topic : tops.entrySet()) {
 			Topic topic = entry_topic.getKey();
 			ConcurrentLinkedQueue<Message> msgs = entry_topic.getValue();
+			
+			// Message à envoyé
+			Message msg = msgs.poll();
 
-			for (ConcurrentHashMap.Entry<String, ConcurrentHashMap<String, Souscription>> entry_sub : subs.entrySet()) {
+			if(msg != null) {
+				for (ConcurrentHashMap.Entry<String, ConcurrentHashMap<String, Souscription>> entry_sub : subs.entrySet()) {
 
-				ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
-				if (sub.containsKey(topic.getTopicURI())) {
-					String uri = sub.get(topic.getTopicURI()).uriInboundReception;
-					envoieMessageAndPrint(msgs.poll(), uri);
+					ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
+					if (sub.containsKey(topic.getTopicURI())) {
+						String uri = sub.get(topic.getTopicURI()).uriInboundReception;
+						envoieMessageAndPrint(msg, uri);
 
-				}
+					}
 
+				}	
 			}
 		}
 	}

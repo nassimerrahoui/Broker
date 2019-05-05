@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.net.InetAddress;
 
-public class Message {
+public class Message implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	/** identifiant unique du message */
@@ -12,20 +12,17 @@ public class Message {
 	/** temps systeme unix de la publication du message */
 	protected final long datePublication;
 	/** identifiant du dateur de la publication */
-	protected final String idDateur;
+	protected final String hostname;
 	/** charge utile serialisable du message */
 	protected final Serializable contenu;
 	/** le sujet du message */
 	protected final ArrayList<String> uriTopics = new ArrayList<String>();
-	/** le URI du producteur du message */
-	protected final String uriProducteur;
 
 	public Message(Serializable contenu, String idPublieur, ArrayList<String> uriTopics) throws Exception {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		this.uri = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();
-		this.idDateur = inetAddress.getHostName();
-		this.uriProducteur = idPublieur;
+		this.hostname = inetAddress.getHostName();
 		this.contenu = contenu;
 		this.uriTopics.addAll(uriTopics);
 	}
@@ -34,8 +31,7 @@ public class Message {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		this.uri = java.util.UUID.randomUUID().toString();
 		this.datePublication = System.currentTimeMillis();
-		this.idDateur = inetAddress.getHostName();
-		this.uriProducteur = idPublieur;
+		this.hostname = inetAddress.getHostName();
 		this.contenu = contenu;
 		this.uriTopics.add(uriTopic);
 	}
@@ -49,11 +45,7 @@ public class Message {
 	}
 
 	public String getIDDateur() {
-		return idDateur;
-	}
-
-	public String getUriProducteur() {
-		return uriProducteur;
+		return hostname;
 	}
 
 	public Serializable getContenu() {
@@ -62,7 +54,7 @@ public class Message {
 
 	@Override
 	public String toString() {
-		return contenu.toString() + " - publie par " + idDateur + ", date: " + datePublication;
+		return contenu.toString() + " - publie par " + hostname + ", date: " + datePublication;
 	}
 
 	public ArrayList<String> getTopicsURI() {

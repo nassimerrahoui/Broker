@@ -25,11 +25,18 @@ public class ReceptionOutboundPort extends AbstractOutboundPort implements Recep
 				return null;
 			}
 		};
-		this.owner.handleRequestAsync("envoi", task);
+		this.owner.handleRequestAsync(1, task);
 	}
 
-	public void recevoirNMessage(ArrayList<Message> msg, String uri) throws Exception {
-		((ReceptionServiceI) this.connector).recevoirNMessage(msg, uri);
+	public void recevoirNMessage(final ArrayList<Message> msg, final String uri) throws Exception {
+		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
+
+			public Void call() throws Exception {
+				((ReceptionServiceI) connector).recevoirNMessage(msg, uri);
+				return null;
+			}
+		};
+		this.owner.handleRequestAsync(1, task);
 	}
 
 }

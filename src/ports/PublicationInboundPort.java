@@ -27,7 +27,7 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 			}
 		};
 
-		this.owner.handleRequestAsync("publication", task);
+		this.owner.handleRequestAsync(0, task);
 	}
 
 	public void publierMessage(final Message msg) throws Exception {
@@ -40,7 +40,7 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 			}
 		};
 
-		this.owner.handleRequestAsync("publication", task);
+		this.owner.handleRequestAsync(0, task);
 	}
 
 	public void publierNMessages(final ArrayList<Message> msgs) throws Exception {
@@ -52,6 +52,6 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 			}
 		};
 
-		this.owner.handleRequestAsync("publication", task);
+		this.owner.handleRequestAsync(0, task);
 	}
 }
