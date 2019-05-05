@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<deployment>
+   <hosts>
+    <host name="localhost"
+          dir="/Users/Grey/workspace/broker/src/app"/>
+  </hosts>
+  <cyclicBarrier   hostname="localhost" port="55253"/>
+  <globalRegistry  hostname="localhost" port="55252"/>
+  <rmiRegistryPort no="55999"/>
+  <jvms2hostnames>
+    <jvm2hostname jvmuri="jvm_courtier_1"
+        rmiRegistryCreator="true"
+        hostname="localhost"
+        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+    <jvm2hostname jvmuri="jvm_courtier_2"
+        rmiRegistryCreator="false"
+        	hostname="localhost"
+        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+    <jvm2hostname jvmuri="jvm_courtier_3"
+        rmiRegistryCreator="false"
+        	hostname="localhost"
+        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+    <jvm2hostname jvmuri="jvm_courtier_4"
+        rmiRegistryCreator="false"
+        	hostname="localhost"
+        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+  </jvms2hostnames>
+</deployment>
