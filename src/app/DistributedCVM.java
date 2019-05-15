@@ -42,6 +42,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 	@Override
 	public void	instantiateAndPublish() throws Exception {
+		
 		if (thisJVMURI.equals(COURTIER_1_JVM_URI)) {
 
 			this.uriCourtier_1 = new Courtier();

@@ -1,0 +1,23 @@
+1557942741042|Registry up and running!
+1557942766710|GlobalRegistry processing put fr.sorbonne_u.components.reflection.interfaces.ReflectionI-e9d63115-6bd3-4947-80a2-72581e1240ec rmi=localhost
+1557942766851|GlobalRegistry processing put jvm_courtier_1-dcc rmi=localhost
+1557942767038|All connected!
+1557942767038|GlobalRegistry processing put fr.sorbonne_u.components.reflection.interfaces.ReflectionI-2d55f006-b3d8-4aff-9f7a-4f0ac0968cd9 rmi=localhost
+1557942767038|GlobalRegistry processing put fr.sorbonne_u.components.reflection.interfaces.ReflectionI-bcd819b3-3433-4bb4-997d-6a50b5e1d560 rmi=localhost
+1557942767038|GlobalRegistry processing put fr.sorbonne_u.components.reflection.interfaces.ReflectionI-66f93d6c-e3dd-4dcb-92eb-2ad61ea2044c rmi=localhost
+1557942767148|GlobalRegistry processing put jvm_courtier_2-dcc rmi=localhost
+1557942767163|GlobalRegistry processing put jvm_courtier_4-dcc rmi=localhost
+1557942767195|GlobalRegistry processing put jvm_courtier_3-dcc rmi=localhost
+1557942782287|GlobalRegistry processing remove fr.sorbonne_u.components.reflection.interfaces.ReflectionI-e9d63115-6bd3-4947-80a2-72581e1240ec
+1557942782287|GlobalRegistry processing remove fr.sorbonne_u.components.reflection.interfaces.ReflectionI-2d55f006-b3d8-4aff-9f7a-4f0ac0968cd9
+1557942782287|GlobalRegistry processing remove fr.sorbonne_u.components.reflection.interfaces.ReflectionI-bcd819b3-3433-4bb4-997d-6a50b5e1d560
+1557942782287|GlobalRegistry processing remove fr.sorbonne_u.components.reflection.interfaces.ReflectionI-66f93d6c-e3dd-4dcb-92eb-2ad61ea2044c
+1557942782366|GlobalRegistry processing remove jvm_courtier_1-dcc
+1557942782381|GlobalRegistry processing remove jvm_courtier_4-dcc
+1557942782381|GlobalRegistry processing remove jvm_courtier_3-dcc
+1557942782397|GlobalRegistry processing remove jvm_courtier_2-dcc
+1557942782428|GlobalRegistry processing shutdown
+1557942782428|GlobalRegistry processing shutdown
+1557942782428|GlobalRegistry processing shutdown
+1557942782444|GlobalRegistry processing shutdown
+1557942782475|Global registry shuts down!
