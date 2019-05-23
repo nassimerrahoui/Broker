@@ -104,7 +104,7 @@ public class Courtier extends AbstractComponent {
 	}
 	
 	public void transfererMessage(Message msg) throws Exception{
-		if(!transferred.contains(msg)) {
+		if(transferred.contains(msg)) {
 			this.logMessage("distribution d'un message");
 			publierMessage(msg);
 			transfertOutPort.transfererMessage(msg);

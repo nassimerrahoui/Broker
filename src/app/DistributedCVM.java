@@ -16,6 +16,12 @@ public class DistributedCVM extends AbstractDistributedCVM {
 	protected static String	COURTIER_2_JVM_URI = "jvm_courtier_2" ;
 	protected static String	COURTIER_3_JVM_URI = "jvm_courtier_3" ;
 	protected static String	COURTIER_4_JVM_URI = "jvm_courtier_4" ;
+	
+	// URI Port des courtier pour l'interconnexion
+	protected static String	URI_OPORT_COURTIER_1 = "oport1" ;
+	protected static String	URI_OPORT_COURTIER_2 = "oport2" ;
+	protected static String	URI_OPORT_COURTIER_3 = "oport3" ;
+	protected static String	URI_OPORT_COURTIER_4 = "oport4" ;
 
 	// Composants instancie
 	protected Courtier uriCourtier_1;
@@ -45,7 +51,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 		
 		if (thisJVMURI.equals(COURTIER_1_JVM_URI)) {
 
-			this.uriCourtier_1 = new Courtier(null);
+			this.uriCourtier_1 = new Courtier(URI_OPORT_COURTIER_1);
 			this.uriProducteur_1 = new Producteur() ;
 			this.uriConsommateur_1 = new Consommateur();
 			
@@ -58,7 +64,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 		} else if (thisJVMURI.equals(COURTIER_2_JVM_URI)) {
 
-			this.uriCourtier_2 = new Courtier(null);
+			this.uriCourtier_2 = new Courtier(URI_OPORT_COURTIER_2);
 			this.uriProducteur_2 = new Producteur() ;
 			this.uriConsommateur_2 = new Consommateur();
 			
@@ -71,7 +77,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 		} else if (thisJVMURI.equals(COURTIER_3_JVM_URI)) {
 			
-			this.uriCourtier_3 = new Courtier(null);
+			this.uriCourtier_3 = new Courtier(URI_OPORT_COURTIER_3);
 			this.uriProducteur_3 = new Producteur() ;
 			this.uriConsommateur_3 = new Consommateur();
 			
@@ -84,7 +90,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			
 		} else if (thisJVMURI.equals(COURTIER_4_JVM_URI)) {
 			
-			this.uriCourtier_4 = new Courtier(null);
+			this.uriCourtier_4 = new Courtier(URI_OPORT_COURTIER_4);
 			this.uriProducteur_4 = new Producteur() ;
 			this.uriConsommateur_4 = new Consommateur();
 			
@@ -112,7 +118,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					PublicationServiceConnector.class.getCanonicalName());
 			
 			this.uriCourtier_1.doPortConnection(
-					uriCourtier_1.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
+					URI_OPORT_COURTIER_1,
 					uriCourtier_2.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
 					PublicationServiceConnector.class.getCanonicalName());
 			
@@ -129,7 +135,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					PublicationServiceConnector.class.getCanonicalName());
 
 			this.uriCourtier_2.doPortConnection(
-					uriCourtier_2.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
+					URI_OPORT_COURTIER_2,
 					uriCourtier_3.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
 					PublicationServiceConnector.class.getCanonicalName());
 			
@@ -146,7 +152,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					PublicationServiceConnector.class.getCanonicalName());
 
 			this.uriCourtier_3.doPortConnection(
-					uriCourtier_3.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
+					URI_OPORT_COURTIER_3,
 					uriCourtier_4.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
 					PublicationServiceConnector.class.getCanonicalName());
 			
@@ -163,7 +169,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					PublicationServiceConnector.class.getCanonicalName());
 
 			this.uriCourtier_4.doPortConnection(
-					uriCourtier_4.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
+					URI_OPORT_COURTIER_4,
 					uriCourtier_1.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
 					PublicationServiceConnector.class.getCanonicalName());
 			
