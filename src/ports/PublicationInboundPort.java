@@ -34,8 +34,9 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 
 		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
 
-			public Void call() throws Exception {
+			public Void call() throws Exception {				
 				((Courtier) this.owner).publierMessage(msg);
+				((Courtier) this.owner).firstTransmission(msg);
 				return null;
 			}
 		};
@@ -53,5 +54,19 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 		};
 
 		this.owner.handleRequestAsync(0, task);
+	}
+
+	@Override
+	public void transfererMessage(Message msg) throws Exception {
+		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
+
+			public Void call() throws Exception {
+				((Courtier) this.owner).transfererMessage(msg);
+				return null;
+			}
+		};
+
+		this.owner.handleRequestAsync(0, task);
+		
 	}
 }

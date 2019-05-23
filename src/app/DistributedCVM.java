@@ -45,7 +45,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 		
 		if (thisJVMURI.equals(COURTIER_1_JVM_URI)) {
 
-			this.uriCourtier_1 = new Courtier();
+			this.uriCourtier_1 = new Courtier(null);
 			this.uriProducteur_1 = new Producteur() ;
 			this.uriConsommateur_1 = new Consommateur();
 			
@@ -58,7 +58,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 		} else if (thisJVMURI.equals(COURTIER_2_JVM_URI)) {
 
-			this.uriCourtier_2 = new Courtier();
+			this.uriCourtier_2 = new Courtier(null);
 			this.uriProducteur_2 = new Producteur() ;
 			this.uriConsommateur_2 = new Consommateur();
 			
@@ -71,7 +71,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 		} else if (thisJVMURI.equals(COURTIER_3_JVM_URI)) {
 			
-			this.uriCourtier_3 = new Courtier();
+			this.uriCourtier_3 = new Courtier(null);
 			this.uriProducteur_3 = new Producteur() ;
 			this.uriConsommateur_3 = new Consommateur();
 			
@@ -84,7 +84,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			
 		} else if (thisJVMURI.equals(COURTIER_4_JVM_URI)) {
 			
-			this.uriCourtier_4 = new Courtier();
+			this.uriCourtier_4 = new Courtier(null);
 			this.uriProducteur_4 = new Producteur() ;
 			this.uriConsommateur_4 = new Consommateur();
 			

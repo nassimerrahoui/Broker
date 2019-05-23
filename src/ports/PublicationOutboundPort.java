@@ -27,4 +27,10 @@ public class PublicationOutboundPort extends AbstractOutboundPort implements Pub
 		((PublicationServiceI) this.connector).publierNMessages(msgs);
 	}
 
+	@Override
+	public void transfererMessage(Message msg) throws Exception {
+		((PublicationServiceI) this.connector).transfererMessage(msg);
+		
+	}
+
 }

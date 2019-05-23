@@ -12,4 +12,6 @@ public interface PublicationServiceI extends RequiredI, OfferedI {
 	public void publierMessage(Message m) throws Exception;
 
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception;
+	
+	public void transfererMessage(Message msg) throws Exception;
 }

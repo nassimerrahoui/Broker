@@ -16,6 +16,9 @@ public class CVM extends AbstractCVM {
 	protected Consommateur consommateur;
 	protected Producteur producteur;
 	protected Courtier courtier;
+	protected Courtier courtier1;
+	protected Courtier courtier2;
+	protected Courtier courtier3;
 
 	public CVM() throws Exception {
 		super();
@@ -31,7 +34,7 @@ public class CVM extends AbstractCVM {
 		// --------------------------------------------------------------------
 
 		this.producteur = new Producteur();
-		this.courtier = new Courtier();
+		this.courtier = new Courtier("transfertC1");
 		this.consommateur = new Consommateur();
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);

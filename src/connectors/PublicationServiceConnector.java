@@ -18,4 +18,10 @@ public class PublicationServiceConnector extends AbstractConnector implements Pu
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
 		((PublicationServiceI) this.offering).publierNMessages(msgs);
 	}
+
+	@Override
+	public void transfererMessage(Message msg) throws Exception {
+		((PublicationServiceI) this.offering).transfererMessage(msg);
+		
+	}
 }
