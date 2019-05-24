@@ -3,7 +3,7 @@
 <deployment>
    <hosts>
     <host name="localhost"
-          dir="/Users/Grey/workspace/broker/src/app"/>
+          dir="/home/user/eclipse-workspace/broker/src/app"/>
   </hosts>
   <cyclicBarrier   hostname="localhost" port="55253"/>
   <globalRegistry  hostname="localhost" port="55252"/>

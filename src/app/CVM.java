@@ -34,7 +34,7 @@ public class CVM extends AbstractCVM {
 		// --------------------------------------------------------------------
 
 		this.producteur = new Producteur();
-		this.courtier = new Courtier("transfertC1");
+		this.courtier = new Courtier("outTransfertC1","inTransfertC1");
 		this.consommateur = new Consommateur();
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);

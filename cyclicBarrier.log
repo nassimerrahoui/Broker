@@ -1,0 +1,34 @@
+1558658213462|DCVM Cyclic Barrier up and running!
+1558658384538|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 44006
+1558658384539|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558658402120|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 44008
+1558658402120|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558658413287|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 44010
+1558658413288|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558658423051|All connected!
+1558658423053|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 44012
+1558658423053|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558658423053|DCVM Cyclic Barrier releases 4 sites.
+1558658423069|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 44006
+1558658423070|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558658423091|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 44008
+1558658423092|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 44010
+1558658423092|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558658423093|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558658423126|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 44012
+1558658423127|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558658423127|DCVM Cyclic Barrier releases 4 sites.
+1558658424431|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 44006
+1558658424431|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558658424758|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 44012
+1558658424759|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558658424786|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 44010
+1558658424787|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558658424818|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 44008
+1558658424819|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558658424819|DCVM Cyclic Barrier releases 4 sites.
+1558658525144|DCVMCyclicBarrier.run() finished.
+1558658525152|DCVMCyclicBarrier.run() finished.
+1558658525153|DCVMCyclicBarrier.run() finished.
+1558658525156|DCVMCyclicBarrier.run() finished.
+1558658525156|DCVM Cyclic Barrier shuts down!

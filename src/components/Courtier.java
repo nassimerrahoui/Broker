@@ -42,14 +42,14 @@ public class Courtier extends AbstractComponent {
 	
 	
 
-	public Courtier(String outTransfertURI) throws Exception {
+	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
 
 		createNewExecutorService("publication", 5, true);
 		createNewExecutorService("envoi", 5, true);
 
-		String publicationPortURI = java.util.UUID.randomUUID().toString();
-		publicationPort = new PublicationInboundPort(publicationPortURI, this);
+		// String publicationPortURI = java.util.UUID.randomUUID().toString();
+		publicationPort = new PublicationInboundPort(inTransfertURI, this);
 
 		String receptionPortURI = java.util.UUID.randomUUID().toString();
 		envoiPort = new ReceptionOutboundPort(receptionPortURI, this);

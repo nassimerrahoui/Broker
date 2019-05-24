@@ -158,12 +158,12 @@ public class				DCVM_Launcher
 		commandRegistry.add("-ea") ;
 		commandRegistry.add("-Xms2m");
 		commandRegistry.add("-cp") ;
-		commandRegistry.add("/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+		commandRegistry.add("/home/user/eclipse-workspace/broker/target/classes:/home/user/eclipse-workspace/broker/resources/jing.jar:/home/user/eclipse-workspace/broker/resources/jcip-annotations.jar:/home/user/eclipse-workspace/broker/resources/javassist.jar");
 		commandRegistry.add("-Djava.security.manager");
-		commandRegistry.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
+		commandRegistry.add("-Djava.security.policy=/home/user/eclipse-workspace/broker/src/app/dcvm.policy");
 		commandRegistry.add(
 					"fr.sorbonne_u.components.registry.GlobalRegistry") ;
-		commandRegistry.add("/Users/Grey/workspace/broker/src/app/config.xml");
+		commandRegistry.add("/home/user/eclipse-workspace/broker/src/app/config.xml");
 		ProcessBuilder pbRegistry = new ProcessBuilder(commandRegistry) ;
 		pbRegistry.directory(
 			new File(hosts2dirs.get(globalRegistryHostname))) ;
@@ -186,24 +186,24 @@ public class				DCVM_Launcher
 		commandBarrier.add("-ea") ;
 		commandBarrier.add("-Xms2m");
 		commandBarrier.add("-cp") ;
-		commandBarrier.add("/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+		commandBarrier.add("/home/user/eclipse-workspace/broker/target/classes:/home/user/eclipse-workspace/broker/resources/jing.jar:/home/user/eclipse-workspace/broker/resources/jcip-annotations.jar:/Users/Grey/workspace/broker/resources/javassist.jar");
 		commandBarrier.add("-Djava.security.manager");
-		commandBarrier.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
+		commandBarrier.add("-Djava.security.policy=/home/user/eclipse-workspace/broker/src/app/dcvm.policy");
 		commandBarrier.add(
 					"fr.sorbonne_u.components.cvm.utils.DCVMCyclicBarrier") ;
-		commandBarrier.add("/Users/Grey/workspace/broker/src/app/config.xml");
+		commandBarrier.add("/home/user/eclipse-workspace/broker/src/app/config.xml");
 		ProcessBuilder pbBarrier = new ProcessBuilder(commandBarrier) ;
 		pbBarrier.directory(
 			new File(hosts2dirs.get(cyclicBarrierHostname))) ;
 		Process pBarrier = pbBarrier.start() ;
 
-		try (final BufferedReader b = new BufferedReader(new InputStreamReader(pRegistry.getErrorStream()))) {
-			String line;
-			if ((line = b.readLine()) != null)
-				System.out.println(line);
-		} catch (final IOException e) {
-			  e.printStackTrace();
-		}  
+//		try (final BufferedReader b = new BufferedReader(new InputStreamReader(pRegistry.getErrorStream()))) {
+//			String line;
+//			if ((line = b.readLine()) != null)
+//				System.out.println(line);
+//		} catch (final IOException e) {
+//			  e.printStackTrace();
+//		}  
 			
 		// TODO: should be done with an explicit synchronisation!
 		Thread.sleep(2000L) ;
@@ -222,12 +222,12 @@ public class				DCVM_Launcher
 				command.add("-javaagent:hotswap.jar") ;
 			}
 			command.add("-cp") ;
-			command.add("/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+			command.add("/home/user/eclipse-workspace/broker/target/classes:/home/user/eclipse-workspace/broker/resources/jing.jar:/home/user/eclipse-workspace/broker/resources/jcip-annotations.jar:/home/user/eclipse-workspace/broker/resources/javassist.jar");
 			command.add("-Djava.security.manager");
-			command.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
+			command.add("-Djava.security.policy=/home/user/eclipse-workspace/broker/src/app/dcvm.policy");
 			command.add(jvms2mainclasses.get(jvmURIs[i])) ;
 			command.add(jvmURIs[i]) ;
-			command.add("/Users/Grey/workspace/broker/src/app/config.xml");
+			command.add("/home/user/eclipse-workspace/broker/src/app/config.xml");
 			ProcessBuilder pbConsumer = new ProcessBuilder(command) ;
 			pbConsumer.directory(
 					new File(hosts2dirs.get(jvms2hosts.get(jvmURIs[i])))) ;
