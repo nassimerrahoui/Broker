@@ -197,13 +197,13 @@ public class				DCVM_Launcher
 			new File(hosts2dirs.get(cyclicBarrierHostname))) ;
 		Process pBarrier = pbBarrier.start() ;
 
-		try (final BufferedReader b = new BufferedReader(new InputStreamReader(pRegistry.getErrorStream()))) {
-			String line;
-			if ((line = b.readLine()) != null)
-				System.out.println(line);
-		} catch (final IOException e) {
-			  e.printStackTrace();
-		}  
+//		try (final BufferedReader b = new BufferedReader(new InputStreamReader(pRegistry.getErrorStream()))) {
+//			String line;
+//			if ((line = b.readLine()) != null)
+//				System.out.println(line);
+//		} catch (final IOException e) {
+//			  e.printStackTrace();
+//		}  
 			
 		// TODO: should be done with an explicit synchronisation!
 		Thread.sleep(2000L) ;
