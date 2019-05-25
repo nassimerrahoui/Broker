@@ -10,7 +10,5 @@ public interface SouscriptionServiceI extends RequiredI, OfferedI {
 
 	public void souscrire(Souscription s) throws Exception;
 
-	public void resiliation(Topic t, String uriInBoundConsommateur) throws Exception;
-
 	public void setFilter(Topic t, Filter filter, String uriInBoundConsommateur) throws Exception;
 }

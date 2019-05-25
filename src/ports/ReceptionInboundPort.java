@@ -23,7 +23,7 @@ public class ReceptionInboundPort extends AbstractInboundPort implements Recepti
 
 			public Void call() throws Exception {
 
-				((Consommateur) this.getOwner()).recevoirMessage(msg, uriInboundConsumer);
+				((Consommateur) this.owner).recevoirMessage(msg, uriInboundConsumer);
 
 				return null;
 			}
@@ -33,7 +33,7 @@ public class ReceptionInboundPort extends AbstractInboundPort implements Recepti
 
 	public void recevoirNMessage(ArrayList<Message> msgs, String uri) throws Exception {
 
-		((ReceptionServiceI) this.getOwner()).recevoirNMessage(msgs, uri);
+		((Consommateur) this.getOwner()).recevoirNMessages(msgs);
 
 	}
 

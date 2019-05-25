@@ -31,17 +31,15 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 	}
 
 	public void publierMessage(final Message msg) throws Exception {
-
 		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
 
-			public Void call() throws Exception {				
-				((Courtier) this.owner).publierMessage(msg);
+			public Void call() throws Exception {
 				((Courtier) this.owner).firstTransmission(msg);
 				return null;
 			}
 		};
-
-		this.owner.handleRequestAsync(0, task);
+		
+		this.owner.handleRequestAsync(0, task);	
 	}
 
 	public void publierNMessages(final ArrayList<Message> msgs) throws Exception {
@@ -67,6 +65,5 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 		};
 
 		this.owner.handleRequestAsync(0, task);
-		
 	}
 }

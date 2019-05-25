@@ -1,7 +1,7 @@
 package components;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import basics.Filter;
@@ -28,27 +28,24 @@ import ports.SouscriptionInboundPort;
 
 public class Courtier extends AbstractComponent {
 	
-	//transfert à un courtier
+	//transfert a un courtier
 	protected PublicationOutboundPort transfertOutPort;
 	
-	//list des transferts effectués
-	protected List<Message> transferred = new ArrayList<Message>();
+	//liste des transferts effectues
+	protected Vector<Message> transferred = new Vector<Message>();
 
 	protected ReceptionOutboundPort envoiPort;
 	protected PublicationInboundPort publicationPort;
 	protected SouscriptionInboundPort souscriptionPort;
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
-	
-	
 
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
-
+		
 		createNewExecutorService("publication", 5, true);
 		createNewExecutorService("envoi", 5, true);
 
-		//String publicationPortURI = java.util.UUID.randomUUID().toString();
 		publicationPort = new PublicationInboundPort(inTransfertURI, this);
 
 		String receptionPortURI = java.util.UUID.randomUUID().toString();
@@ -90,7 +87,7 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void envoieMessageAndPrint(final Message msg, final String uriInboundConsumer) throws Exception {
-		this.logMessage("Courtier envoi message a�" + uriInboundConsumer + ": \n " + msg.toString());
+		this.logMessage("Courtier envoi message a " + uriInboundConsumer + ": \n " + msg.toString());
 		envoiPort.recevoirMessage(msg, uriInboundConsumer);
 	}
 
@@ -104,7 +101,7 @@ public class Courtier extends AbstractComponent {
 	}
 	
 	public void transfererMessage(Message msg) throws Exception{
-		if(transferred.contains(msg)) {
+		if(!transferred.contains(msg)) {
 			this.logMessage("distribution d'un message");
 			publierMessage(msg);
 			transfertOutPort.transfererMessage(msg);
@@ -116,7 +113,8 @@ public class Courtier extends AbstractComponent {
 	}
 	
 	public void firstTransmission(Message m) throws Exception{
-		if(!transfertOutPort.connected()) {
+		publierMessage(m);
+		if(transfertOutPort.connected()) {
 			transferred.add(m);
 			transfertOutPort.transfererMessage(m);
 			this.logMessage("transmission d'un message de mon producteur");
@@ -125,10 +123,6 @@ public class Courtier extends AbstractComponent {
 
 	public void setFilter(Topic t, Filter f, String uriInBoundConsommateur) {
 		souscriptions.modifyFilter(t, f, uriInBoundConsommateur);
-	}
-
-	/** TODO **/
-	public void resiliation(Topic t, String uriInBoundConsommateur) {
 	}
 
 	@Override
@@ -163,7 +157,7 @@ public class Courtier extends AbstractComponent {
 			Topic topic = entry_topic.getKey();
 			ConcurrentLinkedQueue<Message> msgs = entry_topic.getValue();
 			
-			// Message � envoy�
+			// Message a envoye
 			Message msg = msgs.poll();
 
 			if(msg != null) {
@@ -172,6 +166,7 @@ public class Courtier extends AbstractComponent {
 					ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
 					if (sub.containsKey(topic.getTopicURI())) {
 						String uri = sub.get(topic.getTopicURI()).uriInboundReception;
+						this.logMessage(uri);
 						envoieMessageAndPrint(msg, uri);
 
 					}

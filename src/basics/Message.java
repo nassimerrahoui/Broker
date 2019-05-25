@@ -64,5 +64,13 @@ public class Message implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Message) {
+			return ((Message)o).uri.equals(this.uri);
+		}
+		return false;
+	}
 
 }

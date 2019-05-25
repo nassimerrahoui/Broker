@@ -1,7 +1,7 @@
 package components;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Vector;
 import basics.Filter;
 import basics.Message;
 import basics.Souscription;
@@ -20,7 +20,7 @@ import ports.SouscriptionOutboundPort;
 
 public class Consommateur extends AbstractComponent {
 
-	protected CopyOnWriteArrayList<Message> myMessages = new CopyOnWriteArrayList<Message>();
+	protected Vector<Message> myMessages = new Vector<Message>();
 	protected ReceptionInboundPort receptionPort;
 	protected SouscriptionOutboundPort souscriptionPort;
 
@@ -65,16 +65,9 @@ public class Consommateur extends AbstractComponent {
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-	}
-
-	@Override
-	public void execute() throws Exception {
-		super.execute();
-
 		this.runTask(new AbstractTask() {
 			public void run() {
 				try {
-					Thread.sleep(1000L);
 					Filter f = new Filter();
 					Souscription s = new Souscription("A", f, receptionPort.getPortURI());
 					souscrire(s);
@@ -83,7 +76,11 @@ public class Consommateur extends AbstractComponent {
 				}
 			}
 		});
+	}
 
+	@Override
+	public void execute() throws Exception {
+		super.execute();
 	}
 
 	@Override

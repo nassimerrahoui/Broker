@@ -29,16 +29,6 @@ public class SouscriptionInboundPort extends AbstractInboundPort implements Sous
 
 	}
 
-	public void resiliation(final Topic t, final String uriConsommateur) throws Exception {
-		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
-
-			public Void call() throws Exception {
-				((Courtier) this.getOwner()).resiliation(t, uriConsommateur);
-				return null;
-			}
-		});
-	}
-
 	public void setFilter(final Topic t, final Filter filter, final String uriInBoundConsommateur) throws Exception {
 		this.owner.handleRequestAsync(new AbstractComponent.AbstractService<Void>() {
 

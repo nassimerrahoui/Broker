@@ -12,10 +12,6 @@ public class SouscriptionServiceConnector extends AbstractConnector implements S
 		((SouscriptionServiceI) this.offering).souscrire(s);
 	}
 
-	public void resiliation(Topic t, String uriInBoundConsommateur) throws Exception {
-		((SouscriptionServiceI) this.offering).resiliation(t, uriInBoundConsommateur);
-	}
-
 	public void setFilter(Topic t, Filter filter, String uriInBoundConsommateur) throws Exception {
 		((SouscriptionServiceI) this.offering).setFilter(t, filter, uriInBoundConsommateur);
 	}

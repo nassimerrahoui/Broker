@@ -16,10 +16,6 @@ public class SouscriptionOutboundPort extends AbstractOutboundPort implements So
 
 	private static final long serialVersionUID = 1L;
 
-	public void resiliation(Topic t, String uriConsommateur) throws Exception {
-		((SouscriptionServiceI) this.connector).resiliation(t, uriConsommateur);
-	}
-
 	public void souscrire(Souscription s) throws Exception {
 		((SouscriptionServiceI) this.connector).souscrire(s);
 	}

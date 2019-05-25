@@ -4,9 +4,11 @@ import components.Consommateur;
 import components.Courtier;
 import components.Producteur;
 import connectors.PublicationServiceConnector;
+import connectors.ReceptionServiceConnector;
 import connectors.SouscriptionServiceConnector;
 import fr.sorbonne_u.components.cvm.AbstractDistributedCVM;
 import interfaces.PublicationServiceI;
+import interfaces.ReceptionServiceI;
 import interfaces.SouscriptionServiceI;
 
 public class DistributedCVM extends AbstractDistributedCVM {
@@ -59,9 +61,6 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			this.uriProducteur_1 = new Producteur() ;
 			this.uriConsommateur_1 = new Consommateur();
 			
-			uriCourtier_1.toggleTracing() ;
-			uriCourtier_1.toggleLogging() ;
-			
 			this.addDeployedComponent(uriCourtier_1) ;
 			this.addDeployedComponent(uriProducteur_1) ;
 			this.addDeployedComponent(uriConsommateur_1) ;
@@ -71,9 +70,6 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			this.uriCourtier_2 = new Courtier(URI_OPORT_COURTIER_2, URI_IPORT_COURTIER_2);
 			this.uriProducteur_2 = new Producteur() ;
 			this.uriConsommateur_2 = new Consommateur();
-			
-			uriCourtier_2.toggleTracing() ;
-			uriCourtier_2.toggleLogging() ;
 			
 			this.addDeployedComponent(uriCourtier_2) ;
 			this.addDeployedComponent(uriProducteur_2) ;
@@ -85,9 +81,6 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			this.uriProducteur_3 = new Producteur() ;
 			this.uriConsommateur_3 = new Consommateur();
 			
-			uriCourtier_3.toggleTracing() ;
-			uriCourtier_3.toggleLogging() ;
-			
 			this.addDeployedComponent(uriCourtier_3) ;
 			this.addDeployedComponent(uriProducteur_3) ;
 			this.addDeployedComponent(uriConsommateur_3) ;
@@ -97,9 +90,6 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			this.uriCourtier_4 = new Courtier(URI_OPORT_COURTIER_4, URI_IPORT_COURTIER_4);
 			this.uriProducteur_4 = new Producteur() ;
 			this.uriConsommateur_4 = new Consommateur();
-			
-			uriCourtier_4.toggleTracing() ;
-			uriCourtier_4.toggleLogging() ;
 			
 			this.addDeployedComponent(uriCourtier_4) ;
 			this.addDeployedComponent(uriProducteur_4) ;
@@ -126,6 +116,11 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					URI_IPORT_COURTIER_2,
 					PublicationServiceConnector.class.getCanonicalName());
 			
+			this.uriCourtier_1.doPortConnection(
+					uriCourtier_1.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+					uriConsommateur_1.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+					ReceptionServiceConnector.class.getCanonicalName());
+			
 			this.uriConsommateur_1.doPortConnection(
 					uriConsommateur_1.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
 					uriCourtier_1.findInboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
@@ -142,6 +137,11 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					URI_OPORT_COURTIER_2,
 					URI_IPORT_COURTIER_3,
 					PublicationServiceConnector.class.getCanonicalName());
+			
+			this.uriCourtier_2.doPortConnection(
+					uriCourtier_2.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+					uriConsommateur_2.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+					ReceptionServiceConnector.class.getCanonicalName());
 			
 			this.uriConsommateur_2.doPortConnection(
 					uriConsommateur_2.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
@@ -160,6 +160,11 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					URI_IPORT_COURTIER_4,
 					PublicationServiceConnector.class.getCanonicalName());
 			
+			this.uriCourtier_3.doPortConnection(
+				uriCourtier_3.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+				uriConsommateur_3.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+				ReceptionServiceConnector.class.getCanonicalName());
+			
 			this.uriConsommateur_3.doPortConnection(
 					uriConsommateur_3.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
 					uriCourtier_3.findInboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
@@ -176,6 +181,11 @@ public class DistributedCVM extends AbstractDistributedCVM {
 					URI_OPORT_COURTIER_4,
 					URI_IPORT_COURTIER_1,
 					PublicationServiceConnector.class.getCanonicalName());
+			
+			this.uriCourtier_4.doPortConnection(
+				uriCourtier_4.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+				uriConsommateur_4.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0], 
+				ReceptionServiceConnector.class.getCanonicalName());
 			
 			this.uriConsommateur_4.doPortConnection(
 					uriConsommateur_4.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],

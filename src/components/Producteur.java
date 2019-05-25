@@ -30,7 +30,6 @@ public class Producteur extends AbstractComponent {
 	public void publishMessageAndPrint(Message msg) throws Exception {
 		this.logMessage(this.publicationPort.getPortURI() + " a publie : " + msg.toString());
 		this.publicationPort.publierMessage(msg);
-
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class Producteur extends AbstractComponent {
 	@Override
 	public void execute() throws Exception {
 		super.execute();
-		Thread.sleep(1000);
+		
 		this.runTask(new AbstractTask() {
 			public void run() {
 				try {
@@ -72,14 +71,13 @@ public class Producteur extends AbstractComponent {
 					System.out.println(AbstractCVM.getCVM());
 					Message m1 = new Message("Message numero 1.", "p1", topics);
 					Message m2 = new Message("Message numero 2.", "p1", "C");
-					((Producteur) this.owner).publishMessageAndPrint(m1);
-					((Producteur) this.owner).publishMessageAndPrint(m2);
+					publishMessageAndPrint(m1);
+					publishMessageAndPrint(m2);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-
 	}
 
 }

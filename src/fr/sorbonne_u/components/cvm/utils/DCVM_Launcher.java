@@ -49,10 +49,12 @@ import fr.sorbonne_u.components.cvm.config.ConfigurationParameters;
 
 //-----------------------------------------------------------------------------
 /**
- * The class <code>DCVM_Launcher</code> is used to execute BCM applications
- * in multi-JVM but mono-host mode.
+ * The class <code>DCVM_Launcher</code> is used to execute BCM applications in
+ * multi-JVM but mono-host mode.
  *
- * <p><strong>Description</strong></p>
+ * <p>
+ * <strong>Description</strong>
+ * </p>
  * 
  * The class uses the <code>ProcessBuilder</code> framework of Java to execute
  * the BCM application. For the time being, this class only works on a single
@@ -60,26 +62,29 @@ import fr.sorbonne_u.components.cvm.config.ConfigurationParameters;
  * providing it the name of the configuration file of the application as a
  * command line parameter.
  * 
- * <p><strong>Invariant</strong></p>
+ * <p>
+ * <strong>Invariant</strong>
+ * </p>
  * 
  * <pre>
  * invariant		true
  * </pre>
  * 
- * <p>Created on : 2018-08-28</p>
+ * <p>
+ * Created on : 2018-08-28
+ * </p>
  * 
- * @author	<a href="mailto:Jacques.Malenfant@lip6.fr">Jacques Malenfant</a>
+ * @author <a href="mailto:Jacques.Malenfant@lip6.fr">Jacques Malenfant</a>
  */
-public class				DCVM_Launcher
-{
+public class DCVM_Launcher {
 	// ------------------------------------------------------------------------
 	// Deployment information
 	// ------------------------------------------------------------------------
 
-	/** Debug mode flag.													*/
-	public static boolean				DEBUG = true ;
-	/** parameters obtained form the xml configuration file.				*/
-	protected ConfigurationParameters	configurationParameters ;
+	/** Debug mode flag. */
+	public static boolean DEBUG = true;
+	/** parameters obtained form the xml configuration file. */
+	protected ConfigurationParameters configurationParameters;
 
 	// ------------------------------------------------------------------------
 	// Constructor
@@ -88,33 +93,35 @@ public class				DCVM_Launcher
 	/**
 	 * create a launcher with the given configuration file name.
 	 * 
-	 * <p><strong>Contract</strong></p>
+	 * <p>
+	 * <strong>Contract</strong>
+	 * </p>
 	 * 
 	 * <pre>
 	 * pre	configFileName != null
 	 * post	true			// no postcondition.
 	 * </pre>
-	 * @throws Exception  <i>todo.</i>
+	 * 
+	 * @throws Exception
+	 *             <i>todo.</i>
 	 *
-	 * @param configFileName the name of the configuration file.
-	 * @throws Exception <i>todo.</i>
+	 * @param configFileName
+	 *            the name of the configuration file.
+	 * @throws Exception
+	 *             <i>todo.</i>
 	 */
-	public				DCVM_Launcher(String configFileName)
-	throws Exception
-	{
-		assert	configFileName != null ;
+	public DCVM_Launcher(String configFileName) throws Exception {
+		assert configFileName != null;
 
-		File configFile = new File(configFileName) ;
-		ConfigurationFileParser cfp = new ConfigurationFileParser() ;
+		File configFile = new File(configFileName);
+		ConfigurationFileParser cfp = new ConfigurationFileParser();
 		if (!cfp.validateConfigurationFile(configFile)) {
-			throw new Exception("invalid configuration file " +
-														configFileName) ;
+			throw new Exception("invalid configuration file " + configFileName);
 		}
-		this.configurationParameters =
-								cfp.parseConfigurationFile(configFile) ;
+		this.configurationParameters = cfp.parseConfigurationFile(configFile);
 
 		if (DEBUG) {
-			System.out.println(this.configurationParameters.toString()) ;
+			System.out.println(this.configurationParameters.toString());
 		}
 	}
 
@@ -125,167 +132,142 @@ public class				DCVM_Launcher
 	/**
 	 * launch the application using different Unix processes.
 	 * 
-	 * <p><strong>Contract</strong></p>
+	 * <p>
+	 * <strong>Contract</strong>
+	 * </p>
 	 * 
 	 * <pre>
 	 * pre	true			// no precondition.
 	 * post	true			// no postcondition.
 	 * </pre>
 	 *
-	 * @throws Exception		<i>todo.</i>
+	 * @throws Exception
+	 *             <i>todo.</i>
 	 */
-	public void			launch()
-	throws Exception
-	{
-		assert	this.configurationParameters != null ;
+	public void launch() throws Exception {
+		assert this.configurationParameters != null;
 
-		String[] jvmURIs = this.configurationParameters.getJvms() ;
+		String[] jvmURIs = this.configurationParameters.getJvms();
 
-		Hashtable<String,String> jvms2hosts =
-						this.configurationParameters.getJvms2hosts() ;
-		Hashtable<String,String> hosts2dirs =
-						this.configurationParameters.getHosts2dirs() ;
-		Hashtable<String,String> jvms2mainclasses =
-						this.configurationParameters.getJvms2mainclasses() ;
-		
-		Set<String> reflectiveJVMs =
-						this.configurationParameters.getReflectiveJVMs() ;
+		Hashtable<String, String> jvms2hosts = this.configurationParameters.getJvms2hosts();
+		Hashtable<String, String> hosts2dirs = this.configurationParameters.getHosts2dirs();
+		Hashtable<String, String> jvms2mainclasses = this.configurationParameters.getJvms2mainclasses();
 
-		List<String> commandRegistry = new ArrayList<String>() ;
-		String globalRegistryHostname =
-				this.configurationParameters.getGlobalRegistryHostname() ;
-		commandRegistry.add("java") ;
-		commandRegistry.add("-ea") ;
+		Set<String> reflectiveJVMs = this.configurationParameters.getReflectiveJVMs();
+
+		List<String> commandRegistry = new ArrayList<String>();
+		String globalRegistryHostname = this.configurationParameters.getGlobalRegistryHostname();
+		commandRegistry.add("java");
+		commandRegistry.add("-ea");
 		commandRegistry.add("-Xms2m");
-		commandRegistry.add("-cp") ;
-		commandRegistry.add("/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+		commandRegistry.add("-cp");
+		commandRegistry.add(
+				"/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
 		commandRegistry.add("-Djava.security.manager");
 		commandRegistry.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
-		commandRegistry.add(
-					"fr.sorbonne_u.components.registry.GlobalRegistry") ;
+		commandRegistry.add("fr.sorbonne_u.components.registry.GlobalRegistry");
 		commandRegistry.add("/Users/Grey/workspace/broker/src/app/config.xml");
-		ProcessBuilder pbRegistry = new ProcessBuilder(commandRegistry) ;
-		pbRegistry.directory(
-			new File(hosts2dirs.get(globalRegistryHostname))) ;
-		
-		
-		Process pRegistry = pbRegistry.start() ;
-		
-//		try (final BufferedReader b = new BufferedReader(new InputStreamReader(pRegistry.getErrorStream()))) {
-//            String line;
-//            if ((line = b.readLine()) != null)
-//                System.out.println(line);
-//        } catch (final IOException e) {
-//            e.printStackTrace();
-//        }    
-		
-		List<String> commandBarrier = new ArrayList<String>() ;
-		String cyclicBarrierHostname =
-				this.configurationParameters.getCyclicBarrierHostname() ;
-		commandBarrier.add("java") ;
-		commandBarrier.add("-ea") ;
+		ProcessBuilder pbRegistry = new ProcessBuilder(commandRegistry);
+		pbRegistry.directory(new File(hosts2dirs.get(globalRegistryHostname)));
+
+		Process pRegistry = pbRegistry.start();
+
+		// try (final BufferedReader b = new BufferedReader(new
+		// InputStreamReader(pRegistry.getErrorStream()))) {
+		// String line;
+		// if ((line = b.readLine()) != null)
+		// System.out.println(line);
+		// } catch (final IOException e) {
+		// e.printStackTrace();
+		// }
+
+		List<String> commandBarrier = new ArrayList<String>();
+		String cyclicBarrierHostname = this.configurationParameters.getCyclicBarrierHostname();
+		commandBarrier.add("java");
+		commandBarrier.add("-ea");
 		commandBarrier.add("-Xms2m");
-		commandBarrier.add("-cp") ;
-		commandBarrier.add("/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+		commandBarrier.add("-cp");
+		commandBarrier.add(
+				"/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
 		commandBarrier.add("-Djava.security.manager");
 		commandBarrier.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
-		commandBarrier.add(
-					"fr.sorbonne_u.components.cvm.utils.DCVMCyclicBarrier") ;
+		commandBarrier.add("fr.sorbonne_u.components.cvm.utils.DCVMCyclicBarrier");
 		commandBarrier.add("/Users/Grey/workspace/broker/src/app/config.xml");
-		ProcessBuilder pbBarrier = new ProcessBuilder(commandBarrier) ;
-		pbBarrier.directory(
-			new File(hosts2dirs.get(cyclicBarrierHostname))) ;
-		Process pBarrier = pbBarrier.start() ;
+		ProcessBuilder pbBarrier = new ProcessBuilder(commandBarrier);
+		pbBarrier.directory(new File(hosts2dirs.get(cyclicBarrierHostname)));
+		Process pBarrier = pbBarrier.start();
 
-//		try (final BufferedReader b = new BufferedReader(new InputStreamReader(pRegistry.getErrorStream()))) {
-//			String line;
-//			if ((line = b.readLine()) != null)
-//				System.out.println(line);
-//		} catch (final IOException e) {
-//			  e.printStackTrace();
-//		}  
-			
 		// TODO: should be done with an explicit synchronisation!
-		Thread.sleep(2000L) ;
+		Thread.sleep(2000L);
 
-		Process[] jvmProcesses = new Process[jvmURIs.length] ;
-		for (int i = 0 ; i < jvmURIs.length ; i++) {
+		Process[] jvmProcesses = new Process[jvmURIs.length];
+		for (int i = 0; i < jvmURIs.length; i++) {
 			if (DEBUG) {
-				System.out.println("Starting " + jvmURIs[i] + "...") ;
+				System.out.println("Starting " + jvmURIs[i] + "...");
 			}
 
-			List<String> command = new ArrayList<String>() ;
-			command.add("java") ;
-			command.add("-ea") ;
+			List<String> command = new ArrayList<String>();
+			command.add("java");
+			command.add("-ea");
 			command.add("-Xms2m");
 			if (reflectiveJVMs.contains(jvmURIs[i])) {
-				command.add("-javaagent:hotswap.jar") ;
+				command.add("-javaagent:hotswap.jar");
 			}
-			command.add("-cp") ;
-			command.add("/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+			command.add("-cp");
+			command.add(
+					"/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
 			command.add("-Djava.security.manager");
 			command.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
-			command.add(jvms2mainclasses.get(jvmURIs[i])) ;
-			command.add(jvmURIs[i]) ;
+			command.add(jvms2mainclasses.get(jvmURIs[i]));
+			command.add(jvmURIs[i]);
 			command.add("/Users/Grey/workspace/broker/src/app/config.xml");
-			ProcessBuilder pbConsumer = new ProcessBuilder(command) ;
-			pbConsumer.directory(
-					new File(hosts2dirs.get(jvms2hosts.get(jvmURIs[i])))) ;
-			jvmProcesses[i] = pbConsumer.start() ;
-			
-			
-//			try (final BufferedReader b = new BufferedReader(new InputStreamReader(jvmProcesses[i].getErrorStream()))) {
-//            String line;
-//            if ((line = b.readLine()) != null)
-//                System.out.println(line);
-//	        } catch (final IOException e) {
-//	            e.printStackTrace();
-//	        }
+			ProcessBuilder pbConsumer = new ProcessBuilder(command);
+			pbConsumer.directory(new File(hosts2dirs.get(jvms2hosts.get(jvmURIs[i]))));
+			jvmProcesses[i] = pbConsumer.start();
 
 			if (DEBUG) {
-				System.out.println("Starting " + jvmURIs[i] + "...done!") ;
+				System.out.println("Starting " + jvmURIs[i] + "...done!");
 			}
 		}
 
-		for (int i = 0 ; i < jvmProcesses.length ; i++) {
-			jvmProcesses[i].waitFor() ;
+		for (int i = 0; i < jvmProcesses.length; i++) {
+			jvmProcesses[i].waitFor();
 		}
 
 		if (DEBUG) {
-			System.out.println("exit status GlobalRegistry = " +
-											pRegistry.exitValue()) ;
-			System.out.println("exit status CyclicBarrier = " +
-											pBarrier.exitValue()) ;
-			for (int i = 0 ; i < jvmProcesses.length ; i++) {
-					System.out.println("exit status " + jvmURIs[i] + " = " +
-											jvmProcesses[i].exitValue()) ;
+			System.out.println("exit status GlobalRegistry = " + pRegistry.exitValue());
+			System.out.println("exit status CyclicBarrier = " + pBarrier.exitValue());
+			for (int i = 0; i < jvmProcesses.length; i++) {
+				System.out.println("exit status " + jvmURIs[i] + " = " + jvmProcesses[i].exitValue());
 			}
 		}
 	}
 
 	/**
-	 * launch a BCM application which configuration file name is given
-	 * as a command-line argument.
+	 * launch a BCM application which configuration file name is given as a
+	 * command-line argument.
 	 * 
-	 * <p><strong>Contract</strong></p>
+	 * <p>
+	 * <strong>Contract</strong>
+	 * </p>
 	 * 
 	 * <pre>
 	 * pre	args != null and args.length &gt;= 1
 	 * post	true			// no postcondition.
 	 * </pre>
 	 *
-	 * @param args	the config file name.
+	 * @param args
+	 *            the config file name.
 	 */
-	public static void	main(String[] args)
-	{
-		assert	args != null && args.length >= 1 ;
+	public static void main(String[] args) {
+		assert args != null && args.length >= 1;
 
 		try {
-			DCVM_Launcher launcher = new DCVM_Launcher(args[0]) ;
-			launcher.launch() ;
+			DCVM_Launcher launcher = new DCVM_Launcher(args[0]);
+			launcher.launch();
 		} catch (Exception e) {
-			throw new RuntimeException(e) ;
+			throw new RuntimeException(e);
 		}
 	}
 }
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
