@@ -2,12 +2,14 @@ package components;
 
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 import basics.Filter;
 import basics.Message;
 import basics.Souscription;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
+import fr.sorbonne_u.components.cvm.AbstractCVM;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import interfaces.ReceptionServiceI;
@@ -39,9 +41,10 @@ public class Consommateur extends AbstractComponent {
 		souscriptionPort.publishPort();
 		receptionPort.publishPort();
 
-		this.tracer.setTitle(" Consommateur");
+		this.tracer.setTitle(" Consommateur : " + AbstractCVM.getCVM().logPrefix());
 		this.tracer.setRelativePosition(1, 1);
 		this.toggleTracing();
+		this.toggleLogging();
 	}
 
 	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {
@@ -65,17 +68,24 @@ public class Consommateur extends AbstractComponent {
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-		this.runTask(new AbstractTask() {
-			public void run() {
-				try {
-					Filter f = new Filter();
-					Souscription s = new Souscription("A", f, receptionPort.getPortURI());
-					souscrire(s);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		try {
+			this.scheduleTask(
+				new AbstractComponent.AbstractTask() {
+					@Override
+					public void run() {
+						try {
+							Filter f = new Filter();
+							Souscription s = new Souscription("A", f, receptionPort.getPortURI());
+							souscrire(s);
+						} catch (Exception e) {
+							throw new RuntimeException(e) ;
+						}
+					}
+				},
+				1000, TimeUnit.MILLISECONDS) ;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

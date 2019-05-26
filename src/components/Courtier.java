@@ -2,8 +2,6 @@ package components;
 
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import basics.Filter;
 import basics.ListSouscriptions;
 import basics.ListTopics;
@@ -13,8 +11,8 @@ import basics.Topic;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
+import fr.sorbonne_u.components.cvm.AbstractCVM;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
-import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import interfaces.PublicationServiceI;
 import interfaces.ReceptionServiceI;
 import interfaces.SouscriptionServiceI;
@@ -40,6 +38,7 @@ public class Courtier extends AbstractComponent {
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
 	protected final Object lock = new Object();
+	protected int cpt = 0;
 
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
@@ -67,15 +66,31 @@ public class Courtier extends AbstractComponent {
 		envoiPort.publishPort();
 		transfertOutPort.publishPort();
 
-		this.tracer.setTitle(" Courtier");
+		this.tracer.setTitle(" Courtier : " + AbstractCVM.getCVM().logPrefix());
 		this.tracer.setRelativePosition(1, 1);
 		this.toggleTracing();
+		this.toggleLogging();
 
 	}
 
 	public void publierMessage(Message m) throws Exception {
-		topics.addMesssageToTopic(m);
-		notifyConsommateurs();
+		synchronized (lock) {
+			topics.addMesssageToTopic(m);
+			for(String t : m.getTopicsURI()) {
+				Topic topic = topics.getTopicByUri(t);
+				if(m != null) {
+					for (String consommateurUri : souscriptions.getConsommateurUris()) {
+						for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
+							if (s.topic.equals(topic.getTopicURI())) {
+								String uri = s.uriInboundReception;
+								envoieMessageAndPrint(m, uri);
+								topics.getTopicsMessagesMap().get(topic).remove(m);
+							}
+						}
+					}	
+				}
+			}
+		}
 	}
 
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
@@ -102,38 +117,32 @@ public class Courtier extends AbstractComponent {
 	}
 	
 	public void transfererMessage(Message msg) throws Exception{
-		if(!transferred.contains(msg)) {
-			this.logMessage("distribution d'un message");
-			publierMessage(msg);
-			transfertOutPort.transfererMessage(msg);
-		}
-		else {
-			transferred.remove(msg);
-			this.logMessage("message me revient");
+		synchronized (lock) {
+			if(!transferred.contains(msg)) {
+				this.logMessage("distribution d'un message");
+				publierMessage(msg);
+				transfertOutPort.transfererMessage(msg);
+			}
+			else {
+				transferred.remove(msg);
+				this.logMessage("message deja recu");
+			}
 		}
 	}
 	
 	public void firstTransmission(Message m) throws Exception{
-		publierMessage(m);
-		if(transfertOutPort.connected()) {
-			transferred.add(m);
-			transfertOutPort.transfererMessage(m);
-			this.logMessage("transmission d'un message de mon producteur");
+		synchronized (lock) {
+			publierMessage(m);
+			if(transfertOutPort.connected()) {
+				transferred.add(m);
+				transfertOutPort.transfererMessage(m);
+				this.logMessage("transmission d'un message de mon producteur");
+			}
 		}
 	}
 
 	public void setFilter(Topic t, Filter f, String uriInBoundConsommateur) {
 		souscriptions.modifyFilter(t, f, uriInBoundConsommateur);
-	}
-
-	@Override
-	public void start() throws ComponentStartException {
-		super.start();
-	}
-
-	@Override
-	public void finalise() throws Exception {
-		super.finalise();
 	}
 
 	public void shutdown() throws ComponentShutdownException {
@@ -148,35 +157,4 @@ public class Courtier extends AbstractComponent {
 
 		super.shutdown();
 	}
-
-	public void notifyConsommateurs() throws Exception {
-
-		synchronized (lock) {
-			ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>> subs = souscriptions.getSouscriptions();
-			ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> tops = topics.getTopics();
-	
-			for (ConcurrentHashMap.Entry<Topic, ConcurrentLinkedQueue<Message>> entry_topic : tops.entrySet()) {
-				Topic topic = entry_topic.getKey();
-				ConcurrentLinkedQueue<Message> msgs = entry_topic.getValue();
-				
-				// Message a envoye
-				Message msg = msgs.poll();
-	
-				if(msg != null) {
-					for (ConcurrentHashMap.Entry<String, ConcurrentHashMap<String, Souscription>> entry_sub : subs.entrySet()) {
-	
-						ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
-						if (sub.containsKey(topic.getTopicURI())) {
-							String uri = sub.get(topic.getTopicURI()).uriInboundReception;
-							this.logMessage(uri);
-							envoieMessageAndPrint(msg, uri);
-	
-						}
-	
-					}	
-				}
-			}
-		}
-	}
-
 }

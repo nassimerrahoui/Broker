@@ -1,9 +1,8 @@
 package basics;
 
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -16,11 +15,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ListTopics {
 
-	private ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> topic_messages = new ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>>();
+	private ConcurrentHashMap<Topic, Vector<Message>> topic_messages = new ConcurrentHashMap<Topic, Vector<Message>>();
 
 	public void createTopic(String uri) {
 		Topic t = new Topic(uri);
-		topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
+		topic_messages.put(t, new Vector<Message>());
 	}
 
 	public void deleteTopic(String uri) {
@@ -34,9 +33,9 @@ public class ListTopics {
 		return getUriTopics().contains(uri);
 	}
 
-	public CopyOnWriteArrayList<String> getUriTopics() {
-		CopyOnWriteArrayList<Topic> lm = new CopyOnWriteArrayList<Topic>(topic_messages.keySet());
-		CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<String>();
+	public Vector<String> getUriTopics() {
+		Vector<Topic> lm = new Vector<Topic>(topic_messages.keySet());
+		Vector<String> list = new Vector<String>();
 		for (Topic topic : lm) {
 			list.add(topic.getTopicURI());
 		}
@@ -59,7 +58,7 @@ public class ListTopics {
 
 			if (!topic_messages.containsKey(this.getTopicByUri(uri))) {
 				Topic t = new Topic(uri);
-				topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
+				topic_messages.put(t, new Vector<Message>());
 			}
 
 			topic_messages.get(getTopicByUri(uri)).add(msg);
@@ -73,12 +72,12 @@ public class ListTopics {
 			addMesssageToTopic(m);
 		}
 	}
-
-	public ConcurrentLinkedQueue<Message> getMessagesByUriTopic(String uri) {
+	
+	public Vector<Message> getMessagesByUriTopic(String uri) {
 		return topic_messages.get(getTopicByUri(uri));
 	}
 	
-	public ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> getTopics(){
+	public ConcurrentHashMap<Topic, Vector<Message>> getTopicsMessagesMap(){
 		return topic_messages;
 	}
 }

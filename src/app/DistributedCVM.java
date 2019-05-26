@@ -48,6 +48,34 @@ public class DistributedCVM extends AbstractDistributedCVM {
 	}
 	
 	@Override
+	public boolean startStandardLifeCycle(long duration) {
+		try {
+			assert	duration	> 0 ;
+			this.deploy() ;
+			System.out.println("starting...") ;
+			this.start() ;
+			
+			// on synchronise toute les jvm afin que
+			// toutes methodes start de chaque jvm soit termine avant
+			// les methodes execute
+			this.waitOnCyclicBarrier();
+			
+			System.out.println("executing...") ;
+			this.execute() ;
+			Thread.sleep(duration) ;
+			System.out.println("finalising...") ;
+			this.finalise() ;
+			System.out.println("shutting down...") ;
+			this.shutdown() ;
+			System.out.println("ending...") ;
+			return true ;
+		} catch (Exception e) {
+			e.printStackTrace() ;
+			return false ;
+		}
+	}
+	
+	@Override
 	public void	initialise() throws Exception {
 		super.initialise() ;
 	}
@@ -208,7 +236,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 		try {
 			DistributedCVM da  = new DistributedCVM(args, 2, 5) ;
 			da.startStandardLifeCycle(15000L) ;
-			Thread.sleep(10000L) ;
+			Thread.sleep(100000L) ;
 			System.exit(0) ;
 		} catch (Exception e) {
 			throw new RuntimeException(e) ;

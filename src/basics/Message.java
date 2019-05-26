@@ -2,6 +2,7 @@ package basics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.net.InetAddress;
 
 public class Message implements Serializable {
@@ -16,7 +17,7 @@ public class Message implements Serializable {
 	/** charge utile serialisable du message */
 	protected final Serializable contenu;
 	/** le sujet du message */
-	protected final ArrayList<String> uriTopics = new ArrayList<String>();
+	protected final Vector<String> uriTopics = new Vector<String>();
 
 	public Message(Serializable contenu, String idPublieur, ArrayList<String> uriTopics) throws Exception {
 		InetAddress inetAddress = InetAddress.getLocalHost();
@@ -57,7 +58,7 @@ public class Message implements Serializable {
 		return contenu.toString() + " - publie par " + hostname + ", date: " + datePublication;
 	}
 
-	public ArrayList<String> getTopicsURI() {
+	public Vector<String> getTopicsURI() {
 		return uriTopics;
 	}
 

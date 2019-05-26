@@ -1,5 +1,6 @@
 package basics;
 
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -13,27 +14,36 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ListSouscriptions {
 
-	private ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>> souscriptions = new ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>>();
+	private ConcurrentHashMap<String, Vector<Souscription>> souscriptions = new ConcurrentHashMap<String, Vector<Souscription>>();
 
+	private Vector<String> ConsommateurUris = new Vector<String>();
+	
 	public void addSouscriptionToConsommateur(Souscription s, String uriInBoundConsommateur) throws Exception {
 		if (!souscriptions.containsKey(uriInBoundConsommateur)) {
-			souscriptions.put(uriInBoundConsommateur, new ConcurrentHashMap<String, Souscription>());
+			souscriptions.put(uriInBoundConsommateur, new Vector<Souscription>());
 		}
-		souscriptions.get(uriInBoundConsommateur).put(s.topic, s);
+		souscriptions.get(uriInBoundConsommateur).add(s);
+		ConsommateurUris.addElement(uriInBoundConsommateur);
 	}
 
 	public void deleteSouscription(Souscription s, String uriInBoundConsommateur) throws Exception {
 		if (souscriptions.containsKey(uriInBoundConsommateur)) {
-			souscriptions.get(uriInBoundConsommateur).remove(s.topic);
+			souscriptions.get(uriInBoundConsommateur).remove(s);
 		}
+		ConsommateurUris.remove(uriInBoundConsommateur);
 	}
 
 	public void modifyFilter(Topic t, Filter f, String uriInBoundConsommateur) {
-		souscriptions.get(uriInBoundConsommateur).get(t.uri).filter = f;
+		for (Souscription s : souscriptions.get(uriInBoundConsommateur)) {
+			if(s.topic.equals(t.uri)) s.filter = f;
+		}
 	}
 
-	public ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>> getSouscriptions() {
+	public ConcurrentHashMap<String, Vector<Souscription>> getSouscriptions() {
 		return souscriptions;
 	}
-
+	
+	public Vector<String> getConsommateurUris() {
+		return ConsommateurUris;
+	}
 }
