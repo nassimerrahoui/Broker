@@ -1,7 +1,7 @@
 package basics;
 
 import java.io.Serializable;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Vector;
 
 public class Filter {
 
@@ -48,7 +48,7 @@ public class Filter {
 		return matching;
 	}
 
-	public boolean its_all_match(ConcurrentLinkedQueue<Message> msgs) {
+	public boolean its_all_match(Vector<Message> msgs) {
 		return false;
 	}
 

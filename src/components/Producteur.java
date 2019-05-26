@@ -100,7 +100,7 @@ public class Producteur extends AbstractComponent {
 					e.printStackTrace();
 				}
 			}
-		}, 1000, TimeUnit.MILLISECONDS);
+		}, 2000, TimeUnit.MILLISECONDS);
 	}
 
 }

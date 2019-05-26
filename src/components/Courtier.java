@@ -22,14 +22,14 @@ import ports.ReceptionOutboundPort;
 import ports.SouscriptionInboundPort;
 
 @OfferedInterfaces(offered = { PublicationServiceI.class, SouscriptionServiceI.class })
-@RequiredInterfaces (required = { PublicationServiceI.class, ReceptionServiceI.class})
+@RequiredInterfaces(required = { PublicationServiceI.class, ReceptionServiceI.class })
 
 public class Courtier extends AbstractComponent {
-	
-	//transfert a un courtier
+
+	// transfert a un courtier
 	protected PublicationOutboundPort transfertOutPort;
-	
-	//liste des transferts effectues
+
+	// liste des transferts effectues
 	protected Vector<Message> transferred = new Vector<Message>();
 
 	protected ReceptionOutboundPort envoiPort;
@@ -38,13 +38,12 @@ public class Courtier extends AbstractComponent {
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
 	protected final Object lock = new Object();
-	protected int cpt = 0;
 
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
-		
+
 		createNewExecutorService("publication", 5, true);
-		createNewExecutorService("envoi", 5, true);
+		createNewExecutorService("souscription", 5, true);
 
 		publicationPort = new PublicationInboundPort(inTransfertURI, this);
 
@@ -53,14 +52,14 @@ public class Courtier extends AbstractComponent {
 
 		String souscriptionPortURI = java.util.UUID.randomUUID().toString();
 		souscriptionPort = new SouscriptionInboundPort(souscriptionPortURI, this);
-		
+
 		transfertOutPort = new PublicationOutboundPort(outTransfertURI, this);
 
 		this.addPort(publicationPort);
 		this.addPort(envoiPort);
 		this.addPort(souscriptionPort);
 		this.addPort(transfertOutPort);
-		
+
 		publicationPort.publishPort();
 		souscriptionPort.publishPort();
 		envoiPort.publishPort();
@@ -74,23 +73,23 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void publierMessage(Message m) throws Exception {
-		synchronized (lock) {
-			topics.addMesssageToTopic(m);
-			for(String t : m.getTopicsURI()) {
-				Topic topic = topics.getTopicByUri(t);
-				if(m != null) {
-					for (String consommateurUri : souscriptions.getConsommateurUris()) {
-						for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
-							if (s.topic.equals(topic.getTopicURI())) {
-								String uri = s.uriInboundReception;
-								envoieMessageAndPrint(m, uri);
-								topics.getTopicsMessagesMap().get(topic).remove(m);
-							}
+
+		topics.addMesssageToTopic(m);
+		for (String t : m.getTopicsURI()) {
+			Topic topic = topics.getTopicByUri(t);
+			if (m != null) {
+				for (String consommateurUri : souscriptions.getConsommateurUris()) {
+					for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
+						if (s.topic.equals(topic.getTopicURI())) {
+							String uri = s.uriInboundReception;
+							envoieMessageAndPrint(m, uri);
+							topics.getTopicsMessagesMap().get(topic).remove(m);
 						}
-					}	
+					}
 				}
 			}
 		}
+
 	}
 
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
@@ -115,29 +114,26 @@ public class Courtier extends AbstractComponent {
 			this.logMessage(uriInBoundConsommateur + " : Topic " + s.topic + " n'existe pas.");
 		}
 	}
-	
-	public void transfererMessage(Message msg) throws Exception{
-		synchronized (lock) {
-			if(!transferred.contains(msg)) {
-				this.logMessage("distribution d'un message");
-				publierMessage(msg);
-				transfertOutPort.transfererMessage(msg);
-			}
-			else {
-				transferred.remove(msg);
-				this.logMessage("message deja recu");
-			}
+
+	public void transfererMessage(Message msg) throws Exception {
+
+		if (!transferred.contains(msg)) {
+			this.logMessage("distribution d'un message");
+			publierMessage(msg);
+			transfertOutPort.transfererMessage(msg);
+		} else {
+			transferred.remove(msg);
+			this.logMessage("message deja recu");
 		}
+
 	}
-	
-	public void firstTransmission(Message m) throws Exception{
-		synchronized (lock) {
-			publierMessage(m);
-			if(transfertOutPort.connected()) {
-				transferred.add(m);
-				transfertOutPort.transfererMessage(m);
-				this.logMessage("transmission d'un message de mon producteur");
-			}
+
+	public void firstTransmission(Message m) throws Exception {
+		publierMessage(m);
+		if (transfertOutPort.connected()) {
+			transferred.add(m);
+			transfertOutPort.transfererMessage(m);
+			this.logMessage("transmission d'un message de mon producteur");
 		}
 	}
 

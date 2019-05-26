@@ -1,79 +1,88 @@
-1558886529596|DCVM Cyclic Barrier up and running!
-1558886532172|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886532172|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886532232|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886532232|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886532242|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886532248|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886532678|All connected!
-1558886532682|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886532682|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886532682|DCVM Cyclic Barrier releases 4 sites.
-1558886532712|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886532712|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886533242|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886533242|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886533242|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886533248|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886533257|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886533257|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886533257|DCVM Cyclic Barrier releases 4 sites.
-1558886535087|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886535087|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886536373|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886536373|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886536551|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886536553|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886536983|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886536983|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886536983|DCVM Cyclic Barrier releases 4 sites.
-1558886537280|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886537280|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886537280|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886537280|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886537283|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886537283|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886537301|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886537303|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886537303|DCVM Cyclic Barrier releases 4 sites.
-1558886537322|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886537322|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886537322|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886537322|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886537330|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886537330|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886537332|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886537332|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886537332|DCVM Cyclic Barrier releases 4 sites.
-1558886552358|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886552358|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886552358|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886552358|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886552358|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886552358|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886552358|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886552358|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886552358|DCVM Cyclic Barrier releases 4 sites.
-1558886552392|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886552398|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886552402|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886552402|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886552402|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886552402|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886552408|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886552408|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886552408|DCVM Cyclic Barrier releases 4 sites.
-1558886552468|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58568
-1558886552468|DCVM Cyclic Barrier has received 1 out of 4 expected.
-1558886552492|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58567
-1558886552492|DCVM Cyclic Barrier has received 2 out of 4 expected.
-1558886552502|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58565
-1558886552502|DCVM Cyclic Barrier has received 3 out of 4 expected.
-1558886552502|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58566
-1558886552502|DCVM Cyclic Barrier has received 4 out of 4 expected.
-1558886552502|DCVM Cyclic Barrier releases 4 sites.
-1558886552502|DCVMCyclicBarrier.run() finished.
-1558886552508|DCVMCyclicBarrier.run() finished.
-1558886552508|DCVMCyclicBarrier.run() finished.
-1558886552508|DCVMCyclicBarrier.run() finished.
-1558886552508|DCVM Cyclic Barrier shuts down!
+1558887779171|DCVM Cyclic Barrier up and running!
+1558887781809|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887781813|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887781902|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887781902|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887781912|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887781912|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887782447|All connected!
+1558887782447|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887782457|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887782457|DCVM Cyclic Barrier releases 4 sites.
+1558887782471|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887782471|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887783020|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887783026|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887783037|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887783042|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887783051|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887783051|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887783051|DCVM Cyclic Barrier releases 4 sites.
+1558887785352|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887785352|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887786207|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887786211|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887786528|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887786529|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887786611|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887786612|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887786613|DCVM Cyclic Barrier releases 4 sites.
+1558887786994|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887786995|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887786996|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887787000|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887787043|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887787044|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887787044|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887787047|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887787047|DCVM Cyclic Barrier releases 4 sites.
+1558887787067|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887787070|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887787071|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887787073|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887787079|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887787080|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887787084|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887787085|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887787085|DCVM Cyclic Barrier releases 4 sites.
+1558887787088|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887787089|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887787089|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887787089|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887787090|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887787090|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887787100|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887787100|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887787100|DCVM Cyclic Barrier releases 4 sites.
+1558887802126|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887802126|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887802126|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887802126|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887802126|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887802126|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887802126|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887802126|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887802126|DCVM Cyclic Barrier releases 4 sites.
+1558887802181|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887802181|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887802187|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887802187|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887802187|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887802191|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887802191|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887802191|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887802191|DCVM Cyclic Barrier releases 4 sites.
+1558887802239|DCVM Cyclic Barrier accepts: jvm_courtier_1 localhost 58805
+1558887802239|DCVM Cyclic Barrier has received 1 out of 4 expected.
+1558887802271|DCVM Cyclic Barrier accepts: jvm_courtier_2 localhost 58804
+1558887802277|DCVM Cyclic Barrier has received 2 out of 4 expected.
+1558887802277|DCVM Cyclic Barrier accepts: jvm_courtier_4 localhost 58803
+1558887802281|DCVM Cyclic Barrier has received 3 out of 4 expected.
+1558887802290|DCVM Cyclic Barrier accepts: jvm_courtier_3 localhost 58802
+1558887802290|DCVM Cyclic Barrier has received 4 out of 4 expected.
+1558887802290|DCVM Cyclic Barrier releases 4 sites.
+1558887802290|DCVMCyclicBarrier.run() finished.
+1558887802297|DCVMCyclicBarrier.run() finished.
+1558887802300|DCVMCyclicBarrier.run() finished.
+1558887802300|DCVMCyclicBarrier.run() finished.
+1558887802300|DCVM Cyclic Barrier shuts down!
