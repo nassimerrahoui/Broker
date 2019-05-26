@@ -39,6 +39,7 @@ public class Courtier extends AbstractComponent {
 	protected SouscriptionInboundPort souscriptionPort;
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
+	protected final Object lock = new Object();
 
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
@@ -150,28 +151,30 @@ public class Courtier extends AbstractComponent {
 
 	public void notifyConsommateurs() throws Exception {
 
-		ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>> subs = souscriptions.getSouscriptions();
-		ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> tops = topics.getTopics();
-
-		for (ConcurrentHashMap.Entry<Topic, ConcurrentLinkedQueue<Message>> entry_topic : tops.entrySet()) {
-			Topic topic = entry_topic.getKey();
-			ConcurrentLinkedQueue<Message> msgs = entry_topic.getValue();
-			
-			// Message a envoye
-			Message msg = msgs.poll();
-
-			if(msg != null) {
-				for (ConcurrentHashMap.Entry<String, ConcurrentHashMap<String, Souscription>> entry_sub : subs.entrySet()) {
-
-					ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
-					if (sub.containsKey(topic.getTopicURI())) {
-						String uri = sub.get(topic.getTopicURI()).uriInboundReception;
-						this.logMessage(uri);
-						envoieMessageAndPrint(msg, uri);
-
-					}
-
-				}	
+		synchronized (lock) {
+			ConcurrentHashMap<String, ConcurrentHashMap<String, Souscription>> subs = souscriptions.getSouscriptions();
+			ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> tops = topics.getTopics();
+	
+			for (ConcurrentHashMap.Entry<Topic, ConcurrentLinkedQueue<Message>> entry_topic : tops.entrySet()) {
+				Topic topic = entry_topic.getKey();
+				ConcurrentLinkedQueue<Message> msgs = entry_topic.getValue();
+				
+				// Message a envoye
+				Message msg = msgs.poll();
+	
+				if(msg != null) {
+					for (ConcurrentHashMap.Entry<String, ConcurrentHashMap<String, Souscription>> entry_sub : subs.entrySet()) {
+	
+						ConcurrentHashMap<String, Souscription> sub = entry_sub.getValue();
+						if (sub.containsKey(topic.getTopicURI())) {
+							String uri = sub.get(topic.getTopicURI()).uriInboundReception;
+							this.logMessage(uri);
+							envoieMessageAndPrint(msg, uri);
+	
+						}
+	
+					}	
+				}
 			}
 		}
 	}
