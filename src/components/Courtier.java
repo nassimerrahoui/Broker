@@ -1,7 +1,10 @@
 package components;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+
 import basics.Filter;
 import basics.ListSouscriptions;
 import basics.ListTopics;
@@ -13,6 +16,7 @@ import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
+import fr.sorbonne_u.components.ports.PortI;
 import interfaces.PublicationServiceI;
 import interfaces.ReceptionServiceI;
 import interfaces.SouscriptionServiceI;
@@ -38,6 +42,7 @@ public class Courtier extends AbstractComponent {
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
 	protected final Object lock = new Object();
+	protected ConcurrentHashMap<String,String> outbound_inbound= new ConcurrentHashMap<>();
 
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
@@ -72,8 +77,12 @@ public class Courtier extends AbstractComponent {
 
 	}
 
-	public void publierMessage(Message m) throws Exception {
+	public void addPortToCourtier(PortI p) throws Exception {
+		this.addPort(p);
+		p.publishPort();
+	}
 
+	public void publierMessage(Message m) throws Exception {
 		topics.addMesssageToTopic(m);
 		for (String t : m.getTopicsURI()) {
 			Topic topic = topics.getTopicByUri(t);
@@ -81,13 +90,12 @@ public class Courtier extends AbstractComponent {
 				for (String consommateurUri : souscriptions.getConsommateurUris()) {
 					for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
 						if (s.topic.equals(topic.getTopicURI())) {
-							String uri = s.uriInboundReception;
-							envoieMessageAndPrint(m, uri);
-							topics.getTopicsMessagesMap().get(topic).remove(m);
+							envoieMessageAndPrint(m, consommateurUri);
 						}
 					}
 				}
 			}
+			topics.getTopicsMessagesMap().get(topic).remove(m);
 		}
 
 	}
@@ -97,13 +105,21 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void createTopic(String uri) throws Exception {
-		topics.createTopic(uri);
-		this.logMessage("Le topic " + uri + " a ete cree.");
+		if(!(topics.existTopicURI(uri))) {
+			topics.createTopic(uri);
+			this.logMessage("Le topic " + uri + " a ete cree.");
+		}
 	}
 
 	public void envoieMessageAndPrint(final Message msg, final String uriInboundConsumer) throws Exception {
 		this.logMessage("Courtier envoi message a " + uriInboundConsumer + ": \n " + msg.toString());
-		envoiPort.recevoirMessage(msg, uriInboundConsumer);
+	
+		for (PortI p : findPortsFromInterface(ReceptionServiceI.class)) {
+		
+			if (outbound_inbound.get(p.getPortURI()).equals(uriInboundConsumer)) {
+				((ReceptionOutboundPort) p).recevoirMessage(msg, uriInboundConsumer);
+			}
+		}
 	}
 
 	public void souscrire(Souscription s, String uriInBoundConsommateur) throws Exception {
@@ -143,14 +159,18 @@ public class Courtier extends AbstractComponent {
 
 	public void shutdown() throws ComponentShutdownException {
 		try {
-			envoiPort.unpublishPort();
-			publicationPort.unpublishPort();
-			souscriptionPort.unpublishPort();
-			transfertOutPort.unpublishPort();
+			for (PortI p : portURIs2ports.values()) {
+				if (p.isPublished())
+					p.unpublishPort();
+			}
 		} catch (Exception e) {
 			throw new ComponentShutdownException();
 		}
 
 		super.shutdown();
+	}
+	
+	public void addToMapping(String outboundport,String inboundport) {
+		outbound_inbound.put(outboundport, inboundport);
 	}
 }

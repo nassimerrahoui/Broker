@@ -18,8 +18,10 @@ public class ListTopics {
 	private ConcurrentHashMap<Topic, Vector<Message>> topic_messages = new ConcurrentHashMap<Topic, Vector<Message>>();
 
 	public void createTopic(String uri) {
-		Topic t = new Topic(uri);
-		topic_messages.put(t, new Vector<Message>());
+		
+			Topic t = new Topic(uri);
+			topic_messages.put(t, new Vector<Message>());
+		
 	}
 
 	public void deleteTopic(String uri) {

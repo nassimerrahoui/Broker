@@ -36,13 +36,20 @@ public class Producteur extends AbstractComponent {
 	@Override
 	public void start() throws ComponentStartException {
 		super.start();
-		try {
-			publicationPort.createTopic("A");
-			publicationPort.createTopic("B");
-			publicationPort.createTopic("C");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.runTask(new AbstractTask() {
+
+			public void run() {
+				try {
+					publicationPort.createTopic("A");
+					publicationPort.createTopic("B");
+					publicationPort.createTopic("C");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		});
+
 	}
 
 	@Override
@@ -60,44 +67,60 @@ public class Producteur extends AbstractComponent {
 		this.scheduleTask(new AbstractComponent.AbstractTask() {
 			@Override
 			public void run() {
-				try {
-					ArrayList<String> topics = new ArrayList<String>();
-					topics.add("A");
-					topics.add("B");
-					switch (AbstractCVM.getCVM().logPrefix()) {
-					case "jvm_courtier_1":
+				if (AbstractCVM.isDistributed) {
+					try {
+						ArrayList<String> topics = new ArrayList<String>();
+						topics.add("A");
+						topics.add("B");
+
+						switch (AbstractCVM.getCVM().logPrefix()) {
+						case "jvm_courtier_1":
+							Message m1 = new Message("Message numero 1.", "p1", topics);
+							Message m2 = new Message("Message numero 2.", "p1", "C");
+							publishMessageAndPrint(m1);
+							publishMessageAndPrint(m2);
+							break;
+
+						case "jvm_courtier_2":
+							Message m3 = new Message("Message numero 3.", "p1", topics);
+							Message m4 = new Message("Message numero 4.", "p1", "C");
+							publishMessageAndPrint(m3);
+							publishMessageAndPrint(m4);
+							break;
+
+						case "jvm_courtier_3":
+							Message m5 = new Message("Message numero 5.", "p1", topics);
+							Message m6 = new Message("Message numero 6.", "p1", "C");
+							publishMessageAndPrint(m5);
+							publishMessageAndPrint(m6);
+							break;
+
+						case "jvm_courtier_4":
+							Message m7 = new Message("Message numero 7.", "p1", topics);
+							Message m8 = new Message("Message numero 8.", "p1", "C");
+							publishMessageAndPrint(m7);
+							publishMessageAndPrint(m8);
+							break;
+
+						default:
+							break;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						ArrayList<String> topics = new ArrayList<String>();
+						topics.add("A");
+						topics.add("B");
 						Message m1 = new Message("Message numero 1.", "p1", topics);
 						Message m2 = new Message("Message numero 2.", "p1", "C");
-						publishMessageAndPrint(m1);
-						publishMessageAndPrint(m2);
-						break;
-
-					case "jvm_courtier_2":
-						Message m3 = new Message("Message numero 3.", "p1", topics);
-						Message m4 = new Message("Message numero 4.", "p1", "C");
-						publishMessageAndPrint(m3);
-						publishMessageAndPrint(m4);
-						break;
-
-					case "jvm_courtier_3":
-						Message m5 = new Message("Message numero 5.", "p1", topics);
-						Message m6 = new Message("Message numero 6.", "p1", "C");
-						publishMessageAndPrint(m5);
-						publishMessageAndPrint(m6);
-						break;
-
-					case "jvm_courtier_4":
-						Message m7 = new Message("Message numero 7.", "p1", topics);
-						Message m8 = new Message("Message numero 8.", "p1", "C");
-						publishMessageAndPrint(m7);
-						publishMessageAndPrint(m8);
-						break;
-
-					default:
-						break;
+						((Producteur) this.owner).publishMessageAndPrint(m1);
+						((Producteur) this.owner).publishMessageAndPrint(m2);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+
 				}
 			}
 		}, 2000, TimeUnit.MILLISECONDS);
