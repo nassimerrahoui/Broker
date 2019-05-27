@@ -25,6 +25,8 @@ public class Consommateur extends AbstractComponent {
 	protected Vector<Message> myMessages = new Vector<Message>();
 	protected ReceptionInboundPort receptionPort;
 	protected SouscriptionOutboundPort souscriptionPort;
+	protected long lastDateMessage = 0;
+	protected Object lock = new Object();
 
 	public Consommateur() throws Exception {
 
@@ -46,10 +48,19 @@ public class Consommateur extends AbstractComponent {
 		this.toggleTracing();
 		this.toggleLogging();
 	}
+	
+	public long getLastDateMessage() {
+		return lastDateMessage;
+	}
 
 	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {
-		myMessages.add(msg);
-		this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
+		synchronized (lock) {
+			myMessages.add(msg);
+			this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
+			if(lastDateMessage < msg.getDatePublication()) {
+				lastDateMessage = msg.getDatePublication();
+			}
+		}
 	}
 
 	public void recevoirNMessages(ArrayList<Message> msgs) throws Exception {

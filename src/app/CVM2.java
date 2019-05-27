@@ -7,6 +7,7 @@ import components.Producteur;
 import connectors.PublicationServiceConnector;
 import connectors.ReceptionServiceConnector;
 import connectors.SouscriptionServiceConnector;
+import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
 import interfaces.PublicationServiceI;
 import interfaces.ReceptionServiceI;
@@ -17,6 +18,7 @@ public class CVM2 extends AbstractCVM {
 	protected Courtier courtier;
 	protected Vector<Consommateur> consommateurs = new Vector<Consommateur>();
 	protected Vector<Producteur> producteurs = new Vector<Producteur>();
+	protected long debut;
 
 	public CVM2() throws Exception {
 		super();
@@ -36,7 +38,7 @@ public class CVM2 extends AbstractCVM {
 
 		assert !this.deploymentDone();
 
-		this.courtier = new Courtier("outTransfertC1", "inTransfertC1",5);
+		this.courtier = new Courtier("outTransfertC1", "inTransfertC1", 5);
 		this.deployedComponents.add(courtier);
 
 		for (Producteur p : producteurs) {
@@ -45,24 +47,24 @@ public class CVM2 extends AbstractCVM {
 					courtier.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
 					PublicationServiceConnector.class.getCanonicalName());
 		}
-		
+
 		int i = 0;
 		for (Consommateur c : this.consommateurs) {
 
 			this.deployedComponents.add(c);
-			
+
 			// Connexion entre courtier et consommateur
 			this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[i],
 					c.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0],
 					ReceptionServiceConnector.class.getCanonicalName());
-			
+
 			// Connexion entre consommateur et courtier
 			c.doPortConnection(c.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
 					courtier.findInboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
 					SouscriptionServiceConnector.class.getCanonicalName());
 			i++;
 		}
-		
+
 		super.deploy();
 		assert this.deploymentDone();
 	}
@@ -86,6 +88,31 @@ public class CVM2 extends AbstractCVM {
 		this.courtier.printExecutionLogOnFile("Courtier");
 		super.shutdown();
 	}
+	
+	@Override
+	public boolean	startStandardLifeCycle(long duration)
+	{
+		try {
+			assert duration	> 0 ;
+			this.deploy() ;
+			System.out.println("starting...") ;
+			this.start() ;
+			debut = System.currentTimeMillis();
+			System.out.println("executing...") ;
+			this.execute() ;
+			Thread.sleep(duration) ;
+			System.out.println("finalising...") ;
+			this.finalise() ;
+			System.out.println("shutting down...") ;
+			this.shutdown() ;
+			System.out.println("ending...") ;
+			
+			return true ;
+		} catch (Exception e) {
+			e.printStackTrace() ;
+			return false ;
+		}
+	}
 
 	public static void main(String[] args) {
 		try {
@@ -93,8 +120,27 @@ public class CVM2 extends AbstractCVM {
 			CVM2 a = new CVM2();
 			// Execute the application.
 			a.startStandardLifeCycle(15000L);
+			
+			while(true) {
+				if(a.isShutdown()) {
+					long fin = 0;
+					for (ComponentI c : a.deployedComponents) {
+						if(c instanceof Consommateur) {
+							if(fin < ((Consommateur) c).getLastDateMessage()) {
+								fin = ((Consommateur) c).getLastDateMessage();
+							}
+						}
+					}
+					System.out.println("Temps de reception de tout les messages par les consommateurs : "
+							+ String.valueOf(fin-a.debut-2000) + " ms");
+					break;
+				} else {
+					Thread.currentThread().wait();
+				}
+			}
+			
 			// Give some time to see the traces (convenience).
-			Thread.sleep(100000L);
+			Thread.sleep(10000L);
 			// Simplifies the termination (termination has yet to be treated
 			// properly in BCM).
 			System.exit(0);

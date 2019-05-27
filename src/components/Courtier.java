@@ -143,8 +143,6 @@ public class Courtier extends AbstractComponent {
 		this.logMessage("Courtier envoi message a " + uriInboundConsumer + ": \n " + msg.toString());
 
 		for (PortI p : findPortsFromInterface(ReceptionServiceI.class)) {
-			this.logMessage("uri list : " + p.getServerPortURI());
-			this.logMessage("uri : " + uriInboundConsumer);
 			if (p.getServerPortURI().equals(uriInboundConsumer)) {
 				((ReceptionOutboundPort) p).recevoirMessage(msg, uriInboundConsumer);
 			}
