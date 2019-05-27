@@ -43,8 +43,8 @@ public class Courtier extends AbstractComponent {
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
 
-		createNewExecutorService("publication", 10, true);
-		createNewExecutorService("souscription", 10, true);
+		createNewExecutorService("publication", 5, true);
+		createNewExecutorService("souscription", 5, true);
 
 		publicationPort = new PublicationInboundPort(inTransfertURI, this);
 

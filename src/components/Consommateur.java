@@ -58,7 +58,7 @@ public class Consommateur extends AbstractComponent {
 			myMessages.add(msg);
 			this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
 			if(lastDateMessage < msg.getDatePublication()) {
-				lastDateMessage = msg.getDatePublication();
+				lastDateMessage = System.currentTimeMillis();
 			}
 		}
 	}
