@@ -119,7 +119,7 @@ public class CVM2 extends AbstractCVM {
 			// Create an instance of the defined component virtual machine.
 			CVM2 a = new CVM2();
 			// Execute the application.
-			a.startStandardLifeCycle(15000L);
+			a.startStandardLifeCycle(600000L);
 			
 			while(true) {
 				if(a.isShutdown()) {

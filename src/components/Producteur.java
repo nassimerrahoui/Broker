@@ -14,6 +14,7 @@ import ports.PublicationOutboundPort;
 public class Producteur extends AbstractComponent {
 
 	protected PublicationOutboundPort publicationPort;
+	
 
 	public Producteur() throws Exception {
 		super(1, 1);
@@ -48,6 +49,7 @@ public class Producteur extends AbstractComponent {
 				}
 
 			}
+			
 		});
 
 	}
@@ -113,10 +115,14 @@ public class Producteur extends AbstractComponent {
 						ArrayList<String> topics = new ArrayList<String>();
 						topics.add("A");
 						topics.add("B");
-						Message m1 = new Message("Message numero 1.", "p1", topics);
-						Message m2 = new Message("Message numero 2.", "p1", "C");
-						((Producteur) this.owner).publishMessageAndPrint(m1);
-						((Producteur) this.owner).publishMessageAndPrint(m2);
+						for (int i = 0; i < 100000; i++) {
+							Message m1 = new Message("Message numero "+i+".", "p1", topics);
+							Message m2 = new Message("Message numero "+(i+1)+".", "p1", "C");
+							((Producteur) this.owner).publishMessageAndPrint(m1);
+							((Producteur) this.owner).publishMessageAndPrint(m2);
+						}
+						
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
