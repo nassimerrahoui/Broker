@@ -115,7 +115,7 @@ public class Producteur extends AbstractComponent {
 						ArrayList<String> topics = new ArrayList<String>();
 						topics.add("A");
 						topics.add("B");
-						for (int i = 0; i < 100000; i++) {
+						for (int i = 0; i < 1; i++) {
 							Message m1 = new Message("Message numero "+i+".", "p1", topics);
 							Message m2 = new Message("Message numero "+(i+1)+".", "p1", "C");
 							((Producteur) this.owner).publishMessageAndPrint(m1);

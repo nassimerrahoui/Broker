@@ -43,8 +43,8 @@ public class Courtier extends AbstractComponent {
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
 
-		createNewExecutorService("publication", 100, true);
-		createNewExecutorService("souscription", 100, true);
+		createNewExecutorService("publication", 10, true);
+		createNewExecutorService("souscription", 10, true);
 
 		publicationPort = new PublicationInboundPort(inTransfertURI, this);
 
@@ -114,18 +114,24 @@ public class Courtier extends AbstractComponent {
 	public void publierMessage(Message m) throws Exception {
 		if (m != null) {
 			topics.addMesssageToTopic(m);
-			for (String t : m.getTopicsURI()) {
-				Topic topic = topics.getTopicByUri(t);
-				for (String consommateurUri : souscriptions.getConsommateurUris()) {
-					for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
-						if (s.topic.equals(topic.getTopicURI())) {
-							envoieMessageAndPrint(m, consommateurUri);
-						}
+			notifyConsommateurs(m);
+		}
+	}
+
+	private void notifyConsommateurs(Message m) throws Exception {
+		for (String t : m.getTopicsURI()) {
+			Topic topic = topics.getTopicByUri(t);
+			for (String consommateurUri : souscriptions.getConsommateurUris()) {
+				for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
+					if (s.topic.equals(topic.getTopicURI()) && s.filter.its_a_match(m)) {
+						this.logMessage("envoiee");
+						envoieMessageAndPrint(m, consommateurUri);
 					}
 				}
-				topics.getTopicsMessagesMap().get(topic).remove(m);
 			}
+			topics.getTopicsMessagesMap().get(topic).remove(m);
 		}
+		
 	}
 
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception {

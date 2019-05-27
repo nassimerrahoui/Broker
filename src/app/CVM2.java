@@ -119,7 +119,7 @@ public class CVM2 extends AbstractCVM {
 			// Create an instance of the defined component virtual machine.
 			CVM2 a = new CVM2();
 			// Execute the application.
-			a.startStandardLifeCycle(600000L);
+			a.startStandardLifeCycle(15000L);
 			
 			while(true) {
 				if(a.isShutdown()) {
@@ -131,8 +131,15 @@ public class CVM2 extends AbstractCVM {
 							}
 						}
 					}
-					System.out.println("Temps de reception de tout les messages par les consommateurs : "
-							+ String.valueOf(fin-a.debut-2000) + " ms");
+					long finalTime = fin-a.debut-2000;
+					if(finalTime < 0) {
+						System.out.println("Temps de reception de tout les messages par les consommateurs : "
+								+ String.valueOf(finalTime+2000) + " ms");
+					} else {
+						System.out.println("Temps de reception de tout les messages par les consommateurs : "
+								+ String.valueOf(finalTime) + " ms");
+					}
+					
 					break;
 				} else {
 					Thread.currentThread().wait();

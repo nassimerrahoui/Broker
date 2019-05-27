@@ -25,7 +25,7 @@ public class Consommateur extends AbstractComponent {
 	protected Vector<Message> myMessages = new Vector<Message>();
 	protected ReceptionInboundPort receptionPort;
 	protected SouscriptionOutboundPort souscriptionPort;
-	protected long lastDateMessage = 0;
+	protected long lastDateMessage = System.currentTimeMillis();
 	protected Object lock = new Object();
 
 	public Consommateur() throws Exception {
@@ -86,6 +86,8 @@ public class Consommateur extends AbstractComponent {
 					public void run() {
 						try {
 							Filter f = new Filter();
+							f.setContenu("numero 0");
+							f.setDatePublication(System.currentTimeMillis());
 							Souscription s = new Souscription("A", f, receptionPort.getPortURI());
 							souscrire(s);
 						} catch (Exception e) {

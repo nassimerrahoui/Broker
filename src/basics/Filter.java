@@ -31,6 +31,7 @@ public class Filter {
 		} else if (datePublication == 0 && contenu != null) {
 			if (msg.getContenu() instanceof String && contenu instanceof String) {
 				if (((String) msg.getContenu()).toLowerCase().contains(((String) contenu).toLowerCase())) {
+					System.out.println(" msg contenu = "+ msg.getContenu());
 					return matching;
 				} else {
 					matching = false;
