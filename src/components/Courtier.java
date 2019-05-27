@@ -1,10 +1,7 @@
 package components;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import basics.Filter;
 import basics.ListSouscriptions;
 import basics.ListTopics;
@@ -42,7 +39,6 @@ public class Courtier extends AbstractComponent {
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
 	protected final Object lock = new Object();
-	protected ConcurrentHashMap<String,String> outbound_inbound= new ConcurrentHashMap<>();
 
 	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
 		super(1, 0);
@@ -76,6 +72,39 @@ public class Courtier extends AbstractComponent {
 		this.toggleLogging();
 
 	}
+	
+	public Courtier(String outTransfertURI, String inTransfertURI, int nb_consommateurs) throws Exception {
+		super(1, 0);
+
+		createNewExecutorService("publication", 5, true);
+		createNewExecutorService("souscription", 5, true);
+
+		for (int i = 0; i < nb_consommateurs; i++) {
+			ReceptionOutboundPort r = new ReceptionOutboundPort("oportreception"+i, this);
+			this.addPort(r);
+			r.publishPort();
+		}
+
+		String souscriptionPortURI = java.util.UUID.randomUUID().toString();
+		souscriptionPort = new SouscriptionInboundPort(souscriptionPortURI, this);
+
+		publicationPort = new PublicationInboundPort(inTransfertURI, this);
+		transfertOutPort = new PublicationOutboundPort(outTransfertURI, this);
+
+		this.addPort(publicationPort);
+		this.addPort(souscriptionPort);
+		this.addPort(transfertOutPort);
+
+		publicationPort.publishPort();
+		souscriptionPort.publishPort();
+		transfertOutPort.publishPort();
+
+		this.tracer.setTitle(" Courtier : " + AbstractCVM.getCVM().logPrefix());
+		this.tracer.setRelativePosition(1, 1);
+		this.toggleTracing();
+		this.toggleLogging();
+
+	}
 
 	public void addPortToCourtier(PortI p) throws Exception {
 		this.addPort(p);
@@ -83,10 +112,10 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void publierMessage(Message m) throws Exception {
-		topics.addMesssageToTopic(m);
-		for (String t : m.getTopicsURI()) {
-			Topic topic = topics.getTopicByUri(t);
-			if (m != null) {
+		if (m != null) {
+			topics.addMesssageToTopic(m);
+			for (String t : m.getTopicsURI()) {
+				Topic topic = topics.getTopicByUri(t);
 				for (String consommateurUri : souscriptions.getConsommateurUris()) {
 					for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
 						if (s.topic.equals(topic.getTopicURI())) {
@@ -94,10 +123,9 @@ public class Courtier extends AbstractComponent {
 						}
 					}
 				}
+				topics.getTopicsMessagesMap().get(topic).remove(m);
 			}
-			topics.getTopicsMessagesMap().get(topic).remove(m);
 		}
-
 	}
 
 	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
@@ -105,7 +133,7 @@ public class Courtier extends AbstractComponent {
 	}
 
 	public void createTopic(String uri) throws Exception {
-		if(!(topics.existTopicURI(uri))) {
+		if (!(topics.existTopicURI(uri))) {
 			topics.createTopic(uri);
 			this.logMessage("Le topic " + uri + " a ete cree.");
 		}
@@ -113,10 +141,11 @@ public class Courtier extends AbstractComponent {
 
 	public void envoieMessageAndPrint(final Message msg, final String uriInboundConsumer) throws Exception {
 		this.logMessage("Courtier envoi message a " + uriInboundConsumer + ": \n " + msg.toString());
-	
+
 		for (PortI p : findPortsFromInterface(ReceptionServiceI.class)) {
-		
-			if (outbound_inbound.get(p.getPortURI()).equals(uriInboundConsumer)) {
+			this.logMessage("uri list : " + p.getServerPortURI());
+			this.logMessage("uri : " + uriInboundConsumer);
+			if (p.getServerPortURI().equals(uriInboundConsumer)) {
 				((ReceptionOutboundPort) p).recevoirMessage(msg, uriInboundConsumer);
 			}
 		}
@@ -168,9 +197,5 @@ public class Courtier extends AbstractComponent {
 		}
 
 		super.shutdown();
-	}
-	
-	public void addToMapping(String outboundport,String inboundport) {
-		outbound_inbound.put(outboundport, inboundport);
 	}
 }

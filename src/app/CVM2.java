@@ -8,11 +8,9 @@ import connectors.PublicationServiceConnector;
 import connectors.ReceptionServiceConnector;
 import connectors.SouscriptionServiceConnector;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
-import fr.sorbonne_u.components.ports.PortI;
 import interfaces.PublicationServiceI;
 import interfaces.ReceptionServiceI;
 import interfaces.SouscriptionServiceI;
-import ports.ReceptionOutboundPort;
 
 public class CVM2 extends AbstractCVM {
 
@@ -38,51 +36,33 @@ public class CVM2 extends AbstractCVM {
 
 		assert !this.deploymentDone();
 
-		// --------------------------------------------------------------------
-		// Creation phase
-		// --------------------------------------------------------------------
-
-		this.courtier = new Courtier("outTransfertC1", "inTransfertC1");
+		this.courtier = new Courtier("outTransfertC1", "inTransfertC1",5);
+		this.deployedComponents.add(courtier);
 
 		for (Producteur p : producteurs) {
 			this.deployedComponents.add(p);
+			p.doPortConnection(p.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
+					courtier.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
+					PublicationServiceConnector.class.getCanonicalName());
 		}
-
-		this.deployedComponents.add(courtier);
-		int i = 1;
+		
+		int i = 0;
 		for (Consommateur c : this.consommateurs) {
 
 			this.deployedComponents.add(c);
-			PortI p = new ReceptionOutboundPort("ReceptionOutboundPort_" + i, this.courtier);
-			this.courtier.addPortToCourtier(p);
-			this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[i - 1],
+			
+			// Connexion entre courtier et consommateur
+			this.courtier.doPortConnection(courtier.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[i],
 					c.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0],
 					ReceptionServiceConnector.class.getCanonicalName());
-			this.courtier.addToMapping(courtier.findOutboundPortURIsFromInterface(ReceptionServiceI.class)[i - 1],
-					c.findInboundPortURIsFromInterface(ReceptionServiceI.class)[0]);
+			
 			// Connexion entre consommateur et courtier
 			c.doPortConnection(c.findOutboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
 					courtier.findInboundPortURIsFromInterface(SouscriptionServiceI.class)[0],
 					SouscriptionServiceConnector.class.getCanonicalName());
 			i++;
 		}
-
-		// --------------------------------------------------------------------
-		// Connection phase
-		// --------------------------------------------------------------------
-
-		// Connexion entre producteur et courtier
-
-		for (Producteur p : producteurs) {
-			p.doPortConnection(p.findOutboundPortURIsFromInterface(PublicationServiceI.class)[0],
-					courtier.findInboundPortURIsFromInterface(PublicationServiceI.class)[0],
-					PublicationServiceConnector.class.getCanonicalName());
-		}
-
-		// --------------------------------------------------------------------
-		// Deployment done
-		// --------------------------------------------------------------------
-
+		
 		super.deploy();
 		assert this.deploymentDone();
 	}
