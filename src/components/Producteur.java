@@ -77,29 +77,29 @@ public class Producteur extends AbstractComponent {
 
 						switch (AbstractCVM.getCVM().logPrefix()) {
 						case "jvm_courtier_1":
-							Message m1 = new Message("Message numero 1.", "p1", topics);
-							Message m2 = new Message("Message numero 2.", "p1", "C");
+							Message m1 = new Message("Message numero 0.", "p1", topics);
+							Message m2 = new Message("Message numero 1.", "p1", "C");
 							publishMessageAndPrint(m1);
 							publishMessageAndPrint(m2);
 							break;
 
 						case "jvm_courtier_2":
-							Message m3 = new Message("Message numero 3.", "p1", topics);
-							Message m4 = new Message("Message numero 4.", "p1", "C");
+							Message m3 = new Message("Message numero 2.", "p1", topics);
+							Message m4 = new Message("Message numero 3.", "p1", "C");
 							publishMessageAndPrint(m3);
 							publishMessageAndPrint(m4);
 							break;
 
 						case "jvm_courtier_3":
-							Message m5 = new Message("Message numero 5.", "p1", topics);
-							Message m6 = new Message("Message numero 6.", "p1", "C");
+							Message m5 = new Message("Message numero 4.", "p1", topics);
+							Message m6 = new Message("Message numero 5.", "p1", "C");
 							publishMessageAndPrint(m5);
 							publishMessageAndPrint(m6);
 							break;
 
 						case "jvm_courtier_4":
-							Message m7 = new Message("Message numero 7.", "p1", topics);
-							Message m8 = new Message("Message numero 8.", "p1", "C");
+							Message m7 = new Message("Message numero 6.", "p1", topics);
+							Message m8 = new Message("Message numero 7.", "p1", "C");
 							publishMessageAndPrint(m7);
 							publishMessageAndPrint(m8);
 							break;
