@@ -3,6 +3,11 @@ package basics;
 import java.io.Serializable;
 import java.util.Vector;
 
+/**
+ * Classe représentant le filtre.
+ * @author 3408526
+ *
+ */
 public class Filter {
 
 	/** temps systeme unix de la publication du message */
@@ -11,16 +16,29 @@ public class Filter {
 	/** charge utile serialisable du message */
 	protected Serializable contenu;
 
+	/**
+	 * Constructeur du  Filtre prenant le critère de date de publication et le contenu.
+	 * @param datePublication
+	 * @param contenu
+	 */
 	public Filter(long datePublication, Serializable contenu) {
 		this.datePublication = datePublication;
 		this.contenu = contenu;
 	}
 
+	/**
+	 * Constructeur d'un filtre vierge. 
+	 */
 	public Filter() {
 		this.datePublication = 0;
 		this.contenu = null;
 	}
 
+	/**
+	 * Retourne si le message msg satisfait les connditions du filtre ou non.
+	 * @param msg
+	 * @return
+	 */
 	public boolean its_a_match(Message msg) {
 		boolean matching = true;
 		if (datePublication == 0 && contenu == null)
@@ -49,14 +67,19 @@ public class Filter {
 		return matching;
 	}
 
-	public boolean its_all_match(Vector<Message> msgs) {
-		return false;
-	}
+	/**
+	 *  Modifie la condition sur la date de publication 
+	 * @param datePublication
+	 */
 
 	public void setDatePublication(long datePublication) {
 		this.datePublication = datePublication;
 	}
 
+	/**
+	 * Modifie la condition sur le contenu
+	 * @param contenu
+	 */
 	public void setContenu(Serializable contenu) {
 		this.contenu = contenu;
 	}

@@ -17,6 +17,11 @@ import interfaces.SouscriptionServiceI;
 import ports.ReceptionInboundPort;
 import ports.SouscriptionOutboundPort;
 
+/**
+ * Classe Consommateur
+ * 
+ *
+ */
 @OfferedInterfaces(offered = { ReceptionServiceI.class })
 @RequiredInterfaces(required = { SouscriptionServiceI.class })
 
@@ -28,6 +33,10 @@ public class Consommateur extends AbstractComponent {
 	protected long lastDateMessage = System.currentTimeMillis();
 	protected Object lock = new Object();
 
+	/**
+	 * Constructeur de consommateur avec creation et publication de ports. 
+	 * @throws Exception
+	 */
 	public Consommateur() throws Exception {
 
 		super(1, 1);
@@ -48,29 +57,33 @@ public class Consommateur extends AbstractComponent {
 		this.toggleTracing();
 		this.toggleLogging();
 	}
-	
+	/**
+	 * Renvoie la date du dernier message recu
+	 * @return date 
+	 */
 	public long getLastDateMessage() {
 		return lastDateMessage;
 	}
-
+	
+	/**
+	 * Réception d'un message à travers le port entrant de réception
+	 * @param msg Message à envoyer sur le port
+	 * @param uriInboundPort URI du port de réception
+	 * @throws Exception
+	 */
 	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {
 		synchronized (lock) {
 			myMessages.add(msg);
 			this.logMessage(this.receptionPort.getPortURI() + " a recu : " + msg.getContenu().toString());
-			if(lastDateMessage < msg.getDatePublication()) {
-				lastDateMessage = System.currentTimeMillis();
-			}
+			lastDateMessage = System.currentTimeMillis();
 		}
 	}
-
-	public void recevoirNMessages(ArrayList<Message> msgs) throws Exception {
-		for (int i = 0; i < msgs.size(); i++) {
-			if (msgs.get(i) == null)
-				msgs.remove(i);
-		}
-		myMessages.addAll(msgs);
-	}
-
+	
+	/**
+	 * Demande de souscription à un topic à travers le port sortant de souscription
+	 * @param s la souscription  
+	 * @throws Exception
+	 */
 	public void souscrire(Souscription s) throws Exception {
 		this.logMessage("Souscription au topic " + s.topic + " sur le port " + s.uriInboundReception);
 		this.souscriptionPort.souscrire(s);
@@ -86,7 +99,8 @@ public class Consommateur extends AbstractComponent {
 					public void run() {
 						try {
 							Filter f = new Filter();
-							f.setContenu("numero 0");
+							// decommenter pour effectuer un filtre sur le contenu du message 
+							// f.setContenu("numero 0");
 							f.setDatePublication(System.currentTimeMillis());
 							Souscription s = new Souscription("A", f, receptionPort.getPortURI());
 							souscrire(s);

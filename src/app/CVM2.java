@@ -13,6 +13,16 @@ import interfaces.PublicationServiceI;
 import interfaces.ReceptionServiceI;
 import interfaces.SouscriptionServiceI;
 
+
+/** 
+ * 
+ * La CVM2 est un exemple d'execution de 10 producteurs et 5 consommateurs.
+ * Les producteurs envoient 2 messages chacun. Le premier message appartient au topic A et B.
+ * Le second appartient au topic C. Les consommateurs s'abonnent au topic A.
+ * Les consommateurs doivent recevoir 10 messages chacun correspondant aux messages du topic A.
+ * Il existe 5 consommateurs.
+ *
+ */
 public class CVM2 extends AbstractCVM {
 
 	protected Courtier courtier;
@@ -97,6 +107,7 @@ public class CVM2 extends AbstractCVM {
 			this.deploy() ;
 			System.out.println("starting...") ;
 			this.start() ;
+			// timer utilise pour les tests de performances
 			debut = System.currentTimeMillis();
 			System.out.println("executing...") ;
 			this.execute() ;
@@ -116,13 +127,16 @@ public class CVM2 extends AbstractCVM {
 
 	public static void main(String[] args) {
 		try {
+			long sleepTime = 30000L;
 			// Create an instance of the defined component virtual machine.
 			CVM2 a = new CVM2();
 			// Execute the application.
-			a.startStandardLifeCycle(150000L);
+			a.startStandardLifeCycle(sleepTime);
 			
 			while(true) {
 				if(a.isShutdown()) {
+					// recuperation du temps de reception final de tous les messages recu
+					// par les consommateurs pour les tests de perfomances.
 					long fin = 0;
 					for (ComponentI c : a.deployedComponents) {
 						if(c instanceof Consommateur) {
@@ -131,10 +145,12 @@ public class CVM2 extends AbstractCVM {
 							}
 						}
 					}
-					long finalTime = fin-a.debut-2000-15000L;
+					
+					// affichage du temps de reception de tous les messages de tous les consommateurs
+					long finalTime = fin-a.debut-2000-sleepTime;
 					if(finalTime < 0) {
 						System.out.println("Temps de reception de tout les messages par les consommateurs : "
-								+ String.valueOf(finalTime+2000+15000L) + " ms");
+								+ String.valueOf(finalTime+2000+sleepTime) + " ms");
 					} else {
 						System.out.println("Temps de reception de tout les messages par les consommateurs : "
 								+ String.valueOf(finalTime) + " ms");

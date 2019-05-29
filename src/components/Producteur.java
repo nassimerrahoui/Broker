@@ -10,11 +10,17 @@ import fr.sorbonne_u.components.exceptions.ComponentStartException;
 import interfaces.PublicationServiceI;
 import ports.PublicationOutboundPort;
 
+/**
+ * 
+ * Le composant producteur requiert le service de publication provenant du composant Courtier.
+ * Un producteur envoi des appels de publications a travers son port sortant de publication connecte au port entrant
+ * de publication du courtier.
+ *
+ */
 @RequiredInterfaces(required = { PublicationServiceI.class })
 public class Producteur extends AbstractComponent {
 
 	protected PublicationOutboundPort publicationPort;
-	
 
 	public Producteur() throws Exception {
 		super(1, 1);
@@ -29,6 +35,9 @@ public class Producteur extends AbstractComponent {
 
 	}
 
+	/** 
+	 * Publication d'un message en passant par le port de publication.
+	 * **/
 	public void publishMessageAndPrint(Message msg) throws Exception {
 		this.logMessage(this.publicationPort.getPortURI() + " a publie : " + msg.toString());
 		this.publicationPort.publierMessage(msg);
@@ -115,7 +124,7 @@ public class Producteur extends AbstractComponent {
 						ArrayList<String> topics = new ArrayList<String>();
 						topics.add("A");
 						topics.add("B");
-						for (int i = 0; i < 20000; i++) {
+						for (int i = 0; i < 1; i++) {
 							Message m1 = new Message("Message numero "+i+".", "p1", topics);
 							Message m2 = new Message("Message numero "+(i+1)+".", "p1", "C");
 							((Producteur) this.owner).publishMessageAndPrint(m1);
