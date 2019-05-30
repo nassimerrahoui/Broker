@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.net.InetAddress;
 
+/**
+ * Classe representant un message
+ *
+ */
 public class Message implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,18 +41,34 @@ public class Message implements Serializable {
 		this.uriTopics.add(uriTopic);
 	}
 
+	/**
+	 * Getter uri de message.
+	 * @return
+	 */
 	public String getIDMessage() {
 		return uri;
 	}
 
+	/**
+	 * Getter date de publication.
+	 * @return
+	 */
 	public long getDatePublication() {
 		return datePublication;
 	}
 
+	/**
+	 * Retourne l'id de publieur.
+	 * @return
+	 */
 	public String getIDDateur() {
 		return hostname;
 	}
 
+	/**
+	 * Retourne le contenu du message
+	 * @return
+	 */
 	public Serializable getContenu() {
 		return contenu;
 	}
@@ -58,6 +78,10 @@ public class Message implements Serializable {
 		return contenu.toString() + " - publie par " + hostname + ", date: " + datePublication;
 	}
 
+	/**
+	 * Retourne les topics du message.
+	 * @return
+	 */
 	public Vector<String> getTopicsURI() {
 		return uriTopics;
 	}

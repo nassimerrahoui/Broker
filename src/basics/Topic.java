@@ -1,5 +1,9 @@
 package basics;
 
+/**
+ * Classe representant le topic.
+ *
+ */
 public class Topic {
 
 	protected final String uri;

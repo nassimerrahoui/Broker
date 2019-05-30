@@ -1,8 +1,12 @@
 package basics;
 
+/**
+ * Classe représentant la Souscription.
+ *
+ */
 public class Souscription {
 
-	public String topic;
+	public String topic; 
 	public Filter filter;
 	public String uriInboundReception;
 

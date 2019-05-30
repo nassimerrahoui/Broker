@@ -17,6 +17,10 @@ public class ListTopics {
 
 	private ConcurrentHashMap<Topic, Vector<Message>> topic_messages = new ConcurrentHashMap<Topic, Vector<Message>>();
 
+	/**
+	 * Crée un topic avec l'uri
+	 * @param uri
+	 */
 	public void createTopic(String uri) {
 		
 			Topic t = new Topic(uri);
@@ -24,6 +28,10 @@ public class ListTopics {
 		
 	}
 
+	/**
+	 * Supprime un topic de la map
+	 * @param uri
+	 */
 	public void deleteTopic(String uri) {
 		Topic t = getTopicByUri(uri);
 		topic_messages.remove(t);
@@ -31,10 +39,19 @@ public class ListTopics {
 
 	}
 
+	/**
+	 * Retourne si un topic existe.
+	 * @param uri
+	 * @return
+	 */
 	public Boolean existTopicURI(String uri) {
 		return getUriTopics().contains(uri);
 	}
 
+	/**
+	 * Retourne les uris de tout les topics de la map
+	 * @return
+	 */
 	public Vector<String> getUriTopics() {
 		Vector<Topic> lm = new Vector<Topic>(topic_messages.keySet());
 		Vector<String> list = new Vector<String>();
@@ -44,6 +61,11 @@ public class ListTopics {
 		return list;
 	}
 
+	/**
+	 * Retourne un topic avec l'uri.
+	 * @param uri
+	 * @return
+	 */
 	public Topic getTopicByUri(String uri) {
 		Topic topic = null;
 		for (Topic t : topic_messages.keySet()) {
@@ -54,6 +76,10 @@ public class ListTopics {
 		return topic;
 	}
 
+	/**
+	 * Ajoute un message à un topic
+	 * @param msg
+	 */
 	public void addMesssageToTopic(Message msg) {
 
 		for (String uri : msg.getTopicsURI()) {
@@ -68,6 +94,10 @@ public class ListTopics {
 		}
 	}
 
+	/**
+	 * Ajoute N messages à leurs topics respectifs.
+	 * @param msgs
+	 */
 	public void addNMesssageToTopic(ArrayList<Message> msgs) {
 
 		for (Message m : msgs) {
@@ -75,10 +105,19 @@ public class ListTopics {
 		}
 	}
 	
+	/**
+	 * Retourne les messages ayant l'uri "uri"
+	 * @param uri
+	 * @return
+	 */
 	public Vector<Message> getMessagesByUriTopic(String uri) {
 		return topic_messages.get(getTopicByUri(uri));
 	}
 	
+	/**
+	 * Retourne la map topic_messages.
+	 * @return
+	 */
 	public ConcurrentHashMap<Topic, Vector<Message>> getTopicsMessagesMap(){
 		return topic_messages;
 	}
