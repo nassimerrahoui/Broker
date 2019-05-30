@@ -7,8 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 
  * La classe ListSouscriptions est un objet qui represente les souscriptions stockes sous forme de map.
- * souscriptions : key<uriInBoundConsommateur> x value<Map<Nom_du_Topic,Souscription>> : 
- * A chaque InBoundPort de consommateur est associe une map de <topic,souscription>.
+ * souscriptions : key : uriInBoundConsommateur x value : Map : Nom_du_Topic,Souscription : 
+ * A chaque InBoundPort de consommateur est associe une map de (topic,souscription).
  * On utilise une ConcurrentHashMap pour gerer les acces concurrents des differentes souscriptions.
  *
  */
@@ -37,6 +37,7 @@ public class ListSouscriptions {
 
 	/**
 	 * retourne la map des souscriptions
+	 * @return
 	 */
 	public ConcurrentHashMap<String, Vector<Souscription>> getSouscriptions() {
 		return souscriptions;

@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 
  * La classe ListTopics est un objet qui représente les messages stockés sous forme map topic_messages.
- * topic_messages : key<Topic> x value<vector<Messages>> : A chaque topic est associé une liste de messages. 
+ * topic_messages : key : Topic x value : vector : Messages : A chaque topic est associé une liste de messages. 
  * On utilise une ConcurrentHashMap pour topic_messages et un vector pour chaque liste de messages
  * afin de gérer les accés concurrent des différentes publications.
  *   
