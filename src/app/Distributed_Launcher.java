@@ -22,7 +22,7 @@ public class Distributed_Launcher {
 			// le second parametre est le path vers le workspace du projet
 			// le ; est le separateur pour les commandes sous Windows
 			// le : est le separateur pour les commandes sous Linux
-			DCVM_Launcher launcher = new DCVM_Launcher(args[0],"/Users/Grey/workspace",";");
+			DCVM_Launcher launcher = new DCVM_Launcher(args[0],"/home/user/eclipse-workspace",":");
 			launcher.launch();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
