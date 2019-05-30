@@ -54,7 +54,6 @@ import fr.sorbonne_u.components.cvm.config.ConfigurationParameters;
 import fr.sorbonne_u.components.helpers.CVMDebugModes;
 import fr.sorbonne_u.components.helpers.Logger;
 import fr.sorbonne_u.components.helpers.TracerOnConsole;
-import fr.sorbonne_u.components.helpers.WindowOutputStream;
 
 //-----------------------------------------------------------------------------
 /**

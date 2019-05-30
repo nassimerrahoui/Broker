@@ -1,11 +1,9 @@
 package basics;
 
 import java.io.Serializable;
-import java.util.Vector;
 
 /**
- * Classe représentant le filtre.
- * @author 3408526
+ * Classe representant le filtre.
  *
  */
 public class Filter {

@@ -1,6 +1,5 @@
 package ports;
 
-import java.util.ArrayList;
 import basics.Message;
 import components.Consommateur;
 import fr.sorbonne_u.components.AbstractComponent;
@@ -30,11 +29,4 @@ public class ReceptionInboundPort extends AbstractInboundPort implements Recepti
 		});
 
 	}
-
-	public void recevoirNMessage(ArrayList<Message> msgs, String uri) throws Exception {
-
-		((Consommateur) this.getOwner()).recevoirNMessages(msgs);
-
-	}
-
 }

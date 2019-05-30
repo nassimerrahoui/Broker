@@ -1,6 +1,5 @@
 package components;
 
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import basics.Filter;
@@ -34,7 +33,7 @@ public class Consommateur extends AbstractComponent {
 	protected Object lock = new Object();
 
 	/**
-	 * Constructeur de consommateur avec creation et publication de ports. 
+	 * Constructeur du consommateur avec creation et publication de ports. 
 	 * @throws Exception
 	 */
 	public Consommateur() throws Exception {
@@ -53,7 +52,7 @@ public class Consommateur extends AbstractComponent {
 		receptionPort.publishPort();
 
 		this.tracer.setTitle(" Consommateur : " + AbstractCVM.getCVM().logPrefix());
-		this.tracer.setRelativePosition(1, 1);
+		this.tracer.setRelativePosition(2, 1);
 		this.toggleTracing();
 		this.toggleLogging();
 	}
@@ -66,9 +65,9 @@ public class Consommateur extends AbstractComponent {
 	}
 	
 	/**
-	 * Réception d'un message à travers le port entrant de réception
-	 * @param msg Message à envoyer sur le port
-	 * @param uriInboundPort URI du port de réception
+	 * Reception d'un message a travers le port entrant de reception
+	 * @param msg Message a envoyer sur le port
+	 * @param uriInboundPort URI du port de reception
 	 * @throws Exception
 	 */
 	public void recevoirMessage(Message msg, String uriInboundPort) throws Exception {
@@ -80,7 +79,7 @@ public class Consommateur extends AbstractComponent {
 	}
 	
 	/**
-	 * Demande de souscription à un topic à travers le port sortant de souscription
+	 * Demande de souscription a un topic a travers le port sortant de souscription
 	 * @param s la souscription  
 	 * @throws Exception
 	 */

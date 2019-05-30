@@ -1,6 +1,5 @@
 package ports;
 
-import java.util.ArrayList;
 import basics.Message;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
@@ -18,9 +17,4 @@ public class ReceptionOutboundPort extends AbstractOutboundPort implements Recep
 	public void recevoirMessage(final Message msg, final String uri) throws Exception {
 		((ReceptionServiceI) this.connector).recevoirMessage(msg, uri);
 	}
-
-	public void recevoirNMessage(final ArrayList<Message> msg, final String uri) throws Exception {
-		((ReceptionServiceI) this.connector).recevoirNMessage(msg, uri);
-	}
-
 }

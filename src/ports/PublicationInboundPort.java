@@ -1,6 +1,5 @@
 package ports;
 
-import java.util.ArrayList;
 import basics.Message;
 import components.Courtier;
 import fr.sorbonne_u.components.AbstractComponent;
@@ -40,18 +39,6 @@ public class PublicationInboundPort extends AbstractInboundPort implements Publi
 		};
 		
 		this.owner.handleRequestAsync(0, task);	
-	}
-
-	public void publierNMessages(final ArrayList<Message> msgs) throws Exception {
-		AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
-
-			public Void call() throws Exception {
-				((Courtier) this.owner).publierNMessages(msgs);
-				return null;
-			}
-		};
-
-		this.owner.handleRequestAsync(0, task);
 	}
 
 	@Override

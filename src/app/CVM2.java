@@ -84,7 +84,12 @@ public class CVM2 extends AbstractCVM {
 		assert this.allFinalised();
 
 		// print logs on files, if activated
-		this.courtier.toggleLogging();
+//		this.consommateurs.get(0).toggleLogging();
+//		this.courtier.toggleLogging();
+//		this.producteurs.get(0).toggleLogging();
+//		this.consommateurs.get(0).printExecutionLogOnFile("CVM2_Consommateur");
+//		this.producteurs.get(0).printExecutionLogOnFile("CVM2_Producteur");
+//		this.courtier.printExecutionLogOnFile("CVM2_Courtier");
 
 		for (Producteur p : producteurs) {
 			p.toggleLogging();

@@ -1,8 +1,6 @@
 package ports;
 
-import basics.Filter;
 import basics.Souscription;
-import basics.Topic;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
 import interfaces.SouscriptionServiceI;
@@ -19,9 +17,4 @@ public class SouscriptionOutboundPort extends AbstractOutboundPort implements So
 	public void souscrire(Souscription s) throws Exception {
 		((SouscriptionServiceI) this.connector).souscrire(s);
 	}
-
-	public void setFilter(Topic t, Filter filter, String uriInBoundConsommateur) throws Exception {
-		((SouscriptionServiceI) this.connector).setFilter(t, filter, uriInBoundConsommateur);
-	}
-
 }

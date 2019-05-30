@@ -34,7 +34,7 @@ public class CVM extends AbstractCVM {
 		// --------------------------------------------------------------------
 
 		this.producteur = new Producteur();
-		this.courtier = new Courtier("outTransfertC1","inTransfertC1");
+		this.courtier = new Courtier("outTransfertC1","inTransfertC1",1);
 		this.consommateur = new Consommateur();
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);
@@ -75,12 +75,12 @@ public class CVM extends AbstractCVM {
 		assert this.allFinalised();
 		
 		// print logs on files, if activated
-		this.consommateur.toggleLogging();
-		this.courtier.toggleLogging();
-		this.producteur.toggleLogging();
-		this.consommateur.printExecutionLogOnFile("Consommateur");
-		this.producteur.printExecutionLogOnFile("Producteur");
-		this.courtier.printExecutionLogOnFile("Courtier");
+//		this.consommateur.toggleLogging();
+//		this.courtier.toggleLogging();
+//		this.producteur.toggleLogging();
+//		this.consommateur.printExecutionLogOnFile("CVM_Consommateur");
+//		this.producteur.printExecutionLogOnFile("CVM_Producteur");
+//		this.courtier.printExecutionLogOnFile("CVM_Courtier");
 		super.shutdown();
 	}
 

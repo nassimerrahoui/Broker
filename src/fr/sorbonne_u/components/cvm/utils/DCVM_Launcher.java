@@ -1,6 +1,6 @@
 package fr.sorbonne_u.components.cvm.utils;
 
-import java.io.BufferedReader;
+
 
 //Copyright Jacques Malenfant, Sorbonne Universite.
 //
@@ -37,8 +37,6 @@ import java.io.BufferedReader;
 //knowledge of the CeCILL-C license and that you accept its terms.
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -81,6 +79,13 @@ public class DCVM_Launcher {
 	// Deployment information
 	// ------------------------------------------------------------------------
 
+	/** Path vers workspace contenant le projet a changer en fonction de la machine utilise */
+	public String machine_path;
+	/** Seperateur utilise pour les path en fonction de l'OS du systeme 
+	 * Linux --> :
+	 * Windows --> ;
+	 * **/
+	public String separator_command_unix;
 	/** Debug mode flag. */
 	public static boolean DEBUG = true;
 	/** parameters obtained form the xml configuration file. */
@@ -110,9 +115,12 @@ public class DCVM_Launcher {
 	 * @throws Exception
 	 *             <i>todo.</i>
 	 */
-	public DCVM_Launcher(String configFileName) throws Exception {
+	public DCVM_Launcher(String configFileName, String machine_path, String separator_command_unix) throws Exception {
 		assert configFileName != null;
 
+		this.machine_path = machine_path;
+		this.separator_command_unix = separator_command_unix;
+		
 		File configFile = new File(configFileName);
 		ConfigurationFileParser cfp = new ConfigurationFileParser();
 		if (!cfp.validateConfigurationFile(configFile)) {
@@ -162,16 +170,20 @@ public class DCVM_Launcher {
 		commandRegistry.add("-Xms2m");
 		commandRegistry.add("-cp");
 		commandRegistry.add(
-				"/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+				machine_path+"/broker/target/classes"+separator_command_unix+
+				machine_path+"/broker/resources/jing.jar"+separator_command_unix+
+				machine_path+"/broker/resources/jcip-annotations.jar"+separator_command_unix+
+				machine_path+"/broker/resources/javassist.jar");
 		commandRegistry.add("-Djava.security.manager");
-		commandRegistry.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
+		commandRegistry.add("-Djava.security.policy="+machine_path+"/broker/src/app/dcvm.policy");
 		commandRegistry.add("fr.sorbonne_u.components.registry.GlobalRegistry");
-		commandRegistry.add("/Users/Grey/workspace/broker/src/app/config.xml");
+		commandRegistry.add(machine_path+"/broker/src/app/config.xml");
 		ProcessBuilder pbRegistry = new ProcessBuilder(commandRegistry);
 		pbRegistry.directory(new File(hosts2dirs.get(globalRegistryHostname)));
 
 		Process pRegistry = pbRegistry.start();
 
+		// bloc de code pour remonter les erreurs des commandes unix ci dessus
 		// try (final BufferedReader b = new BufferedReader(new
 		// InputStreamReader(pRegistry.getErrorStream()))) {
 		// String line;
@@ -188,11 +200,14 @@ public class DCVM_Launcher {
 		commandBarrier.add("-Xms2m");
 		commandBarrier.add("-cp");
 		commandBarrier.add(
-				"/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+				machine_path+"/broker/target/classes"+separator_command_unix+
+				machine_path+"/broker/resources/jing.jar"+separator_command_unix+
+				machine_path+"/broker/resources/jcip-annotations.jar"+separator_command_unix+
+				machine_path+"/broker/resources/javassist.jar");
 		commandBarrier.add("-Djava.security.manager");
-		commandBarrier.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
+		commandBarrier.add("-Djava.security.policy="+machine_path+"/broker/src/app/dcvm.policy");
 		commandBarrier.add("fr.sorbonne_u.components.cvm.utils.DCVMCyclicBarrier");
-		commandBarrier.add("/Users/Grey/workspace/broker/src/app/config.xml");
+		commandBarrier.add(machine_path+"/broker/src/app/config.xml");
 		ProcessBuilder pbBarrier = new ProcessBuilder(commandBarrier);
 		pbBarrier.directory(new File(hosts2dirs.get(cyclicBarrierHostname)));
 		Process pBarrier = pbBarrier.start();
@@ -215,12 +230,15 @@ public class DCVM_Launcher {
 			}
 			command.add("-cp");
 			command.add(
-					"/Users/Grey/workspace/broker/target/classes;/Users/Grey/workspace/broker/resources/jing.jar;/Users/Grey/workspace/broker/resources/jcip-annotations.jar;/Users/Grey/workspace/broker/resources/javassist.jar");
+					machine_path+"/broker/target/classes"+separator_command_unix+
+					machine_path+"/broker/resources/jing.jar"+separator_command_unix+
+					machine_path+"/broker/resources/jcip-annotations.jar"+separator_command_unix+
+					machine_path+"/broker/resources/javassist.jar");
 			command.add("-Djava.security.manager");
-			command.add("-Djava.security.policy=/Users/Grey/workspace/broker/src/app/dcvm.policy");
+			command.add("-Djava.security.policy="+machine_path+"/broker/src/app/dcvm.policy");
 			command.add(jvms2mainclasses.get(jvmURIs[i]));
 			command.add(jvmURIs[i]);
-			command.add("/Users/Grey/workspace/broker/src/app/config.xml");
+			command.add(machine_path+"/broker/src/app/config.xml");
 			ProcessBuilder pbConsumer = new ProcessBuilder(command);
 			pbConsumer.directory(new File(hosts2dirs.get(jvms2hosts.get(jvmURIs[i]))));
 			jvmProcesses[i] = pbConsumer.start();
@@ -243,31 +261,30 @@ public class DCVM_Launcher {
 		}
 	}
 
-	/**
-	 * launch a BCM application which configuration file name is given as a
-	 * command-line argument.
-	 * 
-	 * <p>
-	 * <strong>Contract</strong>
-	 * </p>
-	 * 
-	 * <pre>
-	 * pre	args != null and args.length &gt;= 1
-	 * post	true			// no postcondition.
-	 * </pre>
-	 *
-	 * @param args
-	 *            the config file name.
-	 */
-	public static void main(String[] args) {
-		assert args != null && args.length >= 1;
-
-		try {
-			DCVM_Launcher launcher = new DCVM_Launcher(args[0]);
-			launcher.launch();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+//	/**
+//	 * launch a BCM application which configuration file name is given as a
+//	 * command-line argument.
+//	 * 
+//	 * <p>
+//	 * <strong>Contract</strong>
+//	 * </p>
+//	 * 
+//	 * <pre>
+//	 * pre	args != null and args.length &gt;= 1
+//	 * post	true			// no postcondition.
+//	 * </pre>
+//	 *
+//	 * @param args
+//	 *            the config file name.
+//	 */
+//	public static void main(String[] args) {
+//		assert args != null && args.length >= 1;
+//
+//		try {
+//			DCVM_Launcher launcher = new DCVM_Launcher(args[0],"A COMPLETER",":");
+//			launcher.launch();
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 }
-// -----------------------------------------------------------------------------

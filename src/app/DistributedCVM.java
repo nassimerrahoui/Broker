@@ -85,7 +85,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 		
 		if (thisJVMURI.equals(COURTIER_1_JVM_URI)) {
 
-			this.uriCourtier_1 = new Courtier(URI_OPORT_COURTIER_1, URI_IPORT_COURTIER_1);
+			this.uriCourtier_1 = new Courtier(URI_OPORT_COURTIER_1, URI_IPORT_COURTIER_1,1);
 			this.uriProducteur_1 = new Producteur() ;
 			this.uriConsommateur_1 = new Consommateur();
 			
@@ -95,7 +95,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 		} else if (thisJVMURI.equals(COURTIER_2_JVM_URI)) {
 
-			this.uriCourtier_2 = new Courtier(URI_OPORT_COURTIER_2, URI_IPORT_COURTIER_2);
+			this.uriCourtier_2 = new Courtier(URI_OPORT_COURTIER_2, URI_IPORT_COURTIER_2,1);
 			this.uriProducteur_2 = new Producteur() ;
 			this.uriConsommateur_2 = new Consommateur();
 			
@@ -105,7 +105,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 
 		} else if (thisJVMURI.equals(COURTIER_3_JVM_URI)) {
 			
-			this.uriCourtier_3 = new Courtier(URI_OPORT_COURTIER_3, URI_IPORT_COURTIER_3);
+			this.uriCourtier_3 = new Courtier(URI_OPORT_COURTIER_3, URI_IPORT_COURTIER_3,1);
 			this.uriProducteur_3 = new Producteur() ;
 			this.uriConsommateur_3 = new Consommateur();
 			
@@ -115,7 +115,7 @@ public class DistributedCVM extends AbstractDistributedCVM {
 			
 		} else if (thisJVMURI.equals(COURTIER_4_JVM_URI)) {
 			
-			this.uriCourtier_4 = new Courtier(URI_OPORT_COURTIER_4, URI_IPORT_COURTIER_4);
+			this.uriCourtier_4 = new Courtier(URI_OPORT_COURTIER_4, URI_IPORT_COURTIER_4,1);
 			this.uriProducteur_4 = new Producteur() ;
 			this.uriConsommateur_4 = new Consommateur();
 			
@@ -235,8 +235,8 @@ public class DistributedCVM extends AbstractDistributedCVM {
 	public static void main(String[] args) {
 		try {
 			DistributedCVM da  = new DistributedCVM(args, 2, 5) ;
-			da.startStandardLifeCycle(15000L) ;
-			Thread.sleep(100000L) ;
+			da.startStandardLifeCycle(150000L) ;
+			Thread.sleep(10000L) ;
 			System.exit(0) ;
 		} catch (Exception e) {
 			throw new RuntimeException(e) ;

@@ -30,7 +30,7 @@ public class Producteur extends AbstractComponent {
 		publicationPort.publishPort();
 
 		this.tracer.setTitle(" Producteur");
-		this.tracer.setRelativePosition(1, 1);
+		this.tracer.setRelativePosition(0, 1);
 		this.toggleTracing();
 
 	}

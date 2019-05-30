@@ -1,8 +1,6 @@
 package components;
 
-import java.util.ArrayList;
 import java.util.Vector;
-import basics.Filter;
 import basics.ListSouscriptions;
 import basics.ListTopics;
 import basics.Message;
@@ -22,13 +20,12 @@ import ports.PublicationOutboundPort;
 import ports.ReceptionOutboundPort;
 import ports.SouscriptionInboundPort;
 
-
 /**
  * 
  * Le composant Courtier offre un service de publication et de souscription en requierant un service de reception du Consommateur
- * Un producteur envoie un Message au Courtier grâce à son port sortant de reception connecte au port entrant de reception
+ * Un producteur envoie un Message au Courtier grace a son port sortant de reception connecte au port entrant de reception
  * du consommateur.
- * Il recoit une souscription du Consommateur grâce à son port entrant de Souscription.
+ * Il recoit une souscription du Consommateur grace a son port entrant de Souscription.
  */
 @OfferedInterfaces(offered = { PublicationServiceI.class, SouscriptionServiceI.class })
 @RequiredInterfaces(required = { PublicationServiceI.class, ReceptionServiceI.class })
@@ -47,66 +44,27 @@ public class Courtier extends AbstractComponent {
 	protected SouscriptionInboundPort souscriptionPort;
 	protected ListTopics topics = new ListTopics();
 	protected ListSouscriptions souscriptions = new ListSouscriptions();
-	protected final Object lock = new Object();
 	
 	/**
 	 * Constructeur de Courtier prenant un port sortant pour entrant pour les connexions RMI entre
-	 * Courtier de differentes JVM.  
-	 * @param outTransfertURI
-	 * @param inTransfertURI
-	 * @throws Exception
-	 */
-	public Courtier(String outTransfertURI, String inTransfertURI) throws Exception {
-		super(1, 0);
-
-		createNewExecutorService("publication", 10, true);
-		createNewExecutorService("souscription", 10, true);
-		createNewExecutorService("envoi", 10, true);
-
-		publicationPort = new PublicationInboundPort(inTransfertURI, this);
-
-		String receptionPortURI = java.util.UUID.randomUUID().toString();
-		envoiPort = new ReceptionOutboundPort(receptionPortURI, this);
-
-		String souscriptionPortURI = java.util.UUID.randomUUID().toString();
-		souscriptionPort = new SouscriptionInboundPort(souscriptionPortURI, this);
-
-		transfertOutPort = new PublicationOutboundPort(outTransfertURI, this);
-
-		this.addPort(publicationPort);
-		this.addPort(envoiPort);
-		this.addPort(souscriptionPort);
-		this.addPort(transfertOutPort);
-
-		publicationPort.publishPort();
-		souscriptionPort.publishPort();
-		envoiPort.publishPort();
-		transfertOutPort.publishPort();
-
-		this.tracer.setTitle(" Courtier : " + AbstractCVM.getCVM().logPrefix());
-		this.tracer.setRelativePosition(1, 1);
-		this.toggleTracing();
-		this.toggleLogging();
-
-	}
-	
-	/**
-	 * Un 2eme Constructeur appele seulement dans la classe CVM2, il reçoit en plus un nombre de Consommateurs
-	 * pour créer des ports sortants vers le consommateur et les publier
+	 * Courtier de differentes JVM.
+	 * Il recoit en plus un nombre de Consommateurs
+	 * pour creer des ports sortants vers le consommateur et les publier
 	 * @param outTransfertURI
 	 * @param inTransfertURI
 	 * @param nb_consommateurs
 	 * @throws Exception
 	 */
 	public Courtier(String outTransfertURI, String inTransfertURI, int nb_consommateurs) throws Exception {
-		super(1, 0);
+		super(1, 1);
 
 		createNewExecutorService("publication", 10, true);
 		createNewExecutorService("souscription",10, true);
 		createNewExecutorService("envoi", 10, true);
 
 		for (int i = 0; i < nb_consommateurs; i++) {
-			ReceptionOutboundPort r = new ReceptionOutboundPort("oportreception"+i, this);
+			String receptionPortURI = java.util.UUID.randomUUID().toString();
+			ReceptionOutboundPort r = new ReceptionOutboundPort(receptionPortURI, this);
 			this.addPort(r);
 			r.publishPort();
 		}
@@ -133,7 +91,7 @@ public class Courtier extends AbstractComponent {
 	}
 
 	/**
-	 * Ajoute un  port au courtier et le publie
+	 * Ajoute un port au courtier et le publie
 	 * @param p
 	 * @throws Exception
 	 */
@@ -143,7 +101,7 @@ public class Courtier extends AbstractComponent {
 	}
 
 	/**
-	 * publie le message en l'ajoutant à notre structure de stockage  et notifie les consommateurs.
+	 * publie le message en l'ajoutant a notre structure de stockage et notifie les consommateurs.
 	 * @param m
 	 * @throws Exception
 	 */
@@ -155,7 +113,7 @@ public class Courtier extends AbstractComponent {
 	}
 
 	/**
-	 * notifie les consommateurs ayant un  topic et un filtre correspondant au message.
+	 * notifie les consommateurs ayant un topic et un filtre correspondant au message.
 	 * @param m
 	 * @throws Exception
 	 */
@@ -165,7 +123,6 @@ public class Courtier extends AbstractComponent {
 			for (String consommateurUri : souscriptions.getConsommateurUris()) {
 				for (Souscription s : souscriptions.getSouscriptions().get(consommateurUri)) {
 					if (s.topic.equals(topic.getTopicURI()) && s.filter.its_a_match(m)) {
-						this.logMessage("envoie");
 						envoieMessageAndPrint(m, consommateurUri);
 					}
 				}
@@ -189,7 +146,7 @@ public class Courtier extends AbstractComponent {
 	}
 
 	/**
-	 * envoie un message au Consommateur ayant l'uri uriInboundConsumer.
+	 * Envoie un message au Consommateur ayant l'uri uriInboundConsumer.
 	 * @param msg
 	 * @param uriInboundConsumer
 	 * @throws Exception
@@ -199,14 +156,22 @@ public class Courtier extends AbstractComponent {
 
 		for (PortI p : findPortsFromInterface(ReceptionServiceI.class)) {
 			if (p.getServerPortURI().equals(uriInboundConsumer)) {
-				((ReceptionOutboundPort) p).recevoirMessage(msg, uriInboundConsumer);
+				AbstractComponent.AbstractService<Void> task = new AbstractComponent.AbstractService<Void>() {
+
+					public Void call() throws Exception {
+						((ReceptionOutboundPort) p).recevoirMessage(msg, uriInboundConsumer);
+						return null;
+					}
+				};
+
+				this.handleRequestAsync(2, task);
 			}
 		}
 	}
 
 	/**
-	 * enregistre une souscription d'un Consommateur en l'enregistre dans sa 
-	 * liste de souscription grâce à l'uriInboundConsommateur
+	 * Enregistre une souscription d'un Consommateur en l'enregistre dans sa 
+	 * liste de souscription grace a l'uriInboundConsommateur
 	 * @param s
 	 * @param uriInBoundConsommateur
 	 * @throws Exception
@@ -229,12 +194,12 @@ public class Courtier extends AbstractComponent {
 	public void transfererMessage(Message msg) throws Exception {
 
 		if (!transferred.contains(msg)) {
-			this.logMessage("distribution d'un message");
+			this.logMessage("distribution du message : " + msg.getContenu());
 			publierMessage(msg);
 			transfertOutPort.transfererMessage(msg);
 		} else {
 			transferred.remove(msg);
-			this.logMessage("message deja recu");
+			this.logMessage("message deja recu : " + msg.getContenu());
 		}
 
 	}
@@ -248,18 +213,8 @@ public class Courtier extends AbstractComponent {
 		if (transfertOutPort.connected()) {
 			transferred.add(m);
 			transfertOutPort.transfererMessage(m);
-			this.logMessage("transmission d'un message de mon producteur");
+			this.logMessage("transmission du message de mon producteur : " + m.getContenu());
 		}
-	}
-
-	/**
-	 * modifie les filtre d'un Consommateur ayant deja souscris.
-	 * @param t
-	 * @param f
-	 * @param uriInBoundConsommateur
-	 */
-	public void setFilter(Topic t, Filter f, String uriInBoundConsommateur) {
-		souscriptions.modifyFilter(t, f, uriInBoundConsommateur);
 	}
 
 	public void shutdown() throws ComponentShutdownException {
