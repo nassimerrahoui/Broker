@@ -12,18 +12,18 @@
     <jvm2hostname jvmuri="jvm_courtier_1"
         rmiRegistryCreator="true"
         hostname="localhost"
-        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+        mainclass="app.DistributedCVM"/>
     <jvm2hostname jvmuri="jvm_courtier_2"
         rmiRegistryCreator="false"
         	hostname="localhost"
-        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+        mainclass="app.DistributedCVM"/>
     <jvm2hostname jvmuri="jvm_courtier_3"
         rmiRegistryCreator="false"
         	hostname="localhost"
-        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+        mainclass="app.DistributedCVM"/>
     <jvm2hostname jvmuri="jvm_courtier_4"
         rmiRegistryCreator="false"
         	hostname="localhost"
-        mainclass="fr.sorbonne_u.components.examples.basic_cs.DistributedCVM"/>
+        mainclass="app.DistributedCVM"/>
   </jvms2hostnames>
 </deployment>

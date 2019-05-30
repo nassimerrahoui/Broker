@@ -1,17 +1,27 @@
 package basics;
 
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
+
+/**
+ * 
+ * La classe ListTopics est un objet qui représente les messages stockés sous forme map topic_messages.
+ * topic_messages : key<Topic> x value<vector<Messages>> : A chaque topic est associé une liste de messages. 
+ * On utilise une ConcurrentHashMap pour topic_messages et un vector pour chaque liste de messages
+ * afin de gérer les accés concurrent des différentes publications.
+ *   
+ */
 public class ListTopics {
 
-	private ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> topic_messages = new ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>>();
+	private ConcurrentHashMap<Topic, Vector<Message>> topic_messages = new ConcurrentHashMap<Topic, Vector<Message>>();
 
 	public void createTopic(String uri) {
-		Topic t = new Topic(uri);
-		topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
+		
+			Topic t = new Topic(uri);
+			topic_messages.put(t, new Vector<Message>());
+		
 	}
 
 	public void deleteTopic(String uri) {
@@ -25,9 +35,9 @@ public class ListTopics {
 		return getUriTopics().contains(uri);
 	}
 
-	public CopyOnWriteArrayList<String> getUriTopics() {
-		CopyOnWriteArrayList<Topic> lm = new CopyOnWriteArrayList<Topic>(topic_messages.keySet());
-		CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<String>();
+	public Vector<String> getUriTopics() {
+		Vector<Topic> lm = new Vector<Topic>(topic_messages.keySet());
+		Vector<String> list = new Vector<String>();
 		for (Topic topic : lm) {
 			list.add(topic.getTopicURI());
 		}
@@ -44,13 +54,13 @@ public class ListTopics {
 		return topic;
 	}
 
-	public void addMesssageToTopic(Message msg, String uriProducteur) {
+	public void addMesssageToTopic(Message msg) {
 
 		for (String uri : msg.getTopicsURI()) {
 
 			if (!topic_messages.containsKey(this.getTopicByUri(uri))) {
 				Topic t = new Topic(uri);
-				topic_messages.put(t, new ConcurrentLinkedQueue<Message>());
+				topic_messages.put(t, new Vector<Message>());
 			}
 
 			topic_messages.get(getTopicByUri(uri)).add(msg);
@@ -58,18 +68,18 @@ public class ListTopics {
 		}
 	}
 
-	public void addNMesssageToTopic(ArrayList<Message> msgs, String uriProducteur) {
+	public void addNMesssageToTopic(ArrayList<Message> msgs) {
 
 		for (Message m : msgs) {
-			addMesssageToTopic(m, uriProducteur);
+			addMesssageToTopic(m);
 		}
 	}
-
-	public ConcurrentLinkedQueue<Message> getMessagesByUriTopic(String uri) {
+	
+	public Vector<Message> getMessagesByUriTopic(String uri) {
 		return topic_messages.get(getTopicByUri(uri));
 	}
 	
-	public ConcurrentHashMap<Topic, ConcurrentLinkedQueue<Message>> getTopics(){
+	public ConcurrentHashMap<Topic, Vector<Message>> getTopicsMessagesMap(){
 		return topic_messages;
 	}
 }

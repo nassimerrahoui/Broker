@@ -1,6 +1,5 @@
 package ports;
 
-import java.util.ArrayList;
 import basics.Message;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
@@ -23,8 +22,10 @@ public class PublicationOutboundPort extends AbstractOutboundPort implements Pub
 		((PublicationServiceI) this.connector).publierMessage(msg);
 	}
 
-	public void publierNMessages(ArrayList<Message> msgs) throws Exception {
-		((PublicationServiceI) this.connector).publierNMessages(msgs);
+	@Override
+	public void transfererMessage(Message msg) throws Exception {
+		((PublicationServiceI) this.connector).transfererMessage(msg);
+		
 	}
 
 }

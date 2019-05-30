@@ -16,6 +16,9 @@ public class CVM extends AbstractCVM {
 	protected Consommateur consommateur;
 	protected Producteur producteur;
 	protected Courtier courtier;
+	protected Courtier courtier1;
+	protected Courtier courtier2;
+	protected Courtier courtier3;
 
 	public CVM() throws Exception {
 		super();
@@ -31,7 +34,7 @@ public class CVM extends AbstractCVM {
 		// --------------------------------------------------------------------
 
 		this.producteur = new Producteur();
-		this.courtier = new Courtier();
+		this.courtier = new Courtier("outTransfertC1","inTransfertC1",1);
 		this.consommateur = new Consommateur();
 		this.deployedComponents.add(producteur);
 		this.deployedComponents.add(courtier);
@@ -72,12 +75,12 @@ public class CVM extends AbstractCVM {
 		assert this.allFinalised();
 		
 		// print logs on files, if activated
-		this.consommateur.toggleLogging();
-		this.courtier.toggleLogging();
-		this.producteur.toggleLogging();
-		this.consommateur.printExecutionLogOnFile("Consommateur");
-		this.producteur.printExecutionLogOnFile("Producteur");
-		this.courtier.printExecutionLogOnFile("Courtier");
+//		this.consommateur.toggleLogging();
+//		this.courtier.toggleLogging();
+//		this.producteur.toggleLogging();
+//		this.consommateur.printExecutionLogOnFile("CVM_Consommateur");
+//		this.producteur.printExecutionLogOnFile("CVM_Producteur");
+//		this.courtier.printExecutionLogOnFile("CVM_Courtier");
 		super.shutdown();
 	}
 
@@ -88,7 +91,7 @@ public class CVM extends AbstractCVM {
 			// Execute the application.
 			a.startStandardLifeCycle(15000L);
 			// Give some time to see the traces (convenience).
-			Thread.sleep(100000L);
+			Thread.sleep(10000L);
 			// Simplifies the termination (termination has yet to be treated
 			// properly in BCM).
 			System.exit(0);
