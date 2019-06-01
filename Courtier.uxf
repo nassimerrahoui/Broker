@@ -55,8 +55,8 @@ m2=1
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>396</x>
-      <y>765</y>
+      <x>531</x>
+      <y>522</y>
       <w>405</w>
       <h>153</h>
     </coordinates>
@@ -76,8 +76,8 @@ ListSouscriptions: souscriptions
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>261</x>
-      <y>837</y>
+      <x>396</x>
+      <y>594</y>
       <w>153</w>
       <h>45</h>
     </coordinates>
@@ -90,8 +90,8 @@ m2=1
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>9</x>
-      <y>765</y>
+      <x>144</x>
+      <y>522</y>
       <w>261</w>
       <h>153</h>
     </coordinates>
